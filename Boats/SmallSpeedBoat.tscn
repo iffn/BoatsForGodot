@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3 uid="uid://chaqngu1cpmu8"]
+
+[ext_resource type="Script" uid="uid://jlxtks6h7bha" path="res://iffnsStuff/BoatsForGodot/Scripts/InertiaCalculator.gd" id="1_ydj72"]
+[ext_resource type="Script" uid="uid://lbd4e16n60do" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatHull.gd" id="3_frvf1"]
+[ext_resource type="Script" uid="uid://bs6vwopxs5xur" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatThruster.gd" id="4_15i1o"]
+[ext_resource type="Resource" uid="uid://daj3r004we3ve" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_forward.tres" id="5_5t2qy"]
+[ext_resource type="Resource" uid="uid://b44gn6lwh86bv" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_backward.tres" id="6_k7uqj"]
+[ext_resource type="Resource" uid="uid://bxcyp7nsrxiwf" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_right.tres" id="7_pno3k"]
+[ext_resource type="PackedScene" uid="uid://u3a1nn3shhfp" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.blend" id="7_y4o4b"]
+[ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="8_bpxxw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
+size = Vector3(2.5231934, 1, 7.1388397)
+
+[node name="SmallSpeedBoat" type="RigidBody3D"]
+mass = 5000.0
+linear_damp_mode = 1
+angular_damp_mode = 1
+angular_damp = 0.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.70380473)
+shape = SubResource("BoxShape3D_xeeb7")
+
+[node name="InertiaCalculation" type="Node" parent="CollisionShape3D" node_paths=PackedStringArray("linked_rigidbody", "box_collision_shape")]
+script = ExtResource("1_ydj72")
+linked_rigidbody = NodePath("../..")
+box_collision_shape = NodePath("..")
+
+[node name="Thruster" type="Node3D" parent="." node_paths=PackedStringArray("linked_rigidbody", "thrust_output")]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.45656416, 3.496055)
+script = ExtResource("4_15i1o")
+engine_thrust = 100000.0
+engine_rotation_deg = 5.0
+input_forward = ExtResource("5_5t2qy")
+input_backward = ExtResource("6_k7uqj")
+input_right = ExtResource("7_pno3k")
+input_left = ExtResource("8_bpxxw")
+linked_rigidbody = NodePath("..")
+thrust_output = NodePath("../VBoxContainer/f")
+
+[node name="SmallSpeedBoat" parent="." instance=ExtResource("7_y4o4b")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9741103, 0.2260733, 0, -0.2260733, 0.9741103, 0, 2, 6.195)
+
+[node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody", "linear_velocity_output", "angular_velocity_output", "buoyancy_force_output", "drag_force_output", "mass_output")]
+script = ExtResource("3_frvf1")
+drag_coefficient = 0.05
+hull_mesh = NodePath("../SmallSpeedBoat/Plane")
+rigidbody = NodePath("..")
+linear_velocity_output = NodePath("../VBoxContainer/a")
+angular_velocity_output = NodePath("../VBoxContainer/b")
+buoyancy_force_output = NodePath("../VBoxContainer/c")
+drag_force_output = NodePath("../VBoxContainer/d")
+mass_output = NodePath("../VBoxContainer/e")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="a" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "a"
+
+[node name="b" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "b"
+
+[node name="c" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "c"
+
+[node name="d" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "d"
+
+[node name="e" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "e"
+
+[node name="f" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "e"
+
+[editable path="SmallSpeedBoat"]

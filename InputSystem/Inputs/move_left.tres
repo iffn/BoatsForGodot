@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="InputResource" load_steps=2 format=3 uid="uid://d3ufts0le6kdu"]
+
+[ext_resource type="Script" uid="uid://fjjjq54nt2ir" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/InputResource.gd" id="1_rin17"]
+
+[resource]
+script = ExtResource("1_rin17")
+name = "move_left"
+input_name = "move_left"
+input = 65

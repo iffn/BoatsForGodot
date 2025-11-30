@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://d0uhj1n4oep8g"]
+
+[ext_resource type="Script" uid="uid://lbd4e16n60do" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatHull.gd" id="7_78u4n"]
+[ext_resource type="PackedScene" uid="uid://cvfryfw0opmiu" path="res://iffnsStuff/BoatsForGodot/Boats/Cube1m3.blend" id="8_kickn"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2dtrl"]
+
+[node name="FloatingCube" type="RigidBody3D"]
+mass = 500.0
+center_of_mass_mode = 1
+inertia = Vector3(5000, 5000, 5000)
+linear_damp = 0.5
+
+[node name="Camera3D2" type="Camera3D" parent="."]
+transform = Transform3D(1, -8.7422805e-08, -8.4703295e-22, 7.785409e-08, 0.8905467, 0.4548919, -3.9767926e-08, -0.4548919, 0.8905467, 0, 2.0692692, 3.7284422)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_2dtrl")
+
+[node name="Cube1m4" parent="." instance=ExtResource("8_kickn")]
+
+[node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody")]
+script = ExtResource("7_78u4n")
+hull_mesh = NodePath("../Cube1m4/Cube")
+rigidbody = NodePath("..")
+
+[editable path="Cube1m4"]
