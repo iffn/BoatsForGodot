@@ -8,6 +8,7 @@ class_name BoatHull
 # https://github.com/iffn/iffnsBoatsForVRChat/blob/main/Scripts/HullCalculator.cs
 
 @export var drag_coefficient : float = 0.05
+@export var drag_multiplier : float  = 1.0
 @export var buoyancy_multiplier : float  = 1.0
 @export var hull_mesh: MeshInstance3D
 @export var rigidbody: RigidBody3D
@@ -41,10 +42,11 @@ func _physics_process(delta: float) -> void:
 		var application_force := buoyancy_multiplier * triangle.static_pressure_force_world
 		rigidbody.apply_force(application_force, application_position)
 		
-		rigidbody.apply_force(triangle.world_drag_force(velocity_world, drag_coefficient))
+		var drag = drag_multiplier * triangle.world_drag_force(velocity_world, drag_coefficient)
+		rigidbody.apply_force(drag)
 		
 		total_buoyancy += triangle.static_pressure_force_world
-		total_drag += triangle.world_drag_force(velocity_world, drag_coefficient)
+		total_drag += drag
 	
 	if linear_velocity_output:
 		linear_velocity_output.text = "Linear velocity: " + str(rigidbody.linear_velocity.length()).pad_decimals(2)
