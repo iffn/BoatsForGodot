@@ -7,10 +7,19 @@ So far, the basic concept seems to work.
 - Add this repository to your Godot project folder
 - In Godot, open BoatsForGodot > TestScene > BuoyancyTest.tscn
 - Press F6 to test it
+  - Control with WASD
+  - Inputs are automatically assigned when running the game, but not saved to the project
+
 
 ### Create a boat
 - Model a closed buoyancy mesh (Limit the number of triangles for performance reasons)
-
+- Setup a boat similar to the test boats:
+    - Rigidbody base
+    - Buoyancy mesh (closed, otherwise you'll get phantom forces)
+    - HullCalculator script linked to the Rigidbody and Buoyancy mesh
+    - InertiaCalculation if not set properly
+    - Thruster if required
+    - Input setter if needed
 
 ## Current implementation
 ### Buoyancy and drag
@@ -26,4 +35,8 @@ Previous implementations:
 ### Water level
 The current version is simplified and assumes that the water height is at 0. This can be changed within the `BoatHull` script in the static `get_distance_to_water` function. (To be ipmroved)
 
+### Inertia
+A script was added, that is able to calculate the proper inertia based on the shape of a CollisionShape3D. Note: The script assumes that the box is centered around the center of gravity.
+
 ### Input system
+The repository also includes a script that assigns the controls in the `_ready()` function. They are therefore not saved to the project.
