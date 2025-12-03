@@ -25,6 +25,8 @@ func _ready() -> void:
 	convert_mesh()
 
 func _physics_process(delta: float) -> void:
+	var start_time_usec: int = Time.get_ticks_usec()
+	
 	var triangles_below_water : Array[BelowWaterTriangle] = []
 	
 	for triangle in mesh_triangles:
@@ -47,6 +49,12 @@ func _physics_process(delta: float) -> void:
 		
 		total_buoyancy += triangle.static_pressure_force_world
 		total_drag += drag
+	
+	var end_time_usec: int = Time.get_ticks_usec()
+	var elapsed_usec: int = end_time_usec - start_time_usec
+	var elapsed_sec: float = float(elapsed_usec) / 1_000_000.0
+	
+	#print("Time taken: ", elapsed_sec, "s for ", triangles_below_water.size(), "/", mesh_triangles.size(), " triangles below water")
 	
 	if linear_velocity_output:
 		linear_velocity_output.text = "Linear velocity: " + str(rigidbody.linear_velocity.length()).pad_decimals(2)
@@ -103,7 +111,7 @@ func assign(triangle : MeshTriangle, below_water : Array[BelowWaterTriangle]) ->
 	if(distance_to_water_2 > 0): above_water_counter += 1
 	
 	if(above_water_counter == 0):
-		below_water.append(BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v2_world, triangle.normal_world))
+		below_water.append(BelowWaterTriangle.create_from_triangle(triangle))
 	
 	elif(above_water_counter == 1):
 		var high_point : Vector3
@@ -136,8 +144,8 @@ func assign(triangle : MeshTriangle, below_water : Array[BelowWaterTriangle]) ->
 		var between_point_1 = lerp(high_point, low_point_1, high_point.y / (high_point.y - low_point_1.y))
 		var between_point_2 = lerp(high_point, low_point_2, high_point.y / (high_point.y - low_point_2.y))
 		
-		below_water.append(BelowWaterTriangle.new(low_point_1, low_point_2, between_point_1, normal))
-		below_water.append(BelowWaterTriangle.new(low_point_2, between_point_2, between_point_1, normal))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, normal))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, normal))
 		#above_water.append(AboveWaterTriangle.new(between_point_1, between_point_2, high_point, normal))
 		
 	elif(above_water_counter == 2):
@@ -173,7 +181,7 @@ func assign(triangle : MeshTriangle, below_water : Array[BelowWaterTriangle]) ->
 		
 		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
 		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
-		below_water.append(BelowWaterTriangle.new(between_point_2, high_point_2, high_point_1, normal))
+		below_water.append(BelowWaterTriangle.create_from_points(between_point_2, high_point_2, high_point_1, normal))
 		
 	else:
 		#above_water.append(self)
@@ -191,38 +199,22 @@ class MeshTriangle:
 	var v2_world : Vector3
 	var normal_world : Vector3
 	
+	var area : float
+	
 	func _init(_v0_local: Vector3, _v1_local: Vector3, _v2_local: Vector3, _normal_local):
 		v0_local = _v0_local
 		v1_local = _v1_local
 		v2_local = _v2_local
 		normal_local = _normal_local
+		area = get_triangle_area_from_points(v0_local, v1_local, v2_local)
 	
 	func update_world_positions(global_transform: Transform3D):
 		v0_world = global_transform * v0_local
 		v1_world = global_transform * v1_local
 		v2_world = global_transform * v2_local
 		normal_world = (global_transform.basis * normal_local).normalized()
-
-class BelowWaterTriangle:
-	var static_pressure_force_world : Vector3
-	var geometric_center_world : Vector3
-	var area : float
-	var fluid_density := 1000
-	var gravitational_acceleration := 9.81
 	
-	func _init(v0_world: Vector3, v1_world: Vector3, v2_world, normal_world: Vector3):
-		geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
-		area = get_triangle_area_from_points(v0_world, v1_world, v2_world)
-		static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(geometric_center_world) * area * normal_world
-		static_pressure_force_world.x = 0
-		static_pressure_force_world.z = 0
-	
-	func world_drag_force(world_velocity : Vector3, drag_coefficient : float) -> Vector3:
-		var velocity := world_velocity.length()
-		var drag_force := -0.5 * area * drag_coefficient * fluid_density * velocity * world_velocity
-		return drag_force
-	
-	func get_triangle_area_from_points(A: Vector3, B: Vector3, C: Vector3):
+	static func get_triangle_area_from_points(A: Vector3, B: Vector3, C: Vector3):
 		# Triangle area according to sin formula:
 		# A = 0.5 * a * b * sin(gamma)
 		# A = Area [m^2]
@@ -235,4 +227,37 @@ class BelowWaterTriangle:
 		var gamma_rad := (A - C).angle_to(B - C)
 		
 		return 0.5 * a * b * sin(gamma_rad)
+
+class BelowWaterTriangle:
+	var static_pressure_force_world : Vector3
+	var geometric_center_world : Vector3
+	var area : float
+	static var fluid_density := 1000
+	static var gravitational_acceleration := 9.81
 	
+	func _init(the_geometric_center_wthe_area : Vector3, the_static_pressure_force_world : Vector3, the_area : float):
+		geometric_center_world = the_geometric_center_wthe_area
+		static_pressure_force_world = the_static_pressure_force_world
+		area = the_area
+	
+	static func create_from_triangle(triangle : MeshTriangle) -> BelowWaterTriangle:
+		var the_geometric_center_world = 0.33333333 * (triangle.v0_world + triangle.v1_world + triangle.v2_world)
+		var the_area = triangle.area
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_geometric_center_world) * the_area * triangle.normal_world
+		the_static_pressure_force_world.x = 0
+		the_static_pressure_force_world.z = 0
+		
+		return BelowWaterTriangle.new(the_geometric_center_world, the_static_pressure_force_world, the_area)
+	
+	static func create_from_points(v0_world: Vector3, v1_world: Vector3, v2_world, normal_world: Vector3)  -> BelowWaterTriangle:
+		var the_geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
+		var the_area = MeshTriangle.get_triangle_area_from_points(v0_world, v1_world, v2_world)
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_geometric_center_world) * the_area * normal_world
+		the_static_pressure_force_world.x = 0
+		the_static_pressure_force_world.z = 0
+		return BelowWaterTriangle.new(the_geometric_center_world, the_static_pressure_force_world, the_area)
+	
+	func world_drag_force(world_velocity : Vector3, drag_coefficient : float) -> Vector3:
+		var velocity := world_velocity.length()
+		var drag_force := -0.5 * area * drag_coefficient * fluid_density * velocity * world_velocity
+		return drag_force
