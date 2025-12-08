@@ -18,8 +18,34 @@ func generate_mesh() -> void:
 	# Initialize SurfaceTool
 	_surface_tool = SurfaceTool.new()
 	_surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var vertices := 0
 	
-	generate_ring()
+	# Generate base grid
+	if true:
+		var grid_generator = UniformGridGenerator.new(
+			plane_size, 
+			grid_resolution
+		)
+		vertices += grid_generator.vertices.size()
+		for vertex in grid_generator.vertices:
+			_surface_tool.add_vertex(vertex)
+			
+		for index in grid_generator.indices:
+			_surface_tool.add_index(index)
+	
+	# Generate ring
+	if true:
+		var ring_generator = QuadraticRingGenerator.new(
+			inner_radius, 
+			side_quad_count,
+			depth,
+			vertices
+		)
+		vertices += ring_generator.indices.size() - 1
+		for vertex in ring_generator.vertices:
+			_surface_tool.add_vertex(vertex)
+		for index in ring_generator.indices:
+			_surface_tool.add_index(index)
 	
 	# Finalize Mesh
 	_surface_tool.generate_normals()
