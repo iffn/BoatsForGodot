@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=4 uid="uid://b4fso0ql27llx"]
+
+[ext_resource type="Script" uid="uid://cp6slgkxj5yhp" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTreeGenerator.gd" id="1_2ud6y"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2ud6y"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34359742471,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAwAAAAIABAAAAAMABQAEAAMABgAHAAEAAAAGAAEACAAGAAAABAAIAAAA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 9,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAAAAAAvwAAAAAAAAAAAAAAvwAAAAAAAAC/AAAAAAAAAAAAAAC/AAAAPwAAAAAAAAAAAAAAPwAAAAAAAAC/AAAAAAAAAAAAAAA/AAAAvwAAAAAAAAA/AAAAPwAAAAAAAAA//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+//3///wAA/7//f///AAD/v/9///8AAP+/")
+}]
+
+[node name="RestrictedQuadTree" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_2ud6y")
+script = ExtResource("1_2ud6y")
