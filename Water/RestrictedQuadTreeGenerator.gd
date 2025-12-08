@@ -23,69 +23,124 @@ func generate_mesh() -> void:
 	var vertices := 0
 	
 	# Generate base grid
-	if true:
-		var grid_generator = UniformGridGenerator.new(
-			plane_size, 
-			grid_resolution
-		)
-		vertices += grid_generator.vertices.size()
-		for vertex in grid_generator.vertices:
-			_surface_tool.add_vertex(vertex)
-			
-		for index in grid_generator.indices:
-			_surface_tool.add_index(index)
+	var grid_generator = UniformGridGenerator.new(
+		plane_size, 
+		grid_resolution
+	)
+	vertices += grid_generator.vertices.size()
+	for vertex in grid_generator.vertices:
+		_surface_tool.add_vertex(vertex)
+		
+	for index in grid_generator.indices:
+		_surface_tool.add_index(index)
+
+# Generate ring
+	var ring_generator = QuadraticRingGenerator.new(
+		inner_radius, 
+		side_quad_count,
+		depth,
+		vertices
+	)
+	vertices += ring_generator.indices.size() - 1
+	for vertex in ring_generator.vertices:
+		_surface_tool.add_vertex(vertex)
+	for index in ring_generator.indices:
+		_surface_tool.add_index(index)
 	
-	# Generate ring
+		# Skirt
 	if true:
-		var ring_generator = QuadraticRingGenerator.new(
-			inner_radius, 
-			side_quad_count,
-			depth,
-			vertices
-		)
-		vertices += ring_generator.indices.size() - 1
-		for vertex in ring_generator.vertices:
-			_surface_tool.add_vertex(vertex)
-		for index in ring_generator.indices:
+		var skirt_indices := _generate_simple_quadrant_skirt(grid_generator.perimeter_indices, ring_generator.inner_perimeter_indices)
+		for index in skirt_indices:
 			_surface_tool.add_index(index)
 	
 	# Finalize Mesh
 	_surface_tool.generate_normals()
 	self.mesh = _surface_tool.commit()
 
-func generate_center():
-	var generator = UniformGridGenerator.new(
-		plane_size, 
-		grid_resolution
-	)
+func _generate_simple_quadrant_skirt(inner_indices: PackedInt32Array, outer_indices: PackedInt32Array) -> PackedInt32Array:
+	var skirt_indices: PackedInt32Array = []
 	
-	for vertex in generator.vertices:
-		_surface_tool.add_vertex(vertex)
-		
-	for index in generator.indices:
-		_surface_tool.add_index(index)
+	var inner_size = inner_indices.size()
+	var outer_size = outer_indices.size()
+	
+	if inner_size == 0 or outer_size == 0:
+		return skirt_indices
 
-func generate_ring():
-	var generator = QuadraticRingGenerator.new(
-		inner_radius, 
-		side_quad_count,
-		depth,
-		0
-	)
+	if inner_size % 4 != 0 or outer_size % 4 != 0:
+		return skirt_indices 
+
+	var inner_segments = inner_size / 4
+	var outer_segments = outer_size / 4
 	
-	# Debug perimiter. Incease scale to test
-	var debug_scale := 0.0
-	for i in range(generator.inner_perimeter_indices.size()):
-		generator.vertices[generator.inner_perimeter_indices[i]].y += i * debug_scale
-	
-	for i in range(generator.outer_perimeter_indices.size()):
-		generator.vertices[generator.outer_perimeter_indices[i]].y += i * debug_scale
-	
-	for vertex in generator.vertices:
-		_surface_tool.add_vertex(vertex)
+	var max_steps_per_segment = inner_segments + outer_segments 
+
+	# Go side by side
+	for side in range(4):
 		
-	for index in generator.indices:
-		_surface_tool.add_index(index)
+		var inner_start = side * inner_segments
+		var outer_start = side * outer_segments
+		
+		# Inner and outer index
+		var i = 0
+		var o = 0
+		
+		# Advance relative
+		for step in range(max_steps_per_segment):
+			
+			if i == inner_segments and o == outer_segments:
+				break
+			
+			var i_seg = inner_start + i
+			var o_seg = outer_start + o
+			
+			var i_curr = inner_indices[i_seg % inner_size]
+			var o_curr = outer_indices[o_seg % outer_size]
+
+			var i_next = inner_indices[(i_seg + 1) % inner_size]
+			var o_next = outer_indices[(o_seg + 1) % outer_size]
+
+			var advance_inner = false
+			var advance_outer = false
+			
+			var inner_remaining = inner_segments - i
+			var outer_remaining = outer_segments - o
+			
+			if inner_remaining == 0 and outer_remaining == 0:
+				break
+
+			if inner_remaining == 0 || inner_remaining * outer_size < outer_remaining * inner_size:
+				advance_outer = true
+			
+			elif outer_remaining == 0 || inner_remaining * outer_size > outer_remaining * inner_size:
+				advance_inner = true
+			
+			else: 
+				advance_inner = true
+				advance_outer = true
+
+			if advance_inner and advance_outer:
+				skirt_indices.push_back(i_curr)
+				skirt_indices.push_back(o_curr)
+				skirt_indices.push_back(i_next)
+				
+				skirt_indices.push_back(i_next)
+				skirt_indices.push_back(o_curr)
+				skirt_indices.push_back(o_next)
+				
+				i += 1
+				o += 1
+			elif advance_inner:
+				skirt_indices.push_back(i_curr)
+				skirt_indices.push_back(o_curr)
+				skirt_indices.push_back(i_next)
+				i += 1
+			elif advance_outer:
+				skirt_indices.push_back(i_curr)
+				skirt_indices.push_back(o_curr)
+				skirt_indices.push_back(o_next)
+				o += 1
+				
+	return skirt_indices
 
 class UniformGridGenerator:
 	var plane_size: float
