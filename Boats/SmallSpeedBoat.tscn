@@ -30,7 +30,7 @@ box_collision_shape = NodePath("..")
 [node name="Thruster" type="Node3D" parent="." node_paths=PackedStringArray("linked_rigidbody", "thrust_output")]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.45656416, 3.496055)
 script = ExtResource("4_15i1o")
-engine_thrust = 150000.0
+engine_thrust = 50000.0
 engine_rotation_deg = 3.0
 input_forward = ExtResource("5_5t2qy")
 input_backward = ExtResource("6_k7uqj")
@@ -42,12 +42,12 @@ thrust_output = NodePath("../VBoxContainer/f")
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("7_y4o4b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046, 0.906)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.9741103, 0.2260733, 0, -0.2260733, 0.9741103, 0, 2, 6.195)
+[node name="DisplacementMesh" parent="SmallSpeedBoat" index="1"]
+visible = false
 
 [node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody", "linear_velocity_output", "angular_velocity_output", "buoyancy_force_output", "drag_force_output", "mass_output")]
 script = ExtResource("3_frvf1")
-hull_mesh = NodePath("../SmallSpeedBoat/Hull")
+hull_mesh = NodePath("../SmallSpeedBoat/DisplacementMesh")
 rigidbody = NodePath("..")
 linear_velocity_output = NodePath("../VBoxContainer/a")
 angular_velocity_output = NodePath("../VBoxContainer/b")

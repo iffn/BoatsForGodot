@@ -1,9 +1,19 @@
-[gd_scene load_steps=4 format=4 uid="uid://b4fso0ql27llx"]
+[gd_scene load_steps=5 format=4 uid="uid://b4fso0ql27llx"]
 
 [ext_resource type="Script" uid="uid://cp6slgkxj5yhp" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTreeGenerator.gd" id="1_2ud6y"]
+[ext_resource type="Shader" uid="uid://bih8cr4hu133g" path="res://iffnsStuff/BoatsForGodot/Water/WaterWithWaves.gdshader" id="1_jj54p"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ud6y"]
-cull_mode = 2
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5mh2v"]
+render_priority = 0
+shader = ExtResource("1_jj54p")
+shader_parameter/depth_distance = 4.0
+shader_parameter/beers_law = 12.0
+shader_parameter/wave_height = 0.1
+shader_parameter/wave_frequency = 1.0
+shader_parameter/wave_length = 0.2
+shader_parameter/water_color_surface = Color(0.0041999957, 0.31605, 0.42, 1)
+shader_parameter/water_color_depth = Color(0.11339999, 0.23092996, 0.42, 1)
+shader_parameter/foam_color = Color(0.632, 0.7399667, 0.79, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_2ud6y"]
 _surfaces = [{
@@ -18,10 +28,14 @@ _surfaces = [{
 }]
 
 [node name="RestrictedQuadTree" type="MeshInstance3D"]
-material_override = SubResource("StandardMaterial3D_2ud6y")
+material_override = SubResource("ShaderMaterial_5mh2v")
 mesh = SubResource("ArrayMesh_2ud6y")
 script = ExtResource("1_2ud6y")
 plane_size = 1.3
 inner_radius = 0.75
 side_quad_count = 12
 depth = 3
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(0.012726478, -0.8801445, 0.47453535, 0.5717014, 0.3957591, 0.71870184, -0.82036304, 0.262146, 0.5082165, 0, -0.36329883, 0)
+visible = false

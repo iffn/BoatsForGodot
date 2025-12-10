@@ -4,7 +4,7 @@ class_name BoatHull
 
 # Inspired by:
 # https://www.gamedeveloper.com/programming/water-interaction-model-for-boats-in-video-games
-# https://www.habrador.com/tutorials/unity-boat-tutorial
+# https://www.habrador.com/tutorials/unity-7boat-tutorial
 # https://github.com/iffn/iffnsBoatsForVRChat/blob/main/Scripts/HullCalculator.cs
 
 @export var drag_coefficient : float = 0.05
@@ -19,12 +19,18 @@ class_name BoatHull
 @export var drag_force_output : Label
 @export var mass_output : Label
 
+static  var wave_height : float = 0.5
+static var wave_frequency : float = 1.0
+static var wave_length : float = 2.0
+
 var mesh_triangles : Array[MeshTriangle]
 
 func _ready() -> void:
 	convert_mesh()
 
 func _physics_process(delta: float) -> void:
+	rigidbody.angular_velocity = clamp(rigidbody.angular_velocity, Vector3(-1,-1,-1), Vector3(1,1,1))
+	
 	var start_time_usec: int = Time.get_ticks_usec()
 	
 	var triangles_below_water : Array[BelowWaterTriangle] = []
@@ -70,7 +76,8 @@ func _physics_process(delta: float) -> void:
 		mass_output.text = "Mass: " + str(rigidbody.mass)
 
 static func get_distance_to_water(world_position : Vector3) -> float:
-	return world_position.y
+	var water_pos_y := wave_height * sin(world_position.z / wave_length + Time.get_ticks_msec() * 0.001 * wave_frequency)
+	return world_position.y - water_pos_y
 
 func convert_mesh():
 	mesh_triangles = []
