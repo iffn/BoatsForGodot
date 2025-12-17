@@ -1,4 +1,5 @@
 # Boat terms
+Based on: https://www.youtube.com/watch?v=Iml-lynj3bM&list=PLxHEvq_hK_PzM0HSlNIvSFrmiSgDC2sC1
 
 ## General shape
 ### Parts of the ship
