@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 	
 	for triangle in triangles_below_water:
 		# Buoyancy
-		var application_position := triangle.geometric_center_world - rigidbody.global_position
+		var application_position := triangle.hydrostatic_center_world - rigidbody.global_position
 		var application_force := buoyancy_multiplier * triangle.static_pressure_force_world
 		rigidbody.apply_force(application_force, application_position)
 		
@@ -231,31 +231,39 @@ class MeshTriangle:
 class BelowWaterTriangle:
 	var static_pressure_force_world : Vector3
 	var geometric_center_world : Vector3
+	var hydrostatic_center_world : Vector3
 	var area : float
 	static var fluid_density := 1000
 	static var gravitational_acceleration := 9.81
 	
-	func _init(the_geometric_center_wthe_area : Vector3, the_static_pressure_force_world : Vector3, the_area : float):
-		geometric_center_world = the_geometric_center_wthe_area
+	func _init(the_geometric_center_world : Vector3, the_hydrostatic_center_world : Vector3, the_static_pressure_force_world : Vector3, the_area : float):
+		geometric_center_world = the_geometric_center_world
+		hydrostatic_center_world = the_hydrostatic_center_world
 		static_pressure_force_world = the_static_pressure_force_world
 		area = the_area
 	
+	static func calculate_hydrostatic_center_world(v0_world: Vector3, v1_world: Vector3, v2_world: Vector3) -> Vector3:
+		var h0 := BoatHull.get_distance_to_water(v0_world)
+		var h1 := BoatHull.get_distance_to_water(v1_world)
+		var h2 := BoatHull.get_distance_to_water(v2_world)
+		var H := h0 + h1 + h2
+		var center_of_pressure := ((h0 + H) * v0_world + (h1 + H) * v1_world + (h2 + H) * v2_world) / (4.0 * H)
+		return center_of_pressure
+	
 	static func create_from_triangle(triangle : MeshTriangle) -> BelowWaterTriangle:
 		var the_geometric_center_world = 0.33333333 * (triangle.v0_world + triangle.v1_world + triangle.v2_world)
+		var the_hydrostatic_center_world = calculate_hydrostatic_center_world(triangle.v0_world, triangle.v1_world, triangle.v2_world)
 		var the_area = triangle.area
-		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_geometric_center_world) * the_area * triangle.normal_world
-		the_static_pressure_force_world.x = 0
-		the_static_pressure_force_world.z = 0
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_hydrostatic_center_world) * the_area * triangle.normal_world
 		
-		return BelowWaterTriangle.new(the_geometric_center_world, the_static_pressure_force_world, the_area)
+		return BelowWaterTriangle.new(the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
 	
 	static func create_from_points(v0_world: Vector3, v1_world: Vector3, v2_world, normal_world: Vector3)  -> BelowWaterTriangle:
 		var the_geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
+		var the_hydrostatic_center_world = calculate_hydrostatic_center_world(v0_world, v1_world, v2_world)
 		var the_area = MeshTriangle.get_triangle_area_from_points(v0_world, v1_world, v2_world)
-		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_geometric_center_world) * the_area * normal_world
-		the_static_pressure_force_world.x = 0
-		the_static_pressure_force_world.z = 0
-		return BelowWaterTriangle.new(the_geometric_center_world, the_static_pressure_force_world, the_area)
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_hydrostatic_center_world) * the_area * normal_world
+		return BelowWaterTriangle.new(the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
 	
 	func world_drag_force(world_velocity : Vector3, drag_coefficient : float) -> Vector3:
 		var velocity := world_velocity.length()
