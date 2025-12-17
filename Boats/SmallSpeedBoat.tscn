@@ -42,6 +42,9 @@ thrust_output = NodePath("../VBoxContainer/f")
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("7_y4o4b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046, 0.906)
 
+[node name="DisplacementMesh" parent="SmallSpeedBoat" index="1"]
+visible = false
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.9741103, 0.2260733, 0, -0.2260733, 0.9741103, 0, 2, 6.195)
 
