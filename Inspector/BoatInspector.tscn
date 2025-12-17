@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bodglwvbjrqjg"]
+
+[ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_uryhj"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vakq3"]
+width = 4000
+height = 4000
+noise = SubResource("FastNoiseLite_uryhj")
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("NoiseTexture2D_vakq3")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1_vakq3")
