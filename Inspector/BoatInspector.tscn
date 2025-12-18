@@ -12,7 +12,7 @@ albedo_color = Color(0, 0.49019608, 1, 1)
 [node name="Node2D" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(560, 317)
+position = Vector2(639, 325)
 script = ExtResource("1_vakq3")
 
 [node name="Control" type="Control" parent="."]
@@ -306,7 +306,7 @@ text = "Evaluate"
 
 [node name="Mass_WaterLine output" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline"]
 layout_mode = 2
-text = "Mass/Water line = XYZ"
+text = "Waterline from origin:  XYZm"
 
 [node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
