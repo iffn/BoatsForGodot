@@ -314,6 +314,70 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 		#above_water.append(self)
 		pass
 
+func find_waterline(buoyancy_goal: float) -> float:
+	var original_value := rigidbody.position.y
+	
+	var print_status := false
+	
+	var data : BoatHull.BoatCalculationData
+	var x_fully_submerged := -10.0  # Start fully submerged
+	var x_above_water := 10.0       # Start above water
+
+	# Evaluate fully submerged
+	rigidbody.position.y = x_fully_submerged
+	data = calculate_all()
+	var f_fully_submerged := data.buoyancy_force.y - buoyancy_goal
+	if print_status:
+		print("Fully submerged (x = ", x_fully_submerged, "): buoyancy_force = ", data.buoyancy_force.y, ", error = ", f_fully_submerged)
+
+	# Evaluate above water
+	rigidbody.position.y = x_above_water
+	data = calculate_all()
+	var f_above_water := data.buoyancy_force.y - buoyancy_goal
+	if print_status:
+		print("Above water (x = ", x_above_water, "): buoyancy_force = ", data.buoyancy_force.y, ", error = ", f_above_water)
+
+	# If both are above or below, the goal is not achievable
+	if f_fully_submerged * f_above_water > 0:
+		if print_status:
+			print("Error: Buoyancy goal not achievable with current hull!")
+		return -999.0  # Fallback
+
+	# Bisection method
+	var x0 := x_fully_submerged
+	var x1 := x_above_water
+	var f0 := f_fully_submerged
+	var max_iterations := 20
+	var tolerance := 0.001
+	
+	var found := false
+	
+	for i in range(max_iterations):
+		var x2 := (x0 + x1) / 2
+		rigidbody.position.y = x2
+		data = calculate_all()
+		var f1 := data.buoyancy_force.y - buoyancy_goal
+		if print_status:
+			print("Iteration ", i, ": Tried x = ", x2, ", buoyancy_force = ", data.buoyancy_force.y, ", error = ", f1)
+
+		if abs(x2 - x1) < tolerance:
+			if print_status:
+				print("Converged to x = ", x2, " in ", i+1, " steps")
+			found = true
+			break
+
+		if f1 * f0 < 0:
+			x1 = x2
+		else:
+			x0 = x2
+			f0 = f1
+	if !found && print_status:
+		print("Max iterations reached.")
+	
+	var return_value := rigidbody.position.y
+	rigidbody.position.y = original_value
+	return return_value
+
 class BoatCalculationData:
 	var buoyancy_force : Vector3
 	var drag_force: Vector3

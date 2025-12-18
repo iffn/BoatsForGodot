@@ -14,7 +14,7 @@
 size = Vector3(2.5231934, 1, 7.1388397)
 
 [node name="SmallSpeedBoat" type="RigidBody3D" node_paths=PackedStringArray("_hull", "_thruster")]
-mass = 5000.0
+mass = 8727.2
 linear_damp_mode = 1
 angular_damp_mode = 1
 angular_damp = 0.5

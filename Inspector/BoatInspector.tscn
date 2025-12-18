@@ -286,7 +286,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
 layout_mode = 2
-text = "Water line height:"
+text = "Waterline from origin"
 
 [node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
 layout_mode = 2
@@ -306,7 +306,7 @@ text = "Evaluate"
 
 [node name="Mass_WaterLine output" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline"]
 layout_mode = 2
-text = "Waterline from origin:  XYZm"
+text = "Not yet calculated"
 
 [node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
