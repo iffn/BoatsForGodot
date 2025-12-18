@@ -1,19 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=4 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
-[ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="2_gli4e"]
+[ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
-
-[sub_resource type="Environment" id="Environment_nqf5c"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gli4e"]
-albedo_color = Color(0, 0.49019608, 1, 1)
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(639, 325)
 script = ExtResource("1_vakq3")
+
+[node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -79,40 +76,14 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer/Front"]
-own_world_3d = true
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport"]
-
-[node name="SmallSpeedBoat" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D" instance=ExtResource("2_gli4e")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
-_state = 1
-
-[node name="Hull" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="0"]
-visible = false
-
-[node name="DisplacementMesh" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
-
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0, -6.0458403)
 projection = 1
 size = 5.1105313
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D"]
-environment = SubResource("Environment_nqf5c")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
-
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D"]
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.473639, -5, 0)
-material_override = SubResource("StandardMaterial3D_gli4e")
-size = Vector3(1, 10, 20)
 
 [node name="Side" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer"]
 layout_mode = 2
@@ -122,34 +93,10 @@ handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport"]
-
-[node name="SmallSpeedBoat" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D" instance=ExtResource("2_gli4e")]
-_state = 1
-
-[node name="Hull" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="0"]
-visible = false
-
-[node name="DisplacementMesh" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
-
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
 projection = 1
 size = 5.1105313
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D"]
-environment = SubResource("Environment_nqf5c")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
-
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D"]
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.473639, -5, 0)
-material_override = SubResource("StandardMaterial3D_gli4e")
-size = Vector3(1, 10, 20)
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
@@ -158,74 +105,31 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO"]
-own_world_3d = true
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport"]
-
-[node name="SmallSpeedBoat" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D" instance=ExtResource("2_gli4e")]
-_state = 1
-
-[node name="Hull" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="0"]
-visible = false
-
-[node name="DisplacementMesh" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
-
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D"]
-environment = SubResource("Environment_nqf5c")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
-
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 1, 4.371139e-08, -3.5527137e-15, 5.950036, 0, 0)
-light_energy = 0.2
-
-[node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D"]
+[node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport"]
 transform = Transform3D(0.6123724, -0.35355338, 0.7071067, 0.5, 0.8660254, 0, -0.6123724, 0.35355338, 0.7071067, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/Node3D2"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D2"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
 projection = 1
-size = 5.1105313
+size = 6.0
+far = 13.28
 
 [node name="Top" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer2"]
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top"]
-own_world_3d = true
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Node3D" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport"]
-
-[node name="SmallSpeedBoat" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D" instance=ExtResource("2_gli4e")]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-_state = 1
-
-[node name="Hull" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="0"]
-visible = false
-
-[node name="DisplacementMesh" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
-
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport"]
+transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, 0)
 projection = 1
 size = 5.1105313
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D"]
-environment = SubResource("Environment_nqf5c")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D/WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
 
 [node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer"]
 layout_mode = 2
@@ -242,7 +146,7 @@ layout_mode = 2
 
 [node name="Evaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("calculation_boat", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
 script = ExtResource("4_otdjp")
-calculation_boat = NodePath("../../../Model view/HBoxContainer/Side/SubViewport/Node3D/SmallSpeedBoat")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
 _mass_or_waterline = NodePath("../OptionButton")
 _mass_line = NodePath("../Mass selection")
 _waterline_line = NodePath("../Waterline selection")
@@ -574,11 +478,4 @@ text = "m"
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 
-[editable path="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D/SmallSpeedBoat"]
-[editable path="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport/Node3D/SmallSpeedBoat/SmallSpeedBoat"]
+[editable path="BoatView"]

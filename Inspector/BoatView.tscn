@@ -1,22 +1,54 @@
-[gd_scene load_steps=3 format=3 uid="uid://1k50il72p5qf"]
+[gd_scene load_steps=5 format=3 uid="uid://1k50il72p5qf"]
 
 [ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="1_f1310"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1310"]
+transparency = 1
+albedo_color = Color(0, 1.5386635, 3.0288723, 0.36862746)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_htfkw"]
+shading_mode = 0
+albedo_color = Color(0, 0.49019608, 1, 1)
+
 [node name="BoatView" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
-projection = 1
-size = 5.1105313
+[node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
+_state = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f1310")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-0.7444165, 0.3428395, 0.57297915, 0, 0.85811865, -0.5134514, -0.6677156, -0.3822217, -0.6387977, 5.950036, 0, 0)
-light_energy = 0.5
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
 
-[node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
-_state = 1
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(-4.371139e-08, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 1, 4.371139e-08, -3.5527137e-15, 5.950036, 0, 0)
+light_energy = 0.2
+
+[node name="WaterLevel" type="Node3D" parent="."]
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="WaterLevel"]
+material_override = SubResource("StandardMaterial3D_f1310")
+size = Vector3(20, 0, 20)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="WaterLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -25, 0)
+material_override = SubResource("StandardMaterial3D_htfkw")
+size = Vector3(0, 50, 20)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="WaterLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -25, 0)
+material_override = SubResource("StandardMaterial3D_htfkw")
+size = Vector3(0, 50, 20)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="WaterLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 10)
+material_override = SubResource("StandardMaterial3D_htfkw")
+size = Vector3(20, 50, 0)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="WaterLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, -10)
+material_override = SubResource("StandardMaterial3D_htfkw")
+size = Vector3(20, 50, 0)
