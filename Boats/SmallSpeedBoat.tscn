@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://chaqngu1cpmu8"]
+[gd_scene load_steps=12 format=3 uid="uid://chaqngu1cpmu8"]
 
 [ext_resource type="Script" uid="uid://3a3uhfevxm18" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatController.gd" id="1_cubwg"]
 [ext_resource type="Script" uid="uid://jlxtks6h7bha" path="res://iffnsStuff/BoatsForGodot/Scripts/InertiaCalculator.gd" id="1_ydj72"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://b44gn6lwh86bv" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_backward.tres" id="6_k7uqj"]
 [ext_resource type="Resource" uid="uid://bxcyp7nsrxiwf" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_right.tres" id="7_pno3k"]
 [ext_resource type="PackedScene" uid="uid://u3a1nn3shhfp" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.blend" id="7_y4o4b"]
+[ext_resource type="PackedScene" uid="uid://cvfryfw0opmiu" path="res://iffnsStuff/BoatsForGodot/Boats/Cube1m3.blend" id="8_1duon"]
 [ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="8_bpxxw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
@@ -43,15 +44,19 @@ input_left = ExtResource("8_bpxxw")
 linked_rigidbody = NodePath("..")
 thrust_output = NodePath("../VBoxContainer/f")
 
+[node name="Cube1m3" parent="." instance=ExtResource("8_1duon")]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.09971702, 0)
+visible = false
+
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("7_y4o4b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046, 0.906)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14587379, -0.24254811)
 
 [node name="DisplacementMesh" parent="SmallSpeedBoat" index="1"]
 visible = false
 
 [node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody", "linear_velocity_output", "angular_velocity_output", "buoyancy_force_output", "drag_force_output", "mass_output")]
 script = ExtResource("3_frvf1")
-hull_mesh = NodePath("../SmallSpeedBoat/Hull")
+hull_mesh = NodePath("../SmallSpeedBoat/DisplacementMesh")
 rigidbody = NodePath("..")
 linear_velocity_output = NodePath("../VBoxContainer/a")
 angular_velocity_output = NodePath("../VBoxContainer/b")
@@ -88,4 +93,5 @@ text = "e"
 layout_mode = 2
 text = "e"
 
+[editable path="Cube1m3"]
 [editable path="SmallSpeedBoat"]

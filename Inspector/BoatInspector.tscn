@@ -1,23 +1,31 @@
-[gd_scene load_steps=5 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=7 format=3 uid="uid://bodglwvbjrqjg"]
 
+[ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
 [ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_otdjp"]
+cull_mode = 2
+albedo_color = Color(1, 0, 0, 1)
+
 [node name="Node2D" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+visible = false
 position = Vector2(639, 325)
 script = ExtResource("1_vakq3")
 
 [node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
 
-[node name="Hull" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="0"]
+[node name="CollisionShape3D" parent="BoatView/SmallSpeedBoat" index="0"]
 visible = false
 
-[node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
+[node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_otdjp")
+skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -101,7 +109,7 @@ size = Vector2i(500, 250)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, -1.6765802)
 projection = 1
 size = 5.1105313
 
@@ -134,9 +142,18 @@ size = Vector2i(500, 250)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport"]
-transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, 0)
+transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, -1.677)
 projection = 1
 size = 5.1105313
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+text = "Update underwater mesh"
+
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model view" node_paths=PackedStringArray("calculation_boat", "visualization")]
+script = ExtResource("1_aak0k")
+calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+visualization = NodePath("../../../../BoatView/UnderwaterVisualization")
 
 [node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer"]
 layout_mode = 2
@@ -402,7 +419,7 @@ text = "Beam"
 
 [node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
 layout_mode = 2
-text = "Length on the waterline"
+text = "Length at the waterline"
 
 [node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
 layout_mode = 2
@@ -492,10 +509,12 @@ text = "m"
 layout_mode = 2
 text = "m"
 
+[connection signal="button_down" from="Control/HBoxContainer/Model view/Button" to="Control/HBoxContainer/Model view/Node" method="update_underwater_mesh"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 
 [editable path="BoatView"]
 [editable path="BoatView/SmallSpeedBoat"]
+[editable path="BoatView/SmallSpeedBoat/Cube1m3"]
 [editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]

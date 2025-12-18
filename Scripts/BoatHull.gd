@@ -94,6 +94,7 @@ func calculate_all() -> BoatCalculationData:
 	if(triangles_below_water.size() > 0):
 		output.water_plane_size_XZ = Vector2(water_x_max - water_x_min, water_z_max - water_z_min)
 		output.draft = -water_y_min
+		output.triangles_below_water = triangles_below_water
 	
 	return output
 
@@ -278,7 +279,6 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 		
 		var between_point_1 = lerp(high_point, low_point_1, high_point.y / (high_point.y - low_point_1.y))
 		var between_point_2 = lerp(high_point, low_point_2, high_point.y / (high_point.y - low_point_2.y))
-		
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, normal))
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, normal))
 		#above_water.append(AboveWaterTriangle.new(between_point_1, between_point_2, high_point, normal))
@@ -311,16 +311,35 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 				high_point_1 = v0
 				high_point_2 = v1
 		
-		#var between_point_1 = lerp(high_point_1, low_point, high_point_1.y / (high_point_1.y - low_point.y))
+		var between_point_1 = lerp(high_point_1, low_point, high_point_1.y / (high_point_1.y - low_point.y))
 		var between_point_2 = lerp(high_point_2, low_point, high_point_2.y / (high_point_2.y - low_point.y))
 		
 		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
 		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
-		below_water.append(BelowWaterTriangle.create_from_points(between_point_2, high_point_2, high_point_1, normal))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point, between_point_1, between_point_2, normal))
 		
 	else:
 		#above_water.append(self)
 		pass
+
+func assign_underwater_mesh(mesh_instance : MeshInstance3D, triangles_below_water : Array[BelowWaterTriangle]):
+	var surface_tool := SurfaceTool.new()
+	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	
+	for triangle in triangles_below_water:
+		surface_tool.add_vertex(triangle.v0_world)
+		surface_tool.add_vertex(triangle.v1_world)
+		surface_tool.add_vertex(triangle.v2_world)
+	
+	for triangle in mesh_triangles:
+		break
+		surface_tool.add_vertex(triangle.v0_world)
+		surface_tool.add_vertex(triangle.v1_world)
+		surface_tool.add_vertex(triangle.v2_world)
+	
+	var array_mesh := ArrayMesh.new()
+	surface_tool.commit(array_mesh)
+	mesh_instance.mesh = array_mesh
 
 func find_waterline(buoyancy_goal: float) -> float:
 	var original_value := rigidbody.position.y
@@ -391,6 +410,7 @@ class BoatCalculationData:
 	var drag_force: Vector3
 	var water_plane_size_XZ: Vector2
 	var draft: float
+	var triangles_below_water : Array[BelowWaterTriangle]
 
 class MeshTriangle:
 	var v0_local : Vector3
@@ -467,7 +487,7 @@ class BelowWaterTriangle:
 		var the_area = triangle.area
 		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * BoatHull.get_distance_to_water(the_hydrostatic_center_world) * the_area * triangle.normal_world
 		
-		return BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v1_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
+		return BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v2_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
 	
 	static func create_from_points(v0_world: Vector3, v1_world: Vector3, v2_world, normal_world: Vector3)  -> BelowWaterTriangle:
 		var the_geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
