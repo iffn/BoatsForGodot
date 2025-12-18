@@ -209,3 +209,6 @@ shape = SubResource("ConcavePolygonShape3D_omhcd")
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("3_t7f04")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.062305927, -1.1920929e-07, -0.9102068)
+
+[node name="Camera3D" type="Camera3D" parent="SmallSpeedBoat"]
+transform = Transform3D(1, 0, 0, 0, 0.9626634, 0.27070126, 0, -0.27070126, 0.9626634, 0, 2.0350552, 5.546309)

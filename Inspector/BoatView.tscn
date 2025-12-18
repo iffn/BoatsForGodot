@@ -1,15 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://1k50il72p5qf"]
 
-[ext_resource type="PackedScene" uid="uid://u3a1nn3shhfp" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.blend" id="1_f1310"]
+[ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="1_f1310"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
 
 [node name="BoatView" type="Node3D"]
 
-[node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
-
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.094271, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
 projection = 1
 size = 5.1105313
 
@@ -17,4 +15,8 @@ size = 5.1105313
 environment = SubResource("Environment_f1310")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
+transform = Transform3D(-0.7444165, 0.3428395, 0.57297915, 0, 0.85811865, -0.5134514, -0.6677156, -0.3822217, -0.6387977, 5.950036, 0, 0)
+light_energy = 0.5
+
+[node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
+_state = 1
