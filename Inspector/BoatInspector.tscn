@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=5 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
 [ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
+[ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 
 [node name="Node2D" type="Node2D"]
@@ -11,6 +12,12 @@ position = Vector2(639, 325)
 script = ExtResource("1_vakq3")
 
 [node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
+
+[node name="Hull" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="0"]
+visible = false
+
+[node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
+visible = true
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -362,12 +369,22 @@ layout_mode = 2
 layout_mode = 2
 text = "Analysis"
 
+[node name="Button" type="Button" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+text = "Evaluate all"
+
 [node name="Basic geometry" type="VBoxContainer" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
 
 [node name="Subtitle" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry"]
 layout_mode = 2
 text = "Basic geometry:"
+
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+script = ExtResource("4_aak0k")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+_basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
+_basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry"]
 layout_mode = 2
@@ -477,5 +494,8 @@ text = "m"
 
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 
 [editable path="BoatView"]
+[editable path="BoatView/SmallSpeedBoat"]
+[editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]

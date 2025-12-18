@@ -24,6 +24,10 @@ class_name BoatHull
 
 var mesh_triangles : Array[MeshTriangle]
 
+var bounding_box : AABB:
+	get:
+		return hull_mesh.get_aabb()
+
 func _ready() -> void:
 	convert_mesh()
 
@@ -76,16 +80,20 @@ func calculate_all() -> BoatCalculationData:
 		
 		output.buoyancy_force += triangle.static_pressure_force_world
 		output.drag_force += drag
+		water_y_min = min(triangle.v0_world.y, water_y_min)
+		water_y_min = min(triangle.v1_world.y, water_y_min)
+		water_y_min = min(triangle.v2_world.y, water_y_min)
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
 		water_x_min = min(point.x, water_x_min)
 		water_z_max = max(point.z, water_z_max)
 		water_z_min = min(point.z, water_z_min)
-		water_y_min = min(point.y, water_y_min)
+		
 	
 	if(triangles_below_water.size() > 0):
 		output.water_plane_size_XZ = Vector2(water_x_max - water_x_min, water_z_max - water_z_min)
+		output.draft = -water_y_min
 	
 	return output
 
@@ -382,7 +390,7 @@ class BoatCalculationData:
 	var buoyancy_force : Vector3
 	var drag_force: Vector3
 	var water_plane_size_XZ: Vector2
-	var depth: float
+	var draft: float
 
 class MeshTriangle:
 	var v0_local : Vector3
