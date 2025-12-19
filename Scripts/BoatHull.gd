@@ -89,12 +89,12 @@ func calculate_all() -> BoatCalculationData:
 		water_x_min = min(point.x, water_x_min)
 		water_z_max = max(point.z, water_z_max)
 		water_z_min = min(point.z, water_z_min)
-		
 	
 	if(triangles_below_water.size() > 0):
 		output.water_plane_size_XZ = Vector2(water_x_max - water_x_min, water_z_max - water_z_min)
 		output.draft = -water_y_min
 		output.triangles_below_water = triangles_below_water
+		output.waterline_points = waterline_points
 	
 	return output
 
@@ -136,11 +136,10 @@ func convert_mesh():
 	
 	mesh_data_tool.clear()
 
-func assign_water_line(triangle : MeshTriangle, water_line  : Array[Vector3]) -> void:
+func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> void:
 	var v0 := triangle.v0_world
 	var v1 := triangle.v1_world
 	var v2 := triangle.v2_world
-	var normal := triangle.normal_world
 	
 	var distance_to_water_0 := get_distance_to_water(v0)
 	var distance_to_water_1 := get_distance_to_water(v1)
@@ -160,32 +159,47 @@ func assign_water_line(triangle : MeshTriangle, water_line  : Array[Vector3]) ->
 		var low_point_1 : Vector3
 		var low_point_2 : Vector3
 		
+		var distance_to_water_high : float
+		var distance_to_water_low_1 : float
+		var distance_to_water_low_2 : float
+		
 		if v0.y > v1.y:
 			if v0.y > v2.y:
 				# Order tested
 				high_point = v0
 				low_point_1 = v1
 				low_point_2 = v2
+				distance_to_water_high = distance_to_water_0
+				distance_to_water_low_1 = distance_to_water_1
+				distance_to_water_low_2 = distance_to_water_2
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
+				distance_to_water_high = distance_to_water_2
+				distance_to_water_low_1 = distance_to_water_0
+				distance_to_water_low_2 = distance_to_water_1
 		else:
 			if v1.y > v2.y:
 				# Order tested
 				high_point = v1
 				low_point_1 = v2
 				low_point_2 = v0
+				distance_to_water_high = distance_to_water_1
+				distance_to_water_low_1 = distance_to_water_2
+				distance_to_water_low_2 = distance_to_water_0
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
+				distance_to_water_high = distance_to_water_2
+				distance_to_water_low_1 = distance_to_water_0
+				distance_to_water_low_2 = distance_to_water_1
 		
-		var between_point_1 = lerp(high_point, low_point_1, high_point.y / (high_point.y - low_point_1.y))
-		var between_point_2 = lerp(high_point, low_point_2, high_point.y / (high_point.y - low_point_2.y))
-		
+		var between_point_1 = lerp(high_point, low_point_1, distance_to_water_high / (distance_to_water_high - distance_to_water_low_1))
+		var between_point_2 = lerp(high_point, low_point_2, distance_to_water_high / (distance_to_water_high - distance_to_water_low_2))
 		water_line.append(between_point_1)
 		water_line.append(between_point_2)
 		
@@ -193,6 +207,9 @@ func assign_water_line(triangle : MeshTriangle, water_line  : Array[Vector3]) ->
 		var low_point : Vector3
 		var high_point_1 : Vector3
 		var high_point_2 : Vector3
+		var distance_to_water_low : float
+		var distance_to_water_high_1 : float
+		var distance_to_water_high_2 : float
 		
 		if v0.y < v1.y:
 			if v0.y < v2.y:
@@ -200,37 +217,43 @@ func assign_water_line(triangle : MeshTriangle, water_line  : Array[Vector3]) ->
 				low_point = v0
 				high_point_1 = v1
 				high_point_2 = v2
+				distance_to_water_low = distance_to_water_0
+				distance_to_water_high_1 = distance_to_water_1
+				distance_to_water_high_2 = distance_to_water_2
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
+				distance_to_water_low = distance_to_water_2
+				distance_to_water_high_1 = distance_to_water_0
+				distance_to_water_high_2 = distance_to_water_1
 		else:
 			if v1.y < v2.y:
 				# Order tested
 				low_point = v1
 				high_point_1 = v2
 				high_point_2 = v0
+				distance_to_water_low = distance_to_water_1
+				distance_to_water_high_1 = distance_to_water_2
+				distance_to_water_high_2 = distance_to_water_0
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
+				distance_to_water_low = distance_to_water_2
+				distance_to_water_high_1 = distance_to_water_0
+				distance_to_water_high_2 = distance_to_water_1
 		
-		var between_point_1 = lerp(high_point_1, low_point, high_point_1.y / (high_point_1.y - low_point.y))
-		var between_point_2 = lerp(high_point_2, low_point, high_point_2.y / (high_point_2.y - low_point.y))
-		
+		var between_point_1 = lerp(high_point_1, low_point, distance_to_water_high_1 / (distance_to_water_high_1 - distance_to_water_low))
+		var between_point_2 = lerp(high_point_2, low_point, distance_to_water_high_2 / (distance_to_water_high_2 - distance_to_water_low))
 		water_line.append(between_point_1)
 		water_line.append(between_point_2)
-		
-		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
-		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
-		
 	else:
-		#above_water.append(self)
 		pass
 
-func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterTriangle]) -> void:
+func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTriangle]) -> void:
 	var v0 := triangle.v0_world
 	var v1 := triangle.v1_world
 	var v2 := triangle.v2_world
@@ -442,6 +465,7 @@ class BoatCalculationData:
 	var water_plane_size_XZ: Vector2
 	var draft: float
 	var triangles_below_water : Array[BelowWaterTriangle]
+	var waterline_points : Array[Vector3]
 
 class MeshTriangle:
 	var v0_local : Vector3

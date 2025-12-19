@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=8 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
 [ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
+[ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_otdjp"]
 cull_mode = 2
@@ -399,6 +400,110 @@ text = "Analysis"
 layout_mode = 2
 text = "Evaluate all"
 
+[node name="Mesh info" type="VBoxContainer" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info"]
+layout_mode = 2
+text = "Mesh info:"
+
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Mesh info" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+script = ExtResource("5_uk4ya")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+_basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
+_basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info"]
+layout_mode = 2
+
+[node name="Names" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Vertices"
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Triangles"
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Is closed"
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Below water triangles"
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Cut triangles"
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Calculation time"
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Data" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "Maybe"
+horizontal_alignment = 2
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Units" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+text = "ms"
+
+[node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+
 [node name="Basic geometry" type="VBoxContainer" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
 
@@ -454,37 +559,37 @@ layout_mode = 2
 
 [node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Name7" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
 layout_mode = 2
-text = "123"
+text = "?"
 horizontal_alignment = 2
 
 [node name="Units" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer"]
@@ -521,6 +626,7 @@ text = "m"
 [connection signal="button_down" from="Control/HBoxContainer/Model view/Button" to="Control/HBoxContainer/Model view/Node" method="update_underwater_mesh"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 
 [editable path="BoatView"]
