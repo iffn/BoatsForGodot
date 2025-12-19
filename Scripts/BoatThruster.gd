@@ -1,6 +1,6 @@
 extends Node3D
 
-class_name BoatController
+class_name BoatThruster
 
 @export var engine_thrust : float
 @export var engine_rotation_deg : float

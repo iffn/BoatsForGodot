@@ -1,0 +1,652 @@
+[gd_scene load_steps=9 format=3 uid="uid://bodglwvbjrqjg"]
+
+[ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
+[ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
+[ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
+[ext_resource type="Script" uid="uid://dlwej14u6j545" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/CenterEvaluator.gd" id="4_7s5vx"]
+[ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
+[ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
+[ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_otdjp"]
+cull_mode = 2
+albedo_color = Color(1, 0, 0, 1)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+visible = false
+position = Vector2(639, 325)
+script = ExtResource("1_vakq3")
+
+[node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
+
+[node name="SmallSpeedBoat" parent="BoatView" index="0"]
+mass = 7732.4
+
+[node name="CollisionShape3D" parent="BoatView/SmallSpeedBoat" index="0"]
+visible = false
+
+[node name="Hull" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="0"]
+visible = false
+
+[node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
+visible = true
+
+[node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_otdjp")
+skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 227.0
+offset_bottom = 148.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Model selection" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "Model selection"
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "Source:"
+
+[node name="OptionButton" type="OptionButton" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "Sample boat"
+popup/item_0/id = 0
+popup/item_1/text = "Import glTF"
+popup/item_1/id = 1
+popup/item_2/text = "Import obj"
+popup/item_2/id = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "Import text:"
+
+[node name="CodeEdit" type="CodeEdit" parent="Control/HBoxContainer/Model selection"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model selection"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+text = "Import"
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Model view" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+text = "Model view
+"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+
+[node name="Front" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer"]
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer/Front"]
+handle_input_locally = false
+size = Vector2i(500, 250)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0, -6.0458403)
+projection = 1
+size = 5.1105313
+
+[node name="Side" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer"]
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer/Side"]
+handle_input_locally = false
+size = Vector2i(500, 250)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, -1.6765802)
+projection = 1
+size = 5.1105313
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+
+[node name="ISO" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer2"]
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO"]
+handle_input_locally = false
+size = Vector2i(500, 250)
+render_target_update_mode = 4
+
+[node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport"]
+transform = Transform3D(0.6123724, -0.35355338, 0.7071067, 0.5, 0.8660254, 0, -0.6123724, 0.35355338, 0.7071067, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D2"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
+projection = 1
+size = 6.0
+far = 13.28
+
+[node name="Top" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer2"]
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top"]
+handle_input_locally = false
+size = Vector2i(500, 250)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport"]
+transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, -1.677)
+projection = 1
+size = 5.1105313
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
+layout_mode = 2
+text = "Update underwater mesh"
+
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button" node_paths=PackedStringArray("calculation_boat", "visualization")]
+script = ExtResource("1_aak0k")
+calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+visualization = NodePath("../../../../../../BoatView/UnderwaterVisualization")
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
+layout_mode = 2
+text = "Update centers"
+
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button2" node_paths=PackedStringArray("calculation_boat", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
+script = ExtResource("4_7s5vx")
+calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
+center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
+
+[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Model setup" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+text = "Model setup"
+
+[node name="MassWaterline" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("calculation_boat", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
+script = ExtResource("4_otdjp")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+_mass_or_waterline = NodePath("../OptionButton")
+_mass_line = NodePath("../Mass selection")
+_waterline_line = NodePath("../Waterline selection")
+_mass_input = NodePath("../Mass selection/LineEdit")
+_waterline_input = NodePath("../Waterline selection/LineEdit")
+_output = NodePath("../Mass_WaterLine output")
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+text = "Mass and waterline:"
+
+[node name="OptionButton" type="OptionButton" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Waterline from mass"
+popup/item_0/id = 0
+popup/item_1/text = "Mass from waterline"
+popup/item_1/id = 1
+
+[node name="Mass selection" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
+layout_mode = 2
+text = "Mass:"
+
+[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
+layout_mode = 2
+placeholder_text = "Mass"
+alignment = 2
+max_length = 12
+expand_to_text_length = true
+
+[node name="Title2" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
+layout_mode = 2
+text = "kg"
+
+[node name="Waterline selection" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
+layout_mode = 2
+text = "Waterline from origin"
+
+[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="Title2" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
+layout_mode = 2
+text = "m"
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+text = "Evaluate"
+
+[node name="Mass_WaterLine output" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline"]
+layout_mode = 2
+text = "Not yet calculated"
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+
+[node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia"]
+layout_mode = 2
+text = "Moment of inertia:"
+
+[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+layout_mode = 2
+text = " "
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = " X"
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = " Y"
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = " Z"
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+layout_mode = 2
+text = "Recommendation"
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+layout_mode = 2
+text = "User"
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="LineEdit2" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="LineEdit3" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+layout_mode = 2
+text = "Unit"
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "kg⋅m²"
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "kg⋅m²"
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "kg⋅m²"
+
+[node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+
+[node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Analysis" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+text = "Analysis"
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+text = "Evaluate all"
+
+[node name="Mesh info" type="VBoxContainer" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info"]
+layout_mode = 2
+text = "Mesh info:"
+
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Mesh info" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+script = ExtResource("5_uk4ya")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+_basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
+_basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info"]
+layout_mode = 2
+
+[node name="Names" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Vertices"
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Triangles"
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Is closed"
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Below water triangles"
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Cut triangles"
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Names"]
+layout_mode = 2
+text = "Calculation time"
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Data" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "Maybe"
+horizontal_alignment = 2
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Units" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Mesh info/HBoxContainer/Units"]
+layout_mode = 2
+text = "ms"
+
+[node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+
+[node name="Basic geometry" type="VBoxContainer" parent="Control/HBoxContainer/Analysis"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry"]
+layout_mode = 2
+text = "Basic geometry:"
+
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+script = ExtResource("4_aak0k")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+_basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
+_basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry"]
+layout_mode = 2
+
+[node name="Names" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Length overal"
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Beam"
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Length at the waterline"
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Beam at the waterline"
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Depth"
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Draft"
+
+[node name="Name7" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Names"]
+layout_mode = 2
+text = "Freeboard"
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer"]
+layout_mode = 2
+
+[node name="Data" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Name7" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Data"]
+layout_mode = 2
+text = "?"
+horizontal_alignment = 2
+
+[node name="Units" type="VBoxContainer" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name2" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name3" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name4" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name5" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name6" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[node name="Name7" type="Label" parent="Control/HBoxContainer/Analysis/Basic geometry/HBoxContainer/Units"]
+layout_mode = 2
+text = "m"
+
+[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button2" to="Control/HBoxContainer/Model view/HBoxContainer3/Button2/Node" method="update_centers"]
+[connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
+[connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
+
+[editable path="BoatView"]
+[editable path="BoatView/SmallSpeedBoat"]
+[editable path="BoatView/SmallSpeedBoat/Cube1m3"]
+[editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]
+[editable path="BoatView/Center of mass indicator"]
+[editable path="BoatView/Center of buoyancy indicator"]
