@@ -254,31 +254,47 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 		var low_point_1 : Vector3
 		var low_point_2 : Vector3
 		
+		var distance_to_water_high : float
+		var distance_to_water_low_1 : float
+		var distance_to_water_low_2 : float
+		
 		if v0.y > v1.y:
 			if v0.y > v2.y:
 				# Order tested
 				high_point = v0
 				low_point_1 = v1
 				low_point_2 = v2
+				distance_to_water_high = distance_to_water_0
+				distance_to_water_low_1 = distance_to_water_1
+				distance_to_water_low_2 = distance_to_water_2
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
+				distance_to_water_high = distance_to_water_2
+				distance_to_water_low_1 = distance_to_water_0
+				distance_to_water_low_2 = distance_to_water_1
 		else:
 			if v1.y > v2.y:
 				# Order tested
 				high_point = v1
 				low_point_1 = v2
 				low_point_2 = v0
+				distance_to_water_high = distance_to_water_1
+				distance_to_water_low_1 = distance_to_water_2
+				distance_to_water_low_2 = distance_to_water_0
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
+				distance_to_water_high = distance_to_water_2
+				distance_to_water_low_1 = distance_to_water_0
+				distance_to_water_low_2 = distance_to_water_1
 		
-		var between_point_1 = lerp(high_point, low_point_1, high_point.y / (high_point.y - low_point_1.y))
-		var between_point_2 = lerp(high_point, low_point_2, high_point.y / (high_point.y - low_point_2.y))
+		var between_point_1 = lerp(high_point, low_point_1, distance_to_water_high / (distance_to_water_high - distance_to_water_low_1))
+		var between_point_2 = lerp(high_point, low_point_2, distance_to_water_high / (distance_to_water_high - distance_to_water_low_2))
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, normal))
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, normal))
 		#above_water.append(AboveWaterTriangle.new(between_point_1, between_point_2, high_point, normal))
@@ -287,6 +303,9 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 		var low_point : Vector3
 		var high_point_1 : Vector3
 		var high_point_2 : Vector3
+		var distance_to_water_low : float
+		var distance_to_water_high_1 : float
+		var distance_to_water_high_2 : float
 		
 		if v0.y < v1.y:
 			if v0.y < v2.y:
@@ -294,25 +313,37 @@ func assign_below_water(triangle : MeshTriangle, below_water : Array[BelowWaterT
 				low_point = v0
 				high_point_1 = v1
 				high_point_2 = v2
+				distance_to_water_low = distance_to_water_0
+				distance_to_water_high_1 = distance_to_water_1
+				distance_to_water_high_2 = distance_to_water_2
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
+				distance_to_water_low = distance_to_water_2
+				distance_to_water_high_1 = distance_to_water_0
+				distance_to_water_high_2 = distance_to_water_1
 		else:
 			if v1.y < v2.y:
 				# Order tested
 				low_point = v1
 				high_point_1 = v2
 				high_point_2 = v0
+				distance_to_water_low = distance_to_water_1
+				distance_to_water_high_1 = distance_to_water_2
+				distance_to_water_high_2 = distance_to_water_0
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
+				distance_to_water_low = distance_to_water_2
+				distance_to_water_high_1 = distance_to_water_0
+				distance_to_water_high_2 = distance_to_water_1
 		
-		var between_point_1 = lerp(high_point_1, low_point, high_point_1.y / (high_point_1.y - low_point.y))
-		var between_point_2 = lerp(high_point_2, low_point, high_point_2.y / (high_point_2.y - low_point.y))
+		var between_point_1 = lerp(high_point_1, low_point, distance_to_water_high_1 / (distance_to_water_high_1 - distance_to_water_low))
+		var between_point_2 = lerp(high_point_2, low_point, distance_to_water_high_2 / (distance_to_water_high_2 - distance_to_water_low))
 		
 		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
 		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
