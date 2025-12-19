@@ -19,8 +19,17 @@ script = ExtResource("1_vakq3")
 
 [node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
 
+[node name="SmallSpeedBoat" parent="BoatView" index="0"]
+mass = 7732.4
+
 [node name="CollisionShape3D" parent="BoatView/SmallSpeedBoat" index="0"]
 visible = false
+
+[node name="Hull" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="0"]
+visible = false
+
+[node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
+visible = true
 
 [node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
 transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
