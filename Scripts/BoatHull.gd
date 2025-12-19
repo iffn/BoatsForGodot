@@ -68,10 +68,21 @@ func calculate_all() -> BoatCalculationData:
 	var water_z_min := INF
 	var water_y_min := INF
 	
+	var center_of_buoyancy_world_additive := Vector3(0,0,0)
+	var displaced_volume_additive := 0.0
+	var water_line_point := Vector3(0,0,0)
+	water_line_point.y = get_distance_to_water(water_line_point)
+	
 	for triangle in triangles_below_water:
-		# Buoyancy
-		var application_position := triangle.hydrostatic_center_world - rigidbody.global_position
-		var application_force := buoyancy_multiplier * triangle.static_pressure_force_world
+		var a := triangle.v0_world - water_line_point;
+		var b := triangle.v1_world - water_line_point;
+		var c := triangle.v2_world - water_line_point;
+		
+		var tetrahedron_volume := (-0.1666666667) * a.dot(b.cross(c));
+		var tetrahedron_center := 0.25 * (triangle.v0_world + triangle.v1_world + triangle.v2_world + water_line_point)
+		
+		displaced_volume_additive += tetrahedron_volume
+		center_of_buoyancy_world_additive += tetrahedron_volume * tetrahedron_center	
 		
 		var drag = drag_multiplier * triangle.world_drag_force(velocity_world, drag_coefficient)
 		
@@ -92,6 +103,9 @@ func calculate_all() -> BoatCalculationData:
 		output.draft = -water_y_min
 		output.triangles_below_water = triangles_below_water
 		output.waterline_points = waterline_points
+		center_of_buoyancy_world_additive = (1.0/displaced_volume_additive) * center_of_buoyancy_world_additive
+		output.center_of_buoyancy_world = center_of_buoyancy_world_additive
+		output.displaced_volume = displaced_volume_additive
 	
 	return output
 
@@ -463,6 +477,8 @@ class BoatCalculationData:
 	var draft: float
 	var triangles_below_water : Array[BelowWaterTriangle]
 	var waterline_points : Array[Vector3]
+	var center_of_buoyancy_world: Vector3
+	var displaced_volume: float
 
 class MeshTriangle:
 	var v0_local : Vector3

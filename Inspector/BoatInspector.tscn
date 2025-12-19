@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=9 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
 [ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
+[ext_resource type="Script" uid="uid://dlwej14u6j545" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/CenterEvaluator.gd" id="4_7s5vx"]
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
@@ -156,14 +157,27 @@ transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -
 projection = 1
 size = 5.1105313
 
-[node name="Button" type="Button" parent="Control/HBoxContainer/Model view"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
 layout_mode = 2
 text = "Update underwater mesh"
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Model view" node_paths=PackedStringArray("calculation_boat", "visualization")]
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button" node_paths=PackedStringArray("calculation_boat", "visualization")]
 script = ExtResource("1_aak0k")
-calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
-visualization = NodePath("../../../../BoatView/UnderwaterVisualization")
+calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+visualization = NodePath("../../../../../../BoatView/UnderwaterVisualization")
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
+layout_mode = 2
+text = "Update centers"
+
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button2" node_paths=PackedStringArray("calculation_boat", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
+script = ExtResource("4_7s5vx")
+calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
+center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
 
 [node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer"]
 layout_mode = 2
@@ -623,7 +637,8 @@ text = "m"
 layout_mode = 2
 text = "m"
 
-[connection signal="button_down" from="Control/HBoxContainer/Model view/Button" to="Control/HBoxContainer/Model view/Node" method="update_underwater_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button2" to="Control/HBoxContainer/Model view/HBoxContainer3/Button2/Node" method="update_centers"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
@@ -633,3 +648,5 @@ text = "m"
 [editable path="BoatView/SmallSpeedBoat"]
 [editable path="BoatView/SmallSpeedBoat/Cube1m3"]
 [editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]
+[editable path="BoatView/Center of mass indicator"]
+[editable path="BoatView/Center of buoyancy indicator"]
