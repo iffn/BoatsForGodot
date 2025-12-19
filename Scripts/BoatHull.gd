@@ -7,9 +7,6 @@ class_name BoatHull
 # https://www.habrador.com/tutorials/unity-boat-tutorial
 # https://github.com/iffn/iffnsBoatsForVRChat/blob/main/Scripts/HullCalculator.cs
 
-# ToDo Debug:
-# - Check assign functions if between points are calculated correctly -> Check mesh
-
 @export var drag_coefficient : float = 0.05
 @export var drag_multiplier : float  = 1.0
 @export var buoyancy_multiplier : float  = 1.0
