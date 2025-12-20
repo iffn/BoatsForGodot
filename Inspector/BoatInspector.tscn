@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=21 format=4 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -11,14 +11,8 @@
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Script" uid="uid://d3sl380qqsy2g" path="res://iffnsStuff/BoatsForGodot/Scripts/SineWaveWaterLevelProvider.gd" id="5_6y73o"]
-[ext_resource type="Shader" uid="uid://bw6nr28nw7kf4" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeShader.gdshader" id="5_7o47y"]
+[ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_7o47y"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ac1ni"]
-render_priority = 0
-shader = ExtResource("5_7o47y")
-shader_parameter/albedo = Color(1, 0, 0, 1)
-shader_parameter/outline_width = 3.0
 
 [sub_resource type="Shader" id="Shader_ot8kp"]
 code = "// NOTE: Shader automatically converted from Godot Engine 4.3.stable's StandardMaterial3D.
@@ -201,9 +195,6 @@ visible = false
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 visible = false
 
-[node name="Grid" parent="BoatView/SmallSpeedBoat/Triangle" index="0"]
-visible = false
-
 [node name="Cube" parent="BoatView/SmallSpeedBoat/Cube1m3" index="0"]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.14250088, 0)
 
@@ -211,7 +202,7 @@ transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.14250
 visible = false
 
 [node name="HullCalculation" parent="BoatView/SmallSpeedBoat" index="6" node_paths=PackedStringArray("hull_mesh", "water_level")]
-hull_mesh = NodePath("../Triangle/Grid")
+hull_mesh = NodePath("../Triangle/Grid-5x5")
 water_level = NodePath("../../Water2/SineWaveWaterLevel")
 
 [node name="WaterLevel" parent="BoatView" index="2"]
@@ -219,7 +210,7 @@ visible = false
 
 [node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
 transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_ac1ni")
+material_override = ExtResource("5_7o47y")
 skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
 
 [node name="Water2" type="Node3D" parent="BoatView" node_paths=PackedStringArray("target")]
