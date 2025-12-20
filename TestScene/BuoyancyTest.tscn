@@ -1,8 +1,9 @@
-[gd_scene load_steps=23 format=4 uid="uid://5dm7gun61a5o"]
+[gd_scene load_steps=24 format=4 uid="uid://5dm7gun61a5o"]
 
-[ext_resource type="PackedScene" uid="uid://d0uhj1n4oep8g" path="res://iffnsStuff/BoatsForGodot/Boats/FloatingCube.tscn" id="3_35urj"]
+[ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="3_t7f04"]
 [ext_resource type="PackedScene" uid="uid://b4fso0ql27llx" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTree.tscn" id="4_35urj"]
 [ext_resource type="Script" uid="uid://ccp6qq033aevu" path="res://iffnsStuff/BoatsForGodot/Water/WaterFollower.gd" id="4_omhcd"]
+[ext_resource type="Script" uid="uid://d3sl380qqsy2g" path="res://iffnsStuff/BoatsForGodot/Scripts/SineWaveWaterLevelProvider.gd" id="5_omhcd"]
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="9_0pqji"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="10_uf2u0"]
 
@@ -184,7 +185,7 @@ as_normal_map = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_56d3r"]
 render_priority = 0
 shader = SubResource("Shader_ot8kp")
-shader_parameter/wave_height = 0.5
+shader_parameter/wave_height = 0.2
 shader_parameter/wave_frequency = 1.0
 shader_parameter/wave_length = 2.0
 shader_parameter/albedo = Color(0.219608, 0.447059, 0.658824, 0.494118)
@@ -271,86 +272,9 @@ size = Vector3(20, 20, 20)
 [node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D4/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_omhcd")
 
-[node name="FloatingCube" parent="." instance=ExtResource("3_35urj")]
-
-[node name="FloatingCube2" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.870841, 0, 0)
-
-[node name="FloatingCube3" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.338847, 0, 0)
-
-[node name="FloatingCube4" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.338847, 0, 7.2916594)
-
-[node name="FloatingCube5" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.23240757, 0, 10.986815)
-
-[node name="FloatingCube6" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8898468, -1.9073486e-06, 5.1860075)
-
-[node name="FloatingCube7" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3361588, -1.9073486e-06, 11.538517)
-
-[node name="FloatingCube8" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.090124, -1.9073486e-06, 12.202343)
-
-[node name="FloatingCube9" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34415054, -2.861023e-06, 15.130693)
-
-[node name="FloatingCube10" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1740646, -2.861023e-06, 6.359538)
-
-[node name="FloatingCube11" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.726994, -2.861023e-06, 6.6565228)
-
-[node name="FloatingCube12" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.333485, -2.861023e-06, 3.4596052)
-
-[node name="FloatingCube13" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7486086, -2.861023e-06, 3.9760876)
-
-[node name="FloatingCube14" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9513235, -1.9073486e-06, -5.728587)
-
-[node name="FloatingCube15" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8996534, -1.9073486e-06, -5.6524467)
-
-[node name="FloatingCube16" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3809414, -1.9073486e-06, -5.5544586)
-
-[node name="FloatingCube17" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3481236, -1.9073486e-06, -10.504192)
-
-[node name="FloatingCube18" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5880766, -1.9073486e-06, -11.242622)
-
-[node name="FloatingCube19" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.060353, -1.9073486e-06, 10.12661)
-
-[node name="FloatingCube20" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.060353, -1.9073486e-06, 0.1266098)
-
-[node name="FloatingCube21" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.392128, -1.9073486e-06, 5.1795893)
-
-[node name="FloatingCube22" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.1924, -1.9073486e-06, -0.72658634)
-
-[node name="FloatingCube23" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.928186, -1.9073486e-06, 4.551964)
-
-[node name="FloatingCube24" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.297693, -1.9073486e-06, 10.478399)
-
-[node name="FloatingCube25" parent="." instance=ExtResource("3_35urj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.297693, -1.9073486e-06, -7.5216007)
-
-[node name="Camera3D2" type="Camera3D" parent="."]
-transform = Transform3D(-1, -1.9763956e-08, 8.515943e-08, 0, 0.9741103, 0.2260733, -8.742278e-08, 0.2260733, -0.9741103, -0.5824514, 6.9439955, -19.654053)
-
 [node name="Node3D" type="Node3D" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("4_omhcd")
-target = NodePath("../FloatingCube")
+target = NodePath("../SmallSpeedBoat")
 
 [node name="RestrictedQuadTree" parent="Node3D" instance=ExtResource("4_35urj")]
 material_override = SubResource("ShaderMaterial_56d3r")
@@ -361,3 +285,19 @@ grid_resolution = 100
 inner_radius = 60.0
 side_quad_count = 10
 depth = 4
+
+[node name="SineWaveWaterLevel" type="Node" parent="."]
+script = ExtResource("5_omhcd")
+water_material = SubResource("ShaderMaterial_56d3r")
+
+[node name="SmallSpeedBoat" parent="." instance=ExtResource("3_t7f04")]
+
+[node name="HullCalculation" parent="SmallSpeedBoat" index="4" node_paths=PackedStringArray("water_level")]
+water_level = NodePath("../../SineWaveWaterLevel")
+
+[node name="Camera3D2" type="Camera3D" parent="SmallSpeedBoat"]
+transform = Transform3D(1, 0, 0, 0, 0.97397596, 0.2266513, 0, -0.2266513, 0.97397596, -4.7683716e-07, 2.4995902, 5.567319)
+
+[editable path="SmallSpeedBoat"]
+[editable path="SmallSpeedBoat/Cube1m3"]
+[editable path="SmallSpeedBoat/SmallSpeedBoat"]

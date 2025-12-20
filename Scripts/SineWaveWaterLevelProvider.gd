@@ -1,0 +1,18 @@
+extends WaterLevelProvider
+
+class_name SineWaveWaterLevelProvider
+
+@export var water_material : ShaderMaterial
+
+var wave_height : float = 0.0
+var wave_frequency : float = 1.0
+var wave_length : float = 1.0
+
+func _ready() -> void:
+	wave_height = water_material.get_shader_parameter("wave_height")
+	wave_frequency = water_material.get_shader_parameter("wave_frequency")
+	wave_length = water_material.get_shader_parameter("wave_length")
+
+func get_distance_to_water(world_position : Vector3) -> float:
+	var water_pos_y := wave_height * sin(world_position.z / wave_length + Time.get_ticks_msec() * 0.001 * wave_frequency)
+	return world_position.y - water_pos_y
