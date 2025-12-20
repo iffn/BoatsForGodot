@@ -1,7 +1,7 @@
 // NOTE: Shader automatically converted from Godot Engine 4.5.1.stable's StandardMaterial3D.
 
 shader_type spatial;
-render_mode cull_disabled, wireframe;
+render_mode unshaded, cull_disabled, wireframe;
 
 uniform vec4 albedo : source_color;
 

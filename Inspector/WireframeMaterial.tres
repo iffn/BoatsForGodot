@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://de0c640fkbred"]
+
+[ext_resource type="Shader" uid="uid://bw6nr28nw7kf4" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeShader.gdshader" id="1_bv8vl"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bv8vl")
+shader_parameter/albedo = Color(1, 0, 0, 1)
+shader_parameter/outline_width = 3.0
