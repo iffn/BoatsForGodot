@@ -270,15 +270,15 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 	var v2 := triangle.v2_world
 	var normal := triangle.normal_world
 	
-	var distance_to_water_0 := water_level.get_distance_to_water(v0)
-	var distance_to_water_1 := water_level.get_distance_to_water(v1)
-	var distance_to_water_2 := water_level.get_distance_to_water(v2)
+	var h0 := water_level.get_distance_to_water(v0)
+	var h1 := water_level.get_distance_to_water(v1)
+	var h2 := water_level.get_distance_to_water(v2)
 	
 	var above_water_counter := 0
 	
-	if(distance_to_water_0 > 0): above_water_counter += 1
-	if(distance_to_water_1 > 0): above_water_counter += 1
-	if(distance_to_water_2 > 0): above_water_counter += 1
+	if(h0 > 0): above_water_counter += 1
+	if(h1 > 0): above_water_counter += 1
+	if(h2 > 0): above_water_counter += 1
 	
 	if(above_water_counter == 0):
 		below_water.append(BelowWaterTriangle.create_from_triangle(triangle, water_level))
@@ -292,40 +292,40 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		var distance_to_water_low_1 : float
 		var distance_to_water_low_2 : float
 		
-		if v0.y > v1.y:
-			if v0.y > v2.y:
+		if h0 > h1:
+			if h0 > h2:
 				# Order tested
 				high_point = v0
 				low_point_1 = v1
 				low_point_2 = v2
-				distance_to_water_high = distance_to_water_0
-				distance_to_water_low_1 = distance_to_water_1
-				distance_to_water_low_2 = distance_to_water_2
+				distance_to_water_high = h0
+				distance_to_water_low_1 = h1
+				distance_to_water_low_2 = h2
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
-				distance_to_water_high = distance_to_water_2
-				distance_to_water_low_1 = distance_to_water_0
-				distance_to_water_low_2 = distance_to_water_1
+				distance_to_water_high = h2
+				distance_to_water_low_1 = h0
+				distance_to_water_low_2 = h1
 		else:
-			if v1.y > v2.y:
+			if h1 > h2:
 				# Order tested
 				high_point = v1
 				low_point_1 = v2
 				low_point_2 = v0
-				distance_to_water_high = distance_to_water_1
-				distance_to_water_low_1 = distance_to_water_2
-				distance_to_water_low_2 = distance_to_water_0
+				distance_to_water_high = h1
+				distance_to_water_low_1 = h2
+				distance_to_water_low_2 = h0
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
-				distance_to_water_high = distance_to_water_2
-				distance_to_water_low_1 = distance_to_water_0
-				distance_to_water_low_2 = distance_to_water_1
+				distance_to_water_high = h2
+				distance_to_water_low_1 = h0
+				distance_to_water_low_2 = h1
 		
 		var lerp_1 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_1)
 		var lerp_2 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_2)
@@ -335,8 +335,8 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		if lerp_2 < 0.0 or lerp_2 > 1.0:
 			print("lerp ", lerp_2)
 		
-		lerp_1 = clamp(lerp_1, 0.0, 1.0)
-		lerp_2 = clamp(lerp_2, 0.0, 1.0)
+		#lerp_1 = clamp(lerp_1, 0.0, 1.0)
+		#lerp_2 = clamp(lerp_2, 0.0, 1.0)
 		
 		var between_point_1 = lerp(high_point, low_point_1, lerp_1)
 		var between_point_2 = lerp(high_point, low_point_2, lerp_2)
@@ -352,40 +352,40 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		var distance_to_water_high_1 : float
 		var distance_to_water_high_2 : float
 		
-		if v0.y < v1.y:
-			if v0.y < v2.y:
+		if h0 < h1:
+			if h0 < h2:
 				# Order tested
 				low_point = v0
 				high_point_1 = v1
 				high_point_2 = v2
-				distance_to_water_low = distance_to_water_0
-				distance_to_water_high_1 = distance_to_water_1
-				distance_to_water_high_2 = distance_to_water_2
+				distance_to_water_low = h0
+				distance_to_water_high_1 = h1
+				distance_to_water_high_2 = h2
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
-				distance_to_water_low = distance_to_water_2
-				distance_to_water_high_1 = distance_to_water_0
-				distance_to_water_high_2 = distance_to_water_1
+				distance_to_water_low = h2
+				distance_to_water_high_1 = h0
+				distance_to_water_high_2 = h1
 		else:
-			if v1.y < v2.y:
+			if h1 < h2:
 				# Order tested
 				low_point = v1
 				high_point_1 = v2
 				high_point_2 = v0
-				distance_to_water_low = distance_to_water_1
-				distance_to_water_high_1 = distance_to_water_2
-				distance_to_water_high_2 = distance_to_water_0
+				distance_to_water_low = h1
+				distance_to_water_high_1 = h2
+				distance_to_water_high_2 = h0
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
-				distance_to_water_low = distance_to_water_2
-				distance_to_water_high_1 = distance_to_water_0
-				distance_to_water_high_2 = distance_to_water_1
+				distance_to_water_low = h2
+				distance_to_water_high_1 = h0
+				distance_to_water_high_2 = h1
 		
 		var lerp_1 = distance_to_water_high_1 / (distance_to_water_high_1 - distance_to_water_low)
 		var lerp_2 = distance_to_water_high_2 / (distance_to_water_high_2 - distance_to_water_low)
