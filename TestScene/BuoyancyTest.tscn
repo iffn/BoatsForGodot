@@ -402,8 +402,7 @@ water_material = SubResource("ShaderMaterial_56d3r")
 water_level = NodePath("../../SineWaveWaterLevel")
 
 [node name="Camera3D2" type="Camera3D" parent="SmallSpeedBoat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3837662, 1.3793997, 0.28950423)
-fov = 89.1
+transform = Transform3D(1, 0, 0, 0, 0.9725209, 0.23281567, 0, -0.23281567, 0.9725209, -0.38376668, 3.0382462, 7.240579)
 
 [editable path="SmallSpeedBoat"]
 [editable path="SmallSpeedBoat/Cube1m3"]

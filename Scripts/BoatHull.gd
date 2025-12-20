@@ -330,16 +330,9 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		var lerp_1 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_1)
 		var lerp_2 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_2)
 		
-		if lerp_1 < 0.0 or lerp_1 > 1.0:
-			print("lerp ", lerp_1)
-		if lerp_2 < 0.0 or lerp_2 > 1.0:
-			print("lerp ", lerp_2)
-		
-		#lerp_1 = clamp(lerp_1, 0.0, 1.0)
-		#lerp_2 = clamp(lerp_2, 0.0, 1.0)
-		
 		var between_point_1 = lerp(high_point, low_point_1, lerp_1)
 		var between_point_2 = lerp(high_point, low_point_2, lerp_2)
+		
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, normal, water_level))
 		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, normal, water_level))
 		#above_water.append(AboveWaterTriangle.new(between_point_1, between_point_2, high_point, normal))
@@ -390,18 +383,8 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		var lerp_1 = distance_to_water_high_1 / (distance_to_water_high_1 - distance_to_water_low)
 		var lerp_2 = distance_to_water_high_2 / (distance_to_water_high_2 - distance_to_water_low)
 		
-		if lerp_1 < 0.0 or lerp_1 > 1.0:
-			print("lerp ", lerp_1)
-		if lerp_2 < 0.0 or lerp_2 > 1.0:
-			print("lerp ", lerp_2)
-		
-		lerp_1 = clamp(lerp_1, 0.0, 1.0)
-		lerp_2 = clamp(lerp_2, 0.0, 1.0)
-		
 		var between_point_1 = lerp(high_point_1, low_point, lerp_1)
 		var between_point_2 = lerp(high_point_2, low_point, lerp_2)
-		
-		
 		
 		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
 		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
