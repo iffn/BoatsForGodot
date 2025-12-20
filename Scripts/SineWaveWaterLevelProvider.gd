@@ -25,7 +25,11 @@ func get_distance_to_water(world_position : Vector3) -> float:
 	time = 6884 # broken speed boat
 	time = 5353 # broken plane
 	time = Time.get_ticks_msec()
-	var water_pos_y := wave_height * sin(world_position.z / wave_length + time * 0.001 * wave_frequency)
+	
+	var float_time = 0.001 * time
+	water_material.set_shader_parameter("time", float_time)
+	
+	var water_pos_y := wave_height * sin(world_position.z / wave_length + float_time * wave_frequency)
 	
 	return world_position.y - water_pos_y
 	

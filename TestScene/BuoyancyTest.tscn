@@ -177,6 +177,7 @@ render_mode blend_mix, depth_draw_always, cull_back, diffuse_burley, specular_sc
 uniform float wave_height : hint_range(0.0, 20.0, 0.0) = 0.5;
 uniform float wave_frequency : hint_range(0.0, 20.0, 0.0) = 1;
 uniform float wave_length : hint_range(0.0, 20.0, 0.0) = 0.2;
+uniform float time = 0.0;
 
 uniform vec4 albedo : source_color;
 uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
@@ -222,7 +223,7 @@ void vertex() {
 	
 	// Waves
 	vec3 world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	VERTEX.y += wave_height * sin(world_position.z / wave_length + TIME * wave_frequency);
+	VERTEX.y += wave_height * sin(world_position.z / wave_length + time * wave_frequency);
 	
 	// UV1 Triplanar: Enabled
 	uv1_power_normal = pow(abs(NORMAL), vec3(uv1_blend_sharpness));
@@ -294,6 +295,7 @@ shader = SubResource("Shader_omhcd")
 shader_parameter/wave_height = 2.0
 shader_parameter/wave_frequency = 0.5
 shader_parameter/wave_length = 5.0
+shader_parameter/time = 0.0
 shader_parameter/albedo = Color(0.219608, 0.447059, 0.658824, 0.494118)
 shader_parameter/point_size = 1.0
 shader_parameter/roughness = 0.0
