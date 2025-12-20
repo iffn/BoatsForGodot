@@ -12,7 +12,21 @@ func _ready() -> void:
 	wave_height = water_material.get_shader_parameter("wave_height")
 	wave_frequency = water_material.get_shader_parameter("wave_frequency")
 	wave_length = water_material.get_shader_parameter("wave_length")
+	
+	print("wave_height: ", wave_height)
+	print("wave_frequency: ", wave_frequency)
+	print("wave_length: ", wave_length)
 
 func get_distance_to_water(world_position : Vector3) -> float:
-	var water_pos_y := wave_height * sin(world_position.z / wave_length + Time.get_ticks_msec() * 0.001 * wave_frequency)
+	var time : int
+	time = 25443 # broken cube
+	time = 96409 # broken cube
+	time = 7284 # broken speed boat
+	time = 6884 # broken speed boat
+	time = Time.get_ticks_msec()
+	time = 5353 # broken plane
+	var water_pos_y := wave_height * sin(world_position.z / wave_length + time * 0.001 * wave_frequency)
+	
+	return world_position.y - world_position.z * 1.0 + 0.5
 	return world_position.y - water_pos_y
+	
