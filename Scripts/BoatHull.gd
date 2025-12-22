@@ -35,8 +35,9 @@ func _physics_process(delta: float) -> void:
 func apply_to_rigidbody():
 	var triangles_below_water : Array[BelowWaterTriangle] = []
 	
+	update_mesh_positions()
+	
 	for triangle in mesh_triangles:
-		triangle.update_world_positions(hull_mesh.global_transform)
 		assign_below_water(triangle, triangles_below_water)
 	
 	var velocity_world := rigidbody.linear_velocity
@@ -53,13 +54,21 @@ func apply_to_rigidbody():
 		var drag = drag_multiplier * triangle.world_drag_force(velocity_world, drag_coefficient)
 		rigidbody.apply_force(drag)
 
+func update_mesh_positions():
+	for triangle in mesh_triangles:
+		triangle.update_world_positions(hull_mesh.global_transform)
+		triangle.distance_to_water_0 = water_level.get_distance_to_water(triangle.v0_world)
+		triangle.distance_to_water_1 = water_level.get_distance_to_water(triangle.v0_world)
+		triangle.distance_to_water_2 = water_level.get_distance_to_water(triangle.v0_world)
+
 func calculate_all() -> BoatCalculationData:
 	var output := BoatCalculationData.new()
 	var triangles_below_water : Array[BelowWaterTriangle] = []
 	var waterline_points : Array[Vector3] = []
 	
+	update_mesh_positions()
+	
 	for triangle in mesh_triangles:
-		triangle.update_world_positions(hull_mesh.global_transform)
 		assign_below_water(triangle, triangles_below_water)
 		assign_water_line(triangle, waterline_points)
 	
@@ -270,9 +279,9 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 	var v2 := triangle.v2_world
 	var normal := triangle.normal_world
 	
-	var h0 := water_level.get_distance_to_water(v0)
-	var h1 := water_level.get_distance_to_water(v1)
-	var h2 := water_level.get_distance_to_water(v2)
+	var h0 := triangle.distance_to_water_0
+	var h1 := triangle.distance_to_water_1
+	var h2 := triangle.distance_to_water_2
 	
 	var above_water_counter := 0
 	
@@ -281,16 +290,16 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 	if(h2 > 0): above_water_counter += 1
 	
 	if(above_water_counter == 0):
-		below_water.append(BelowWaterTriangle.create_from_triangle(triangle, water_level))
+		below_water.append(BelowWaterTriangle.create_from_triangle(triangle))
 	
 	elif(above_water_counter == 1):
 		var high_point : Vector3
 		var low_point_1 : Vector3
 		var low_point_2 : Vector3
 		
-		var distance_to_water_high : float
-		var distance_to_water_low_1 : float
-		var distance_to_water_low_2 : float
+		var h_high : float
+		var h_low_1 : float
+		var h_low_2 : float
 		
 		if h0 > h1:
 			if h0 > h2:
@@ -298,52 +307,54 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 				high_point = v0
 				low_point_1 = v1
 				low_point_2 = v2
-				distance_to_water_high = h0
-				distance_to_water_low_1 = h1
-				distance_to_water_low_2 = h2
+				h_high = h0
+				h_low_1 = h1
+				h_low_2 = h2
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
-				distance_to_water_high = h2
-				distance_to_water_low_1 = h0
-				distance_to_water_low_2 = h1
+				h_high = h2
+				h_low_1 = h0
+				h_low_2 = h1
 		else:
 			if h1 > h2:
 				# Order tested
 				high_point = v1
 				low_point_1 = v2
 				low_point_2 = v0
-				distance_to_water_high = h1
-				distance_to_water_low_1 = h2
-				distance_to_water_low_2 = h0
+				h_high = h1
+				h_low_1 = h2
+				h_low_2 = h0
 			else:
 				# Order not tested
 				high_point = v2
 				low_point_1 = v0
 				low_point_2 = v1
-				distance_to_water_high = h2
-				distance_to_water_low_1 = h0
-				distance_to_water_low_2 = h1
+				h_high = h2
+				h_low_1 = h0
+				h_low_2 = h1
 		
-		var lerp_1 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_1)
-		var lerp_2 = distance_to_water_high / (distance_to_water_high - distance_to_water_low_2)
+		var lerp_1 = h_high / (h_high - h_low_1)
+		var lerp_2 = h_high / (h_high - h_low_2)
 		
-		var between_point_1 = lerp(high_point, low_point_1, lerp_1)
-		var between_point_2 = lerp(high_point, low_point_2, lerp_2)
+		var between_point_1 : Vector3 = lerp(high_point, low_point_1, lerp_1)
+		var between_point_2 : Vector3  = lerp(high_point, low_point_2, lerp_2)
+		var h_between_1 : float = lerp(h_high, h_low_1, lerp_1)
+		var h_between_2 : float = lerp(h_high, h_low_2, lerp_2)
 		
-		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, normal, water_level))
-		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, normal, water_level))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point_1, low_point_2, between_point_1, h_low_1, h_low_2, h_between_1, normal))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point_2, between_point_2, between_point_1, h_low_2, h_between_2, h_between_1, normal))
 		#above_water.append(AboveWaterTriangle.new(between_point_1, between_point_2, high_point, normal))
 		
 	elif(above_water_counter == 2):
 		var low_point : Vector3
 		var high_point_1 : Vector3
 		var high_point_2 : Vector3
-		var distance_to_water_low : float
-		var distance_to_water_high_1 : float
-		var distance_to_water_high_2 : float
+		var h_low : float
+		var h_high_1 : float
+		var h_high_2 : float
 		
 		if h0 < h1:
 			if h0 < h2:
@@ -351,44 +362,46 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 				low_point = v0
 				high_point_1 = v1
 				high_point_2 = v2
-				distance_to_water_low = h0
-				distance_to_water_high_1 = h1
-				distance_to_water_high_2 = h2
+				h_low = h0
+				h_high_1 = h1
+				h_high_2 = h2
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
-				distance_to_water_low = h2
-				distance_to_water_high_1 = h0
-				distance_to_water_high_2 = h1
+				h_low = h2
+				h_high_1 = h0
+				h_high_2 = h1
 		else:
 			if h1 < h2:
 				# Order tested
 				low_point = v1
 				high_point_1 = v2
 				high_point_2 = v0
-				distance_to_water_low = h1
-				distance_to_water_high_1 = h2
-				distance_to_water_high_2 = h0
+				h_low = h1
+				h_high_1 = h2
+				h_high_2 = h0
 			else:
 				# Order not tested
 				low_point = v2
 				high_point_1 = v0
 				high_point_2 = v1
-				distance_to_water_low = h2
-				distance_to_water_high_1 = h0
-				distance_to_water_high_2 = h1
+				h_low = h2
+				h_high_1 = h0
+				h_high_2 = h1
 		
-		var lerp_1 = distance_to_water_high_1 / (distance_to_water_high_1 - distance_to_water_low)
-		var lerp_2 = distance_to_water_high_2 / (distance_to_water_high_2 - distance_to_water_low)
+		var lerp_1 := h_high_1 / (h_high_1 - h_low)
+		var lerp_2 := h_high_2 / (h_high_2 - h_low)
 		
-		var between_point_1 = lerp(high_point_1, low_point, lerp_1)
-		var between_point_2 = lerp(high_point_2, low_point, lerp_2)
+		var between_point_1 : Vector3 = lerp(high_point_1, low_point, lerp_1)
+		var between_point_2 : Vector3 = lerp(high_point_2, low_point, lerp_2)
+		var h_between_1 : float = lerp(h_high_1, h_low, lerp_1)
+		var h_between_2 : float = lerp(h_high_2, h_low, lerp_2)
 		
 		#above_water.append(Triangle.new(low_point, between_point_2, between_point_1, true, false, normal))
 		#above_water.append(Triangle.new(between_point_1, between_point_2, high_point_1, true, false, normal))
-		below_water.append(BelowWaterTriangle.create_from_points(low_point, between_point_1, between_point_2, normal, water_level))
+		below_water.append(BelowWaterTriangle.create_from_points(low_point, between_point_1, between_point_2, h_low, h_between_1, h_between_2, normal))
 		
 	else:
 		#above_water.append(self)
@@ -501,6 +514,10 @@ class MeshTriangle:
 	var v2_world : Vector3
 	var normal_world : Vector3
 	
+	var distance_to_water_0 : float
+	var distance_to_water_1 : float
+	var distance_to_water_2 : float
+	
 	var area : float
 	
 	func _init(_v0_local: Vector3, _v1_local: Vector3, _v2_local: Vector3, _normal_local):
@@ -534,15 +551,15 @@ class BelowWaterTriangle:
 	var v0_world : Vector3
 	var v1_world : Vector3
 	var v2_world : Vector3
+	
 	var static_pressure_force_world : Vector3
 	var geometric_center_world : Vector3
 	var hydrostatic_center_world : Vector3
 	var area : float
 	static var fluid_density := 1000
 	static var gravitational_acceleration := 9.81
-	var water_level: WaterLevelProvider
 	
-	func _init(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world, the_geometric_center_world : Vector3, the_hydrostatic_center_world : Vector3, the_static_pressure_force_world : Vector3, the_area : float, the_water_level: WaterLevelProvider):
+	func _init(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world, the_geometric_center_world : Vector3, the_hydrostatic_center_world : Vector3, the_static_pressure_force_world : Vector3, the_area : float):
 		v0_world = the_v0_world
 		v1_world = the_v1_world
 		v2_world = the_v2_world
@@ -550,31 +567,56 @@ class BelowWaterTriangle:
 		hydrostatic_center_world = the_hydrostatic_center_world
 		static_pressure_force_world = the_static_pressure_force_world
 		area = the_area
-		water_level = the_water_level
 	
-	static func calculate_hydrostatic_center_world(v0_world: Vector3, v1_world: Vector3, v2_world: Vector3, the_water_level: WaterLevelProvider) -> Vector3:
-		var h0 := the_water_level.get_distance_to_water(v0_world)
-		var h1 := the_water_level.get_distance_to_water(v1_world)
-		var h2 := the_water_level.get_distance_to_water(v2_world)
-		var H := h0 + h1 + h2
-		var center_of_pressure := ((h0 + H) * v0_world + (h1 + H) * v1_world + (h2 + H) * v2_world) / (4.0 * H)
+	static func calculate_hydrostatic_center_world(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world: Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float) -> Vector3:
+		var H := the_distance_to_water_0 + the_distance_to_water_1 + the_distance_to_water_2
+		var center_of_pressure := ((the_distance_to_water_0 + H) * the_v0_world + (the_distance_to_water_1 + H) * the_v1_world + (the_distance_to_water_2 + H) * the_v2_world) / (4.0 * H)
 		#ToDo: Formula generated by AI. Unsure if correct. To be tested.
 		return center_of_pressure
 	
-	static func create_from_triangle(triangle : MeshTriangle, the_water_level: WaterLevelProvider) -> BelowWaterTriangle:
-		var the_geometric_center_world = 0.33333333 * (triangle.v0_world + triangle.v1_world + triangle.v2_world)
-		var the_hydrostatic_center_world = calculate_hydrostatic_center_world(triangle.v0_world, triangle.v1_world, triangle.v2_world, the_water_level)
-		var the_area = triangle.area
-		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * the_water_level.get_distance_to_water(the_hydrostatic_center_world) * the_area * triangle.normal_world
+	static func barycentric_interpolation(p0: Vector3, p1: Vector3, p2: Vector3, v0: float, v1: float, v2: float, p_res: Vector3) -> float:
+		# Vectors from p0 to the other vertices and the target point
+		var edge0 := p1 - p0
+		var edge1 := p2 - p0
+		var to_p  := p_res - p0
 		
-		return BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v2_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area, the_water_level)
+		# Dot products for the system of equations
+		var d00 := edge0.dot(edge0)
+		var d01 := edge0.dot(edge1)
+		var d11 := edge1.dot(edge1)
+		var d20 := to_p.dot(edge0)
+		var d21 := to_p.dot(edge1)
+		
+		var denom := d00 * d11 - d01 * d01
+		
+		# Guard against division by zero (if the triangle is a line or a point)
+		if is_zero_approx(denom):
+			return v0
+		
+		# Compute the barycentric weights
+		var weight1 := (d11 * d20 - d01 * d21) / denom
+		var weight2 := (d00 * d21 - d01 * d20) / denom
+		var weight0 := 1.0 - weight1 - weight2
+		
+		# Combine the vertex values based on weights
+		return (weight0 * v0) + (weight1 * v1) + (weight2 * v2)
 	
-	static func create_from_points(v0_world: Vector3, v1_world: Vector3, v2_world, normal_world: Vector3, the_water_level: WaterLevelProvider)  -> BelowWaterTriangle:
-		var the_geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
-		var the_hydrostatic_center_world = calculate_hydrostatic_center_world(v0_world, v1_world, v2_world, the_water_level)
-		var the_area = MeshTriangle.get_triangle_area_from_points(v0_world, v1_world, v2_world)
-		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * the_water_level.get_distance_to_water(the_hydrostatic_center_world) * the_area * normal_world
-		return BelowWaterTriangle.new(v0_world, v1_world, v2_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area, the_water_level)
+	static func create_from_triangle(triangle : MeshTriangle) -> BelowWaterTriangle:
+		var the_geometric_center_world = 0.33333333 * (triangle.v0_world + triangle.v1_world + triangle.v2_world)
+		var the_hydrostatic_center_world := calculate_hydrostatic_center_world(triangle.v0_world, triangle.v1_world, triangle.v2_world, triangle.distance_to_water_0, triangle.distance_to_water_1, triangle.distance_to_water_2)
+		var hydrostatic_depth := barycentric_interpolation(triangle.v0_world, triangle.v1_world, triangle.v2_world, triangle.distance_to_water_0, triangle.distance_to_water_1, triangle.distance_to_water_2, the_hydrostatic_center_world)
+		var the_area := triangle.area
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * hydrostatic_depth * the_area * triangle.normal_world
+		
+		return BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v2_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
+	
+	static func create_from_points(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world : Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float, normal_world: Vector3)  -> BelowWaterTriangle:
+		var the_geometric_center_world = 0.33333333 * (the_v0_world + the_v1_world + the_v2_world)
+		var the_hydrostatic_center_world = calculate_hydrostatic_center_world(the_v0_world, the_v1_world, the_v2_world, the_distance_to_water_0, the_distance_to_water_1, the_distance_to_water_2)
+		var hydrostatic_depth := barycentric_interpolation(the_v0_world, the_v1_world, the_v2_world, the_distance_to_water_0, the_distance_to_water_1, the_distance_to_water_2, the_hydrostatic_center_world)
+		var the_area = MeshTriangle.get_triangle_area_from_points(the_v0_world, the_v1_world, the_v2_world)
+		var the_static_pressure_force_world = fluid_density * gravitational_acceleration * hydrostatic_depth * the_area * normal_world
+		return BelowWaterTriangle.new(the_v0_world, the_v1_world, the_v2_world, the_geometric_center_world, the_hydrostatic_center_world, the_static_pressure_force_world, the_area)
 	
 	func world_drag_force(world_velocity : Vector3, drag_coefficient : float) -> Vector3:
 		var velocity := world_velocity.length()
