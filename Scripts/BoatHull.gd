@@ -20,7 +20,11 @@ class_name BoatHull
 @export var drag_force_output : Label
 @export var mass_output : Label
 
+var mesh_vertices_local : Array[Vector3]
 var mesh_triangles : Array[MeshTriangle]
+var mesh_vertices_world : Array[Vector3]
+var distances_to_water : Array[float]
+
 
 var bounding_box : AABB:
 	get:
@@ -31,6 +35,44 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	apply_to_rigidbody()
+
+func convert_mesh():
+	mesh_vertices_local = []
+	mesh_triangles = []
+	mesh_vertices_world = []
+	distances_to_water = []
+	
+	var mesh := hull_mesh.mesh
+	var mesh_data_tool := MeshDataTool.new()
+	mesh_data_tool.create_from_surface(mesh, 0)
+	
+	for v_index in range(mesh_data_tool.get_vertex_count()):
+		var pos = mesh_data_tool.get_vertex(v_index)
+		mesh_vertices_local.append(pos)
+	
+	mesh_vertices_world.resize(mesh_vertices_local.size())
+	distances_to_water.resize(mesh_vertices_local.size())
+	
+	for face_index in range(mesh_data_tool.get_face_count()):
+		var i0 := mesh_data_tool.get_face_vertex(face_index, 0)
+		var i1 := mesh_data_tool.get_face_vertex(face_index, 1)
+		var i2 := mesh_data_tool.get_face_vertex(face_index, 2)
+		
+		var normal := mesh_data_tool.get_face_normal(face_index)
+		var triangle := MeshTriangle.new(mesh_vertices_local, mesh_vertices_world, distances_to_water, i0, i1, i2, normal)
+		mesh_triangles.append(triangle)
+	
+	mesh_data_tool.clear()
+
+func update_mesh_positions():
+	var hull_transform := hull_mesh.global_transform
+	
+	for i in range(mesh_vertices_local.size()):
+		mesh_vertices_world[i] = hull_transform * mesh_vertices_world[i]
+		distances_to_water[i] = water_level.get_distance_to_water(mesh_vertices_world[i])
+	
+	for triangle in mesh_triangles:
+		triangle.normal_world = (hull_transform.basis * triangle.normal_local).normalized()
 
 func apply_to_rigidbody():
 	var triangles_below_water : Array[BelowWaterTriangle] = []
@@ -53,13 +95,6 @@ func apply_to_rigidbody():
 		
 		var drag = drag_multiplier * triangle.world_drag_force(velocity_world, drag_coefficient)
 		rigidbody.apply_force(drag)
-
-func update_mesh_positions():
-	for triangle in mesh_triangles:
-		triangle.update_world_positions(hull_mesh.global_transform)
-		triangle.distance_to_water_0 = water_level.get_distance_to_water(triangle.v0_world)
-		triangle.distance_to_water_1 = water_level.get_distance_to_water(triangle.v0_world)
-		triangle.distance_to_water_2 = water_level.get_distance_to_water(triangle.v0_world)
 
 func calculate_all() -> BoatCalculationData:
 	var output := BoatCalculationData.new()
@@ -133,28 +168,6 @@ func calculate_buoyancy_force() -> Vector3:
 		output += triangle.static_pressure_force_world
 	
 	return output
-
-func convert_mesh():
-	mesh_triangles = []
-	
-	var mesh := hull_mesh.mesh
-	var mesh_data_tool := MeshDataTool.new()
-	mesh_data_tool.create_from_surface(mesh, 0)
-	
-	for face_index in range(mesh_data_tool.get_face_count()):
-		var v0_index := mesh_data_tool.get_face_vertex(face_index, 0)
-		var v1_index := mesh_data_tool.get_face_vertex(face_index, 1)
-		var v2_index := mesh_data_tool.get_face_vertex(face_index, 2)
-		
-		var v0_position_local := mesh_data_tool.get_vertex(v0_index)
-		var v1_position_local := mesh_data_tool.get_vertex(v1_index)
-		var v2_position_local := mesh_data_tool.get_vertex(v2_index)
-		
-		var normal := mesh_data_tool.get_face_normal(face_index)
-		var triangle := MeshTriangle.new(v0_position_local, v1_position_local, v2_position_local, normal)
-		mesh_triangles.append(triangle)
-	
-	mesh_data_tool.clear()
 
 func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> void:
 	var v0 := triangle.v0_world
@@ -504,34 +517,62 @@ class BoatCalculationData:
 	var displaced_volume: float
 
 class MeshTriangle:
-	var v0_local : Vector3
-	var v1_local : Vector3
-	var v2_local : Vector3
+	var i0 : int
+	var i1 : int
+	var i2 : int
+	
+	var mesh_vertices_local : Array[Vector3]
+	var mesh_vertices_world : Array[Vector3]
+	var distances_to_water : Array[float]
+	
+	var v0_local : Vector3:
+		get:
+			return mesh_vertices_local[i0]
+	var v1_local : Vector3:
+		get:
+			return mesh_vertices_local[i1]
+	var v2_local : Vector3:
+		get:
+			return mesh_vertices_local[i2]
+	
+	var v0_world : Vector3:
+		get:
+			return mesh_vertices_world[i0]
+	var v1_world : Vector3:
+		get:
+			return mesh_vertices_world[i1]
+	var v2_world : Vector3:
+		get:
+			return mesh_vertices_world[i2]
+	
+	var distance_to_water_0 : float:
+		get:
+			return distances_to_water[i0]
+	var distance_to_water_1 : float:
+		get:
+			return distances_to_water[i1]
+	var distance_to_water_2 : float:
+		get:
+			return distances_to_water[i2]
+	
 	var normal_local : Vector3
-	
-	var v0_world : Vector3
-	var v1_world : Vector3
-	var v2_world : Vector3
 	var normal_world : Vector3
-	
-	var distance_to_water_0 : float
-	var distance_to_water_1 : float
-	var distance_to_water_2 : float
 	
 	var area : float
 	
-	func _init(_v0_local: Vector3, _v1_local: Vector3, _v2_local: Vector3, _normal_local):
-		v0_local = _v0_local
-		v1_local = _v1_local
-		v2_local = _v2_local
-		normal_local = _normal_local
+	func _init(the_mesh_vertices_local : Array[Vector3], the_mesh_vertices_world : Array[Vector3], the_distances_to_water : Array[float],
+			the_i0 : int, the_i1 : int, the_i2 : int, the_normal_local):
+		
+		mesh_vertices_local = the_mesh_vertices_local
+		mesh_vertices_world = the_mesh_vertices_world
+		distances_to_water = the_distances_to_water
+		
+		i0 = the_i0
+		i1 = the_i1
+		i2 = the_i2
+		
+		normal_local = the_normal_local
 		area = get_triangle_area_from_points(v0_local, v1_local, v2_local)
-	
-	func update_world_positions(global_transform: Transform3D):
-		v0_world = global_transform * v0_local
-		v1_world = global_transform * v1_local
-		v2_world = global_transform * v2_local
-		normal_world = (global_transform.basis * normal_local).normalized()
 	
 	static func get_triangle_area_from_points(A: Vector3, B: Vector3, C: Vector3):
 		# Triangle area according to sin formula:
