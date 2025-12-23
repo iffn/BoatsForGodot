@@ -93,9 +93,6 @@ func apply_to_rigidbody():
 	var friction_coefficient_divider_part : float = (BoatHull.log_10(reynolds_number) - 2.0)
 	var frictional_drag_coefficient := 0.075 / (friction_coefficient_divider_part * friction_coefficient_divider_part)
 	
-	var area := 0.0
-	var friction_drag_force := Vector3(0,0,0)
-	var pressure_drag_force := Vector3(0,0,0)
 	
 	for triangle in triangles_below_water:
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
@@ -111,26 +108,13 @@ func apply_to_rigidbody():
 		var friction_drag_application := drag_multiplier * triangle.friction_drag_force
 		var pressure_drag_application := drag_multiplier * triangle.pressure_drag_force
 		
-		area += triangle.area
-		friction_drag_force += friction_drag_application
-		pressure_drag_force += pressure_drag_application
+		
 		
 		rigidbody.apply_force(friction_drag_application, geometric_center_application)
 		rigidbody.apply_force(pressure_drag_application, geometric_center_application)
 		
 		var drag = drag_multiplier * triangle.drag_force_world
 		rigidbody.apply_force(drag)
-	
-	print("Velocity: ", str(velocity_world.length()).pad_decimals(1))
-	print("Area: ", str(area).pad_decimals(2))
-	print("Mass: ", rigidbody.mass)
-	print("Friction drag force: ", str(friction_drag_force.length()).pad_decimals(1))
-	
-	var pressure_dag_horizontal := pressure_drag_force
-	pressure_dag_horizontal.y = 0.0
-	
-	print("Pressure drag force horizontal: ", str(pressure_dag_horizontal.length()).pad_decimals(1))
-	print("Pressure drag force vertical: ", str(pressure_drag_force.y).pad_decimals(1))
 
 func calculate_all() -> BoatCalculationData:
 	var output := BoatCalculationData.new()
@@ -161,6 +145,10 @@ func calculate_all() -> BoatCalculationData:
 	var friction_coefficient_divider_part : float = (BoatHull.log_10(reynolds_number) - 2.0)
 	var frictional_drag_coefficient := 0.075 / (friction_coefficient_divider_part * friction_coefficient_divider_part)
 	
+	var area := 0.0
+	var friction_drag_force := Vector3(0,0,0)
+	var pressure_drag_force := Vector3(0,0,0)
+	
 	for triangle in triangles_below_water:
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
 		
@@ -181,6 +169,10 @@ func calculate_all() -> BoatCalculationData:
 		water_y_min = min(triangle.v0_world.y, water_y_min)
 		water_y_min = min(triangle.v1_world.y, water_y_min)
 		water_y_min = min(triangle.v2_world.y, water_y_min)
+		
+		area += triangle.area
+		friction_drag_force += triangle.friction_drag_force
+		pressure_drag_force += triangle.pressure_drag_application
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
