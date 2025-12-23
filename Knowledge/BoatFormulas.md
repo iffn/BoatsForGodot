@@ -2,7 +2,7 @@
 
 ## General geometry
 **Triangle area according to Heron**  
-$ A=\frac{\sqrt{(a+b+c)·(a+b-c)·(b+c-a)·(c+a-b)}}{16} $  
+$A=\frac{\sqrt{(a+b+c)·(a+b-c)·(b+c-a)·(c+a-b)}}{16}$  
 
 $A = \sqrt{s(s-a)(s-b)(s-c)} \qquad s = \frac{a+b+c}{2}$  
 
