@@ -32,7 +32,7 @@ A = Area [m2]
 
 ## Drag force
 **General drag equation**  
-$FD=frac{1}{2}·\rho·A·C_D·v2$  
+$FD=\frac{1}{2}·\rho·A·C_D·v2$  
 F<sub>D</sub> = Drag force [N]  
 ρ = Density of the fluid [kg/m³]  
 A = Area [m²]  
