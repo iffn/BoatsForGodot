@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="3_t7f04"]
 [ext_resource type="PackedScene" uid="uid://b4fso0ql27llx" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTree.tscn" id="4_35urj"]
 [ext_resource type="Script" uid="uid://ccp6qq033aevu" path="res://iffnsStuff/BoatsForGodot/Water/WaterFollower.gd" id="4_omhcd"]
-[ext_resource type="Script" uid="uid://d3sl380qqsy2g" path="res://iffnsStuff/BoatsForGodot/Scripts/SineWaveWaterLevelProvider.gd" id="5_omhcd"]
+[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/SineWaveWaterLevelProvider.gd" id="5_omhcd"]
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="9_0pqji"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="10_uf2u0"]
 
@@ -292,7 +292,7 @@ as_normal_map = true
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_56d3r"]
 render_priority = 0
 shader = SubResource("Shader_omhcd")
-shader_parameter/wave_height = 2.0
+shader_parameter/wave_height = 0.0
 shader_parameter/wave_frequency = 0.5
 shader_parameter/wave_length = 5.0
 shader_parameter/time = 0.0
@@ -400,12 +400,12 @@ water_material = SubResource("ShaderMaterial_56d3r")
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("3_t7f04")]
 
-[node name="HullCalculation" parent="SmallSpeedBoat" index="4" node_paths=PackedStringArray("water_level")]
+[node name="HullCalculation" parent="SmallSpeedBoat" index="3" node_paths=PackedStringArray("water_level")]
+drag_multiplier = 5.0
 water_level = NodePath("../../SineWaveWaterLevel")
 
 [node name="Camera3D2" type="Camera3D" parent="SmallSpeedBoat"]
 transform = Transform3D(1, 0, 0, 0, 0.9725209, 0.23281567, 0, -0.23281567, 0.9725209, -0.38376668, 3.0382462, 7.240579)
 
 [editable path="SmallSpeedBoat"]
-[editable path="SmallSpeedBoat/Cube1m3"]
 [editable path="SmallSpeedBoat/SmallSpeedBoat"]
