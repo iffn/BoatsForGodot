@@ -402,8 +402,6 @@ water_material = SubResource("ShaderMaterial_56d3r")
 
 [node name="Thruster" parent="SmallSpeedBoat" index="1"]
 engine_thrust = 50000.0
-engine_rotation_deg = 15.0
-engine_pitch_deg = 10.0
 
 [node name="HullCalculation" parent="SmallSpeedBoat" index="3" node_paths=PackedStringArray("water_level")]
 drag_multiplier = 5.0
