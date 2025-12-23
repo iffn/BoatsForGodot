@@ -666,12 +666,11 @@ class BelowWaterTriangle:
 		var normal_velocity := normal_velocity_magnitude * normal_world
 		var tangential_velocity := world_velocity - normal_velocity
 		
-		#drag_force_world = -0.5 * area * drag_coefficient * WATER_DENSITY * velocity_magnitude * world_velocity
 		friction_drag_force = 0.5 * WATER_DENSITY * area * frictional_drag_coefficient * tangential_velocity.length() * tangential_velocity
 		
-		var c_p = PRESSURE_DRAG_COEFFICIENT # Tweakable: Drag coefficient
+		var c_p = PRESSURE_DRAG_COEFFICIENT
 		if normal_velocity_magnitude < 0: 
-			c_p = SUCTION_DRAG_COEFFICIENT # Tweakable: Suction coefficient (usually much smaller)
+			c_p = SUCTION_DRAG_COEFFICIENT
 		
 		pressure_drag_force = -0.5 * WATER_DENSITY * area * c_p * normal_velocity_magnitude * abs(normal_velocity_magnitude) * normal_world
 		
