@@ -93,7 +93,6 @@ func apply_to_rigidbody():
 	var friction_coefficient_divider_part : float = (BoatHull.log_10(reynolds_number) - 2.0)
 	var frictional_drag_coefficient := 0.075 / (friction_coefficient_divider_part * friction_coefficient_divider_part)
 	
-	
 	for triangle in triangles_below_water:
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
 		# Buoyancy
@@ -107,8 +106,6 @@ func apply_to_rigidbody():
 		var geometric_center_application := triangle.geometric_center_world - rigidbody.global_position
 		var friction_drag_application := drag_multiplier * triangle.friction_drag_force
 		var pressure_drag_application := drag_multiplier * triangle.pressure_drag_force
-		
-		
 		
 		rigidbody.apply_force(friction_drag_application, geometric_center_application)
 		rigidbody.apply_force(pressure_drag_application, geometric_center_application)
@@ -149,6 +146,8 @@ func calculate_all() -> BoatCalculationData:
 	var friction_drag_force := Vector3(0,0,0)
 	var pressure_drag_force := Vector3(0,0,0)
 	
+	var buoyancy_torque := Vector3(0,0,0)
+	
 	for triangle in triangles_below_water:
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
 		
@@ -172,7 +171,9 @@ func calculate_all() -> BoatCalculationData:
 		
 		area += triangle.area
 		friction_drag_force += triangle.friction_drag_force
-		pressure_drag_force += triangle.pressure_drag_application
+		pressure_drag_force += triangle.pressure_drag_force
+		
+		buoyancy_torque += (triangle.hydrostatic_center_world - rigidbody.global_position).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
@@ -188,6 +189,8 @@ func calculate_all() -> BoatCalculationData:
 		center_of_buoyancy_world_additive = (1.0/displaced_volume_additive) * center_of_buoyancy_world_additive
 		output.center_of_buoyancy_world = center_of_buoyancy_world_additive
 		output.displaced_volume = displaced_volume_additive
+		output.buoyancy_torque = buoyancy_torque
+		
 	
 	return output
 
@@ -550,6 +553,7 @@ class BoatCalculationData:
 	var waterline_points : Array[Vector3]
 	var center_of_buoyancy_world: Vector3
 	var displaced_volume: float
+	var buoyancy_torque : Vector3
 
 class MeshTriangle:
 	var i0 : int

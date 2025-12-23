@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=10 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Material" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_7o47y"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
+[ext_resource type="Script" uid="uid://klj6hj31w6g6" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="9_jotbm"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -634,12 +635,125 @@ text = "m"
 layout_mode = 2
 text = "m"
 
+[node name="Plots" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Plots"]
+layout_mode = 2
+text = "Plots"
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Plots"]
+layout_mode = 2
+text = "Plot roll correction"
+
+[node name="ColorRect" type="ColorRect" parent="Control/HBoxContainer/Plots"]
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 2
+color = Color(0.70796657, 0.7079665, 0.7079665, 1)
+
+[node name="Chart" type="Node2D" parent="Control/HBoxContainer/Plots/ColorRect"]
+position = Vector2(36, 205)
+scale = Vector2(2, 2)
+
+[node name="X-Axis" type="Line2D" parent="Control/HBoxContainer/Plots/ColorRect/Chart"]
+scale = Vector2(1, -1)
+points = PackedVector2Array(0, 0, 250, 0)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="Y-Axis" type="Line2D" parent="Control/HBoxContainer/Plots/ColorRect/Chart"]
+position = Vector2(125, 0)
+scale = Vector2(1, -1)
+points = PackedVector2Array(0, 85, 0, -85)
+width = 1.0
+default_color = Color(0, 0, 0, 1)
+
+[node name="Y-Axis2" type="Line2D" parent="Control/HBoxContainer/Plots/ColorRect/Chart"]
+position = Vector2(62.5, 0)
+scale = Vector2(1, -1)
+points = PackedVector2Array(0, 85, 0, -85)
+width = 0.5
+default_color = Color(0.3403393, 0.34033933, 0.3403393, 1)
+
+[node name="Y-Axis3" type="Line2D" parent="Control/HBoxContainer/Plots/ColorRect/Chart"]
+position = Vector2(187.5, 0)
+scale = Vector2(1, -1)
+points = PackedVector2Array(0, 85, 0, -85)
+width = 0.5
+default_color = Color(0.3403393, 0.34033933, 0.3403393, 1)
+
+[node name="Graph" type="Line2D" parent="Control/HBoxContainer/Plots/ColorRect/Chart"]
+scale = Vector2(1, -1)
+points = PackedVector2Array(0, 0, 50, 50)
+width = 1.0
+default_color = Color(1, 0, 0, 1)
+
+[node name="Node" type="Node" parent="Control/HBoxContainer/Plots/ColorRect" node_paths=PackedStringArray("calculation_boat", "graph")]
+script = ExtResource("9_jotbm")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+graph = NodePath("../Chart/Graph")
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 15.0
+offset_top = 213.0
+offset_right = 55.0
+offset_bottom = 236.0
+text = "-180°"
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 103.0
+offset_bottom = 31.0
+text = "Self righting"
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 10.0
+offset_top = 370.0
+offset_right = 103.0
+offset_bottom = 393.0
+text = "Capsizing"
+
+[node name="Subtitle6" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 465.0
+offset_top = 370.0
+offset_right = 558.0
+offset_bottom = 393.0
+text = "Capsizing"
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 461.0
+offset_top = 8.0
+offset_right = 554.0
+offset_bottom = 31.0
+text = "Self righting"
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Plots/ColorRect"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 0
+offset_left = 524.0
+offset_top = 213.0
+offset_right = 564.0
+offset_bottom = 236.0
+text = "180°"
+
 [connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button2" to="Control/HBoxContainer/Model view/HBoxContainer3/Button2/Node" method="update_centers"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/Button" to="Control/HBoxContainer/Plots/ColorRect/Node" method="plot_graph"]
 
 [editable path="BoatView"]
 [editable path="BoatView/SmallSpeedBoat"]
