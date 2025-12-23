@@ -34,16 +34,22 @@ linked_rigidbody = NodePath("../..")
 box_collision_shape = NodePath("..")
 
 [node name="Thruster" type="Node3D" parent="." node_paths=PackedStringArray("linked_rigidbody", "thrust_output")]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.1426988, 3.295292)
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 2.8755639)
 script = ExtResource("4_15i1o")
 engine_thrust = 150000.0
-engine_rotation_deg = 5.0
+engine_rotation_deg = 10.0
+engine_pitch_deg = 5.0
 input_forward = ExtResource("5_5t2qy")
 input_backward = ExtResource("6_k7uqj")
 input_right = ExtResource("7_pno3k")
 input_left = ExtResource("8_bpxxw")
 linked_rigidbody = NodePath("..")
 thrust_output = NodePath("../VBoxContainer/f")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Thruster"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.2)
+radius = 0.2
+height = 0.4
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("7_y4o4b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14587379, 0.21753132)

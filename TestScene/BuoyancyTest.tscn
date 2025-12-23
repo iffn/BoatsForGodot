@@ -400,12 +400,22 @@ water_material = SubResource("ShaderMaterial_56d3r")
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("3_t7f04")]
 
+[node name="Thruster" parent="SmallSpeedBoat" index="1"]
+engine_thrust = 50000.0
+engine_rotation_deg = 15.0
+engine_pitch_deg = 10.0
+
 [node name="HullCalculation" parent="SmallSpeedBoat" index="3" node_paths=PackedStringArray("water_level")]
 drag_multiplier = 5.0
 water_level = NodePath("../../SineWaveWaterLevel")
 
+[node name="Camera3D3" type="Camera3D" parent="SmallSpeedBoat"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6317272, 1.3336172, -0.18328619)
+visible = false
+
 [node name="Camera3D2" type="Camera3D" parent="SmallSpeedBoat"]
 transform = Transform3D(1, 0, 0, 0, 0.9725209, 0.23281567, 0, -0.23281567, 0.9725209, -0.38376668, 3.0382462, 7.240579)
+visible = false
 
 [editable path="SmallSpeedBoat"]
 [editable path="SmallSpeedBoat/SmallSpeedBoat"]
