@@ -2,14 +2,25 @@
 The goal is to implement the required resources to implement boats into Godot.
 So far, the basic concept seems to work.
 
+## Requirements
+- Easy Charts: https://godotengine.org/asset-library/asset/643
+
 ## Use
-### Test scene
+### Setup
 - Add this repository to your Godot project folder
+
+### Test scene
 - In Godot, open BoatsForGodot > TestScene > BuoyancyTest.tscn
 - Press F6 to test it
   - Control with WASD
   - Inputs are automatically assigned when running the game, but not saved to the project
 
+### Inspector (Early WIP)
+- In Godot, open BoatsForGodot > Inspector > BoatInspector.tscn
+- Press F6 to test it
+  - Scroll in and out or use the middle mouse button to look around
+  - Use the UI
+- Currently, multiple script reference the sample boat directly, so replacing it is not easy. -> WIP
 
 ### Create a boat
 - Model a closed buoyancy mesh (Limit the number of triangles for performance reasons)
@@ -33,7 +44,7 @@ Previous implementations:
 - https://github.com/iffn/iffnsBoatsForVRChat/blob/main/Scripts/HullCalculator.cs
 
 ### Water level
-The current version is simplified and assumes that the water height is at 0. This can be changed within the `BoatHull` script in the static `get_distance_to_water` function. (To be ipmroved)
+You can create your own water level and assign it to the boats by deriving from the WaterLevelProvider class. 
 
 ### Inertia
 A script was added, that is able to calculate the proper inertia based on the shape of a CollisionShape3D. Note: The script assumes that the box is centered around the center of gravity.
