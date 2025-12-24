@@ -58,10 +58,16 @@ func display_data(x : Array[float], y : Array[float], the_title : String):
 	
 	f1.name = the_title
 	
-	var max_x : float = max(x.max(), -x.min())
-	var max_y : float = max(y.max(), -y.min())
+	if(x.min() < 0.0):
+		var max_x : float = max(x.max(), -x.min())
+		chart.set_x_domain(-max_x, max_x)
+	else:
+		chart.set_x_domain(0.0, x.max())
 	
-	chart.set_x_domain(-max_x, max_x)
-	chart.set_y_domain(-max_y, max_y)
+	if(y.min() < 0.0):
+		var max_y : float = max(y.max(), -y.min())
+		chart.set_y_domain(-max_y, max_y)
+	else:
+		chart.set_y_domain(0.0, y.max())
 	
 	chart.queue_redraw()

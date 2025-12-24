@@ -103,9 +103,6 @@ func apply_to_rigidbody():
 		
 		rigidbody.apply_force(friction_drag_application, geometric_center_application)
 		rigidbody.apply_force(pressure_drag_application, geometric_center_application)
-		
-		var drag = drag_multiplier * triangle.drag_force_world
-		rigidbody.apply_force(drag)
 
 func calculate_all() -> BoatCalculationData:
 	var output := BoatCalculationData.new()
@@ -118,7 +115,7 @@ func calculate_all() -> BoatCalculationData:
 		assign_below_water(triangle, triangles_below_water)
 		assign_water_line(triangle, waterline_points)
 	
-	var velocity_world := Vector3(0,0,0)
+	var velocity_world := rigidbody.linear_velocity
 	
 	var water_x_max := -INF
 	var water_x_min := INF
@@ -155,10 +152,7 @@ func calculate_all() -> BoatCalculationData:
 		displaced_volume_additive += tetrahedron_volume
 		center_of_buoyancy_world_additive += tetrahedron_volume * tetrahedron_center	
 		
-		var drag = drag_multiplier * triangle.drag_force_world
-		
 		output.buoyancy_force += triangle.static_pressure_force_world
-		output.drag_force += drag
 		water_y_min = min(triangle.v0_world.y, water_y_min)
 		water_y_min = min(triangle.v1_world.y, water_y_min)
 		water_y_min = min(triangle.v2_world.y, water_y_min)
@@ -184,6 +178,9 @@ func calculate_all() -> BoatCalculationData:
 		output.center_of_buoyancy_world = center_of_buoyancy_world_additive
 		output.displaced_volume = displaced_volume_additive
 		output.buoyancy_torque = buoyancy_torque
+		output.friction_drag_force = friction_drag_force
+		output.pressure_drag_force = pressure_drag_force
+		
 	
 	return output
 
@@ -485,16 +482,16 @@ func find_waterline(buoyancy_goal: float) -> float:
 	# Evaluate fully submerged
 	rigidbody.position.y = x_fully_submerged
 	data = calculate_all()
-	var f_fully_submerged := data.buoyancy_force.y - buoyancy_goal
+	var f_fully_submerged := data.all_forces.y - buoyancy_goal
 	if print_status:
-		print("Fully submerged (x = ", x_fully_submerged, "): buoyancy_force = ", data.buoyancy_force.y, ", error = ", f_fully_submerged)
+		print("Fully submerged (x = ", x_fully_submerged, "): buoyancy_force = ", data.all_forces.y, ", error = ", f_fully_submerged)
 
 	# Evaluate above water
 	rigidbody.position.y = x_above_water
 	data = calculate_all()
-	var f_above_water := data.buoyancy_force.y - buoyancy_goal
+	var f_above_water := data.all_forces.y - buoyancy_goal
 	if print_status:
-		print("Above water (x = ", x_above_water, "): buoyancy_force = ", data.buoyancy_force.y, ", error = ", f_above_water)
+		print("Above water (x = ", x_above_water, "): buoyancy_force = ", data.all_forces.y, ", error = ", f_above_water)
 
 	# If both are above or below, the goal is not achievable
 	if f_fully_submerged * f_above_water > 0:
@@ -515,9 +512,9 @@ func find_waterline(buoyancy_goal: float) -> float:
 		var x2 := (x0 + x1) / 2
 		rigidbody.position.y = x2
 		data = calculate_all()
-		var f1 := data.buoyancy_force.y - buoyancy_goal
+		var f1 := data.all_forces.y - buoyancy_goal
 		if print_status:
-			print("Iteration ", i, ": Tried x = ", x2, ", buoyancy_force = ", data.buoyancy_force.y, ", error = ", f1)
+			print("Iteration ", i, ": Tried x = ", x2, ", buoyancy_force = ", data.all_forces.y, ", error = ", f1)
 
 		if abs(x2 - x1) < tolerance:
 			if print_status:
@@ -539,7 +536,6 @@ func find_waterline(buoyancy_goal: float) -> float:
 
 class BoatCalculationData:
 	var buoyancy_force : Vector3
-	var drag_force: Vector3
 	var water_plane_size_XZ: Vector2
 	var draft: float
 	var triangles_below_water : Array[BelowWaterTriangle]
@@ -547,6 +543,12 @@ class BoatCalculationData:
 	var center_of_buoyancy_world: Vector3
 	var displaced_volume: float
 	var buoyancy_torque : Vector3
+	var friction_drag_force: Vector3
+	var pressure_drag_force: Vector3
+	
+	var all_forces : Vector3:
+		get:
+			return buoyancy_force + friction_drag_force + pressure_drag_force
 
 class MeshTriangle:
 	var i0 : int
@@ -626,7 +628,6 @@ class BelowWaterTriangle:
 	var static_pressure_force_world : Vector3
 	
 	var geometric_center_world : Vector3
-	var drag_force_world : Vector3
 	
 	var friction_drag_force : Vector3
 	var pressure_drag_force : Vector3

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=13 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
 [ext_resource type="Script" uid="uid://fa3eqp2muqgv" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/EasyChartPlot.gd" id="11_jf4no"]
+[ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
 [node name="Node2D" type="Node2D"]
@@ -29,9 +30,6 @@ visible = false
 
 [node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
 visible = true
-
-[node name="WaterLevel" parent="BoatView" index="2"]
-visible = false
 
 [node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
 transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
@@ -653,7 +651,7 @@ title = "Roll correction"
 x_label = "Roll angle [°]"
 y_label = "Torque [Nm]"
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Plots/Roll correction" node_paths=PackedStringArray("calculation_boat", "roll_correction_plot")]
+[node name="PlotController" type="Node" parent="Control/HBoxContainer/Plots/Roll correction" node_paths=PackedStringArray("calculation_boat", "roll_correction_plot")]
 script = ExtResource("13_7o47y")
 calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
 roll_correction_plot = NodePath("..")
@@ -670,13 +668,40 @@ text = "Plot roll correction"
 [node name="Chart" parent="Control/HBoxContainer/Plots/Roll correction/VBoxContainer" instance=ExtResource("10_iv8r6")]
 layout_mode = 2
 
+[node name="Drag force" type="Control" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("chart")]
+custom_minimum_size = Vector2(800, 500)
+layout_mode = 2
+script = ExtResource("11_jf4no")
+chart = NodePath("VBoxContainer/Chart")
+title = "Drag force at speed"
+x_label = "Velocity [m/s]"
+y_label = "Drag [N]"
+
+[node name="PlotController" type="Node" parent="Control/HBoxContainer/Plots/Drag force" node_paths=PackedStringArray("calculation_boat", "drag_force_plot")]
+script = ExtResource("12_jf4no")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+drag_force_plot = NodePath("..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Plots/Drag force"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Drag force/VBoxContainer"]
+layout_mode = 2
+text = "Plot drag force"
+
+[node name="Chart" parent="Control/HBoxContainer/Plots/Drag force/VBoxContainer" instance=ExtResource("10_iv8r6")]
+layout_mode = 2
+
 [connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button2" to="Control/HBoxContainer/Model view/HBoxContainer3/Button2/Node" method="update_centers"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Roll correction/Node" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Roll correction/PlotController" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/Drag force/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Drag force/PlotController" method="plot_graph"]
 
 [editable path="BoatView"]
 [editable path="BoatView/SmallSpeedBoat"]
