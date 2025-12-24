@@ -57,16 +57,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14587379, 0.21753132)
 [node name="DisplacementMesh" parent="SmallSpeedBoat" index="1"]
 visible = false
 
-[node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody", "water_level", "linear_velocity_output", "angular_velocity_output", "buoyancy_force_output", "drag_force_output", "mass_output")]
+[node name="HullCalculation" type="Node" parent="." node_paths=PackedStringArray("hull_mesh", "rigidbody", "water_level")]
 script = ExtResource("3_frvf1")
 hull_mesh = NodePath("../SmallSpeedBoat/DisplacementMesh")
 rigidbody = NodePath("..")
 water_level = NodePath("../DefaultWaterLevel")
-linear_velocity_output = NodePath("../VBoxContainer/a")
-angular_velocity_output = NodePath("../VBoxContainer/b")
-buoyancy_force_output = NodePath("../VBoxContainer/c")
-drag_force_output = NodePath("../VBoxContainer/d")
-mass_output = NodePath("../VBoxContainer/e")
 
 [node name="DefaultWaterLevel" type="Node" parent="."]
 script = ExtResource("11_xo8ma")

@@ -14,12 +14,6 @@ class_name BoatHull
 @export var rigidbody: RigidBody3D
 @export var water_level: WaterLevelProvider
 
-@export var linear_velocity_output : Label
-@export var angular_velocity_output : Label
-@export var buoyancy_force_output : Label
-@export var drag_force_output : Label
-@export var mass_output : Label
-
 var mesh_vertices_local : Array[Vector3]
 var mesh_triangles : Array[MeshTriangle]
 var mesh_vertices_world : Array[Vector3]
@@ -190,7 +184,6 @@ func calculate_all() -> BoatCalculationData:
 		output.center_of_buoyancy_world = center_of_buoyancy_world_additive
 		output.displaced_volume = displaced_volume_additive
 		output.buoyancy_torque = buoyancy_torque
-		
 	
 	return output
 
