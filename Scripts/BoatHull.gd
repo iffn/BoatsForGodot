@@ -167,7 +167,7 @@ func calculate_all() -> BoatCalculationData:
 		friction_drag_force += triangle.friction_drag_force
 		pressure_drag_force += triangle.pressure_drag_force
 		
-		buoyancy_torque += (triangle.hydrostatic_center_world - rigidbody.global_position).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
+		buoyancy_torque += (triangle.hydrostatic_center_world - rigidbody.global_transform * rigidbody.center_of_mass).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
