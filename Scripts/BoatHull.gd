@@ -664,7 +664,7 @@ class BelowWaterTriangle:
 		var normal_velocity := normal_velocity_magnitude * normal_world
 		var tangential_velocity := world_velocity - normal_velocity
 		
-		friction_drag_force = 0.5 * WATER_DENSITY * area * frictional_drag_coefficient * tangential_velocity.length() * tangential_velocity
+		friction_drag_force = -0.5 * WATER_DENSITY * area * frictional_drag_coefficient * tangential_velocity.length() * tangential_velocity
 		
 		var c_p = PRESSURE_DRAG_COEFFICIENT
 		if normal_velocity_magnitude < 0: 
