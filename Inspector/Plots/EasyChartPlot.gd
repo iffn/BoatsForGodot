@@ -7,9 +7,10 @@ class_name EasyChartPlot
 @export var title := ""
 @export var x_label := ""
 @export var y_label := ""
+@export var function_count := 1
 
 # This Chart will plot 3 different functions
-var f1: Function
+var functions: Array[Function]
 
 var cp: ChartProperties = ChartProperties.new()
 
@@ -36,38 +37,62 @@ func _ready():
 	cp.x_scale = 10
 	cp.y_scale = 10
 	cp.interactive = true 
+	cp.show_legend = function_count > 1
 	
-	f1 = Function.new(
-		x, y, "Initial data",
-		{ 
-			color = Color("ff0000ff"),
-			marker = Function.Marker.CIRCLE,
-			type = Function.Type.LINE,
-			interpolation = Function.Interpolation.LINEAR
-		}
-	)
+	for i in range(function_count):
+		var function := Function.new(
+			x, y, "Initial data",
+			{ 
+				color = Color("ff0000ff"),
+				marker = Function.Marker.CIRCLE,
+				type = Function.Type.LINE,
+				interpolation = Function.Interpolation.LINEAR
+			}
+		)
+		functions.append(function)
 	
-	chart.plot([f1], cp)
+	
+	chart.plot(functions, cp)
 
-func display_data(x : Array[float], y : Array[float], the_title : String):
-	f1.__x.clear()
-	f1.__x.append_array(x)
+func display_data(added_functions : Array[Function]):
+	var max_x := 0.0
+	var max_y := 0.0
+	var min_x := 0.0
+	var min_y := 0.0
 	
-	f1.__y.clear()
-	f1.__y.append_array(y)
+	for i in range(functions.size()):
+		var existing_function := functions[i]
+		var added_function := added_functions[i]
+		
+		var x := added_function.__x
+		var y := added_function.__y
+		
+		existing_function.__x.clear()
+		existing_function.__x.append_array(x)
+		
+		existing_function.__y.clear()
+		existing_function.__y.append_array(y)
+		
+		existing_function.name = added_function.name
+		existing_function.props.set("color", added_function.get_color())
+		
+		max_x = max(max_x, max(x.max(), -x.min()))
+		min_x = min(min_x, min(x.min(), x.max()))
+		max_y = max(max_y, max(y.max(), -y.min()))
+		min_y = min(min_y, min(y.min(), y.max()))
 	
-	f1.name = the_title
+	if min_x < 0:
+		max_x = max(max_x, -min_x)
+		min_x = min(-max_x, min_x)
+	if min_y < 0:
+		max_y = max(max_y, -min_y)
+		min_y = min(-max_y, min_y)
 	
-	if(x.min() < 0.0):
-		var max_x : float = max(x.max(), -x.min())
-		chart.set_x_domain(-max_x, max_x)
-	else:
-		chart.set_x_domain(0.0, x.max())
+	chart.function_legend.clear()
+	for function in added_functions:
+		chart.function_legend.add_function(function)
 	
-	if(y.min() < 0.0):
-		var max_y : float = max(y.max(), -y.min())
-		chart.set_y_domain(-max_y, max_y)
-	else:
-		chart.set_y_domain(0.0, y.max())
+	chart.set_x_domain(min_x, max_x)
+	chart.set_y_domain(min_y, max_y)
 	
 	chart.queue_redraw()

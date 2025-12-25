@@ -22,7 +22,17 @@ func plot_graph():
 		data = calculation_boat.hull.calculate_all()
 		y_values.append(-sign(angle_deg)*data.buoyancy_torque.z)
 	
-	roll_correction_plot.display_data(x_values, y_values, "Roll correction")
+	var function := Function.new(
+		x_values, y_values, "Roll correction torque [Nm]",
+		{ 
+			color = Color("ff0000ff"),
+			marker = Function.Marker.CIRCLE,
+			type = Function.Type.LINE,
+			interpolation = Function.Interpolation.LINEAR
+		}
+	)
+	
+	roll_correction_plot.display_data([function])
 	
 	# Reset
 	calculation_boat.position = original_position

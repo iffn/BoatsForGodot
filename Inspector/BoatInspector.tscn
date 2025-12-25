@@ -676,6 +676,7 @@ chart = NodePath("VBoxContainer/Chart")
 title = "Drag force at speed"
 x_label = "Velocity [m/s]"
 y_label = "Drag [N]"
+function_count = 3
 
 [node name="PlotController" type="Node" parent="Control/HBoxContainer/Plots/Drag force" node_paths=PackedStringArray("calculation_boat", "drag_force_plot")]
 script = ExtResource("12_jf4no")
