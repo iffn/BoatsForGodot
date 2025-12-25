@@ -1,7 +1,37 @@
 extends Node
 
 @export var calculation_boat : BoatController
-@export var roll_correction_plot : EasyChartPlot
+@export var chart: Chart
+
+var function: Function
+
+var cp: ChartProperties = ChartProperties.new()
+
+func _ready() -> void:
+	var x: Array[float] = [-180.0, 180.0]
+	var y: Array[float] = [0.0, 0.0]
+	
+	cp = EaysChartHelper.get_default_chart_values()
+	
+	cp.title = "Roll correction relative to roll angle"
+	cp.x_label = "Roll angle [°]"
+	cp.y_label = "Torque [Nm]"
+	cp.x_scale = 10
+	cp.y_scale = 10
+	cp.interactive = true 
+	cp.show_legend = false
+	
+	function = Function.new(
+		x, y, "Torque data",
+		{ 
+			color = Color("ff0000ff"),
+			marker = Function.Marker.CIRCLE,
+			type = Function.Type.LINE,
+			interpolation = Function.Interpolation.LINEAR
+		}
+	)
+	
+	chart.plot([function], cp)
 
 func plot_graph():
 	var original_position := calculation_boat.position
@@ -11,28 +41,21 @@ func plot_graph():
 	
 	var data : BoatHull.BoatCalculationData
 	
-	var x_values : Array[float] = []
-	var y_values : Array[float] = []
+	function.__x.clear()
+	function.__y.clear()
 	
 	for angle_deg in range(-180, 185, 5):
-		x_values.append(angle_deg)
 		calculation_boat.rotation_degrees = Vector3(0, 0, angle_deg)
 		var water_line := calculation_boat.hull.find_waterline(buoyancy_goal)
 		calculation_boat.position.y = water_line
 		data = calculation_boat.hull.calculate_all()
-		y_values.append(-sign(angle_deg)*data.buoyancy_torque.z)
+		var y : float = -sign(angle_deg)*data.buoyancy_torque.z
+		
+		function.add_point(angle_deg, y)
 	
-	var function := Function.new(
-		x_values, y_values, "Roll correction torque [Nm]",
-		{ 
-			color = Color("ff0000ff"),
-			marker = Function.Marker.CIRCLE,
-			type = Function.Type.LINE,
-			interpolation = Function.Interpolation.LINEAR
-		}
-	)
+	EaysChartHelper.set_min_max([function], chart)
 	
-	roll_correction_plot.display_data([function])
+	chart.queue_redraw()
 	
 	# Reset
 	calculation_boat.position = original_position
