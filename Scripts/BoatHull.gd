@@ -138,6 +138,8 @@ func calculate_all() -> BoatCalculationData:
 	var pressure_drag_force := Vector3(0,0,0)
 	
 	var buoyancy_torque := Vector3(0,0,0)
+	var friction_drag_torque := Vector3(0,0,0)
+	var pressure_drag_torque := Vector3(0,0,0)
 	
 	for triangle in triangles_below_water:
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
@@ -161,7 +163,11 @@ func calculate_all() -> BoatCalculationData:
 		friction_drag_force += triangle.friction_drag_force
 		pressure_drag_force += triangle.pressure_drag_force
 		
-		buoyancy_torque += (triangle.hydrostatic_center_world - rigidbody.global_transform * rigidbody.center_of_mass).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
+		var center_of_mass_world := triangle.hydrostatic_center_world - rigidbody.global_transform * rigidbody.center_of_mass
+		
+		buoyancy_torque += (center_of_mass_world).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
+		friction_drag_torque += (center_of_mass_world).cross(triangle.friction_drag_force)
+		pressure_drag_torque += (center_of_mass_world).cross(triangle.pressure_drag_force)
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
@@ -177,9 +183,11 @@ func calculate_all() -> BoatCalculationData:
 		center_of_buoyancy_world_additive = (1.0/displaced_volume_additive) * center_of_buoyancy_world_additive
 		output.center_of_buoyancy_world = center_of_buoyancy_world_additive
 		output.displaced_volume = displaced_volume_additive
-		output.buoyancy_torque = buoyancy_torque
 		output.friction_drag_force = friction_drag_force
 		output.pressure_drag_force = pressure_drag_force
+		output.buoyancy_torque = buoyancy_torque
+		output.friction_drag_torque = friction_drag_force
+		output.pressure_drag_torque = pressure_drag_torque
 		
 	
 	return output
@@ -542,13 +550,20 @@ class BoatCalculationData:
 	var waterline_points : Array[Vector3]
 	var center_of_buoyancy_world: Vector3
 	var displaced_volume: float
-	var buoyancy_torque : Vector3
 	var friction_drag_force: Vector3
 	var pressure_drag_force: Vector3
+	
+	var buoyancy_torque : Vector3
+	var friction_drag_torque: Vector3
+	var pressure_drag_torque: Vector3
 	
 	var all_forces : Vector3:
 		get:
 			return buoyancy_force + friction_drag_force + pressure_drag_force
+	
+	var all_torques : Vector3:
+		get:
+			return buoyancy_torque + friction_drag_torque + pressure_drag_torque
 
 class MeshTriangle:
 	var i0 : int

@@ -641,47 +641,58 @@ layout_mode = 2
 layout_mode = 2
 text = "Plots"
 
-[node name="Roll correction" type="Control" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
+[node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+script = ExtResource("13_7o47y")
+calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+chart = NodePath("Chart")
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Roll correction"]
+layout_mode = 2
+text = "Plot roll correction"
+
+[node name="Chart" parent="Control/HBoxContainer/Plots/Roll correction" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="At speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "force_chart", "position_chart", "torque_chart")]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+script = ExtResource("12_jf4no")
+calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+force_chart = NodePath("Forces")
+position_chart = NodePath("Position")
+torque_chart = NodePath("Torque")
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/At speed"]
+layout_mode = 2
+text = "Plot level sweep"
+
+[node name="Forces" parent="Control/HBoxContainer/Plots/At speed" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="Position" parent="Control/HBoxContainer/Plots/At speed" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="Torque" parent="Control/HBoxContainer/Plots/At speed" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="Roll correction2" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
 custom_minimum_size = Vector2(800, 500)
 layout_mode = 2
 script = ExtResource("13_7o47y")
 calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
-chart = NodePath("VBoxContainer/Chart")
+chart = NodePath("Chart")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Plots/Roll correction"]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Roll correction/VBoxContainer"]
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Roll correction2"]
 layout_mode = 2
 text = "Plot roll correction"
 
-[node name="Chart" parent="Control/HBoxContainer/Plots/Roll correction/VBoxContainer" instance=ExtResource("10_iv8r6")]
-layout_mode = 2
-
-[node name="At speed" type="Control" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "force_chart", "position_chart")]
-custom_minimum_size = Vector2(800, 500)
-layout_mode = 2
-script = ExtResource("12_jf4no")
-calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
-force_chart = NodePath("VBoxContainer/Forces")
-position_chart = NodePath("VBoxContainer/Position")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Plots/At speed"]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer"]
-layout_mode = 2
-text = "Plot forces"
-
-[node name="Forces" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer" instance=ExtResource("10_iv8r6")]
-custom_minimum_size = Vector2(0, 400)
-layout_mode = 2
-
-[node name="Position" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer" instance=ExtResource("10_iv8r6")]
+[node name="Chart" parent="Control/HBoxContainer/Plots/Roll correction2" instance=ExtResource("10_iv8r6")]
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
@@ -691,8 +702,9 @@ layout_mode = 2
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Roll correction" method="plot_graph"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/At speed/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/At speed" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/Button2" to="Control/HBoxContainer/Plots/Roll correction" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/At speed/Button2" to="Control/HBoxContainer/Plots/At speed" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction2/Button2" to="Control/HBoxContainer/Plots/Roll correction2" method="plot_graph"]
 
 [editable path="BoatView"]
 [editable path="BoatView/SmallSpeedBoat"]
