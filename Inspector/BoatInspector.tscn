@@ -660,23 +660,29 @@ text = "Plot roll correction"
 [node name="Chart" parent="Control/HBoxContainer/Plots/Roll correction/VBoxContainer" instance=ExtResource("10_iv8r6")]
 layout_mode = 2
 
-[node name="Drag force" type="Control" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
+[node name="At speed" type="Control" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "force_chart", "position_chart")]
 custom_minimum_size = Vector2(800, 500)
 layout_mode = 2
 script = ExtResource("12_jf4no")
 calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
-chart = NodePath("VBoxContainer/Chart")
+force_chart = NodePath("VBoxContainer/Forces")
+position_chart = NodePath("VBoxContainer/Position")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Plots/Drag force"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Plots/At speed"]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Drag force/VBoxContainer"]
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer"]
 layout_mode = 2
-text = "Plot drag force"
+text = "Plot forces"
 
-[node name="Chart" parent="Control/HBoxContainer/Plots/Drag force/VBoxContainer" instance=ExtResource("10_iv8r6")]
+[node name="Forces" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+
+[node name="Position" parent="Control/HBoxContainer/Plots/At speed/VBoxContainer" instance=ExtResource("10_iv8r6")]
+custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
 [connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
@@ -686,7 +692,7 @@ layout_mode = 2
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 [connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Roll correction" method="plot_graph"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/Drag force/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/Drag force" method="plot_graph"]
+[connection signal="button_down" from="Control/HBoxContainer/Plots/At speed/VBoxContainer/Button2" to="Control/HBoxContainer/Plots/At speed" method="plot_graph"]
 
 [editable path="BoatView"]
 [editable path="BoatView/SmallSpeedBoat"]
