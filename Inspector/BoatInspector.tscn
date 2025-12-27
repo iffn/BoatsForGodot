@@ -172,7 +172,7 @@ layout_mode = 2
 script = ExtResource("6_7o47y")
 calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
 display_from_inputs = NodePath("../Input/HBoxContainer/CheckButton")
-height_position_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/height")
+height_position_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/height")
 pitch_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/pitch")
 yaw_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/yaw")
 roll_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer6/roll")
@@ -266,14 +266,10 @@ layout_mode = 2
 [node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
-[node name="height" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="Empty" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
-alignment = 2
-max_length = 8
-expand_to_text_length = true
+horizontal_alignment = 2
 
 [node name="pitch" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
@@ -305,10 +301,14 @@ expand_to_text_length = true
 [node name="VBoxContainer5" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
-[node name="Empty" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+[node name="height" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-horizontal_alignment = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
 
 [node name="yaw" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
