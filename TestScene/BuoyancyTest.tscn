@@ -399,7 +399,6 @@ script = ExtResource("5_omhcd")
 water_material = SubResource("ShaderMaterial_56d3r")
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("3_t7f04")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9015265, 0)
 
 [node name="Thruster" parent="SmallSpeedBoat" index="1"]
 engine_thrust = 50000.0
