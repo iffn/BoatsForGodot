@@ -11,11 +11,15 @@ var hull : BoatHull:
 
 @export var _state := states.INGAME_UPDATE
 
-func set_boat_state(new_state : BoatState):
-	global_position = new_state.position
-	global_rotation = new_state.rotation
-	linear_velocity = new_state.linear_velocity
-	angular_velocity = new_state.angular_velocity
+var boat_state : BoatState:
+	get:
+		return BoatState.new(global_position, global_rotation, linear_velocity, angular_velocity)
+	set(new_state):
+		global_position = new_state.position
+		global_rotation = new_state.rotation
+		linear_velocity = new_state.linear_velocity
+		angular_velocity = new_state.angular_velocity
+
 
 var state : states:
 	get:

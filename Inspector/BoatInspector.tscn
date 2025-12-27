@@ -160,10 +160,10 @@ size = 5.1105313
 [node name="Update buttons" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="Button3" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
+[node name="Find water height" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Update"
+text = "Find water height"
 
 [node name="Setting states" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
@@ -213,7 +213,19 @@ text = "Input        "
 [node name="CheckButton" type="CheckButton" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
 layout_mode = 2
 button_pressed = true
-text = "Display"
+text = "Active"
+
+[node name="Apply" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+layout_mode = 2
+text = "Apply"
+
+[node name="Get" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+layout_mode = 2
+text = "Get"
+
+[node name="Reset" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+layout_mode = 2
+text = "Reset"
 
 [node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
@@ -1238,7 +1250,10 @@ text = "Plot roll correction"
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Button3" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="update_state"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Apply" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="update_state"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Get" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="get_state_from_rigidbody"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Reset" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="reset_state"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]

@@ -26,21 +26,47 @@ class_name BoatCalculator
 @export var center_evaluator: CenterEvaluator
 @export var visualize_underwater_mesh: VisualizeUnderwaterMesh
 
+var initial_state : BoatController.BoatState
+
 func _ready() -> void:
-		if !Engine.is_editor_hint():
-			height_position_input.text_submitted.connect(update_from_inputs)
-			pitch_input.text_submitted.connect(update_from_inputs)
-			yaw_input.text_submitted.connect(update_from_inputs)
-			roll_input.text_submitted.connect(update_from_inputs)
-			linear_velocity_x_input.text_submitted.connect(update_from_inputs)
-			linear_velocity_y_input.text_submitted.connect(update_from_inputs)
-			linear_velocity_z_input.text_submitted.connect(update_from_inputs)
-			angular_velocity_x_input.text_submitted.connect(update_from_inputs)
-			angular_velocity_y_input.text_submitted.connect(update_from_inputs)
-			angular_velocity_z_input.text_submitted.connect(update_from_inputs)
+	initial_state = calculation_boat.boat_state
+	
+	_set_input_state(initial_state)
+	
+	if !Engine.is_editor_hint():
+		height_position_input.text_submitted.connect(update_from_inputs)
+		pitch_input.text_submitted.connect(update_from_inputs)
+		yaw_input.text_submitted.connect(update_from_inputs)
+		roll_input.text_submitted.connect(update_from_inputs)
+		linear_velocity_x_input.text_submitted.connect(update_from_inputs)
+		linear_velocity_y_input.text_submitted.connect(update_from_inputs)
+		linear_velocity_z_input.text_submitted.connect(update_from_inputs)
+		angular_velocity_x_input.text_submitted.connect(update_from_inputs)
+		angular_velocity_y_input.text_submitted.connect(update_from_inputs)
+		angular_velocity_z_input.text_submitted.connect(update_from_inputs)
+
+func get_state_from_rigidbody():
+	var state := calculation_boat.boat_state
+	
+	_set_input_state(state)
+
+func reset_state():
+	_set_input_state(initial_state)
+	if display_from_inputs.button_pressed:
+		update_state()
 
 func update_state():
 	_set_boat_state_from_inputs()
+	_evaluate_geometry()
+	center_evaluator.update_centers()
+	visualize_underwater_mesh.update_underwater_mesh()
+
+func find_water_height():
+	var height := calculation_boat.hull.find_waterline(9.81 * calculation_boat.mass)
+	var state := calculation_boat.boat_state
+	state.position.y = height
+	calculation_boat.boat_state = state
+	_set_input_state(state)
 	_evaluate_geometry()
 	center_evaluator.update_centers()
 	visualize_underwater_mesh.update_underwater_mesh()
@@ -50,6 +76,22 @@ func update_from_inputs(new_text: String):
 		return
 	
 	update_state()
+	
+
+func _set_input_state(new_state : BoatController.BoatState):
+	height_position_input.text = str(new_state.position.y).pad_decimals(2)
+	
+	pitch_input.text = str(rad_to_deg(new_state.rotation.x)).pad_decimals(2)
+	yaw_input.text = str(rad_to_deg(new_state.rotation.y)).pad_decimals(2)
+	roll_input.text = str(rad_to_deg(new_state.rotation.z)).pad_decimals(2)
+	
+	linear_velocity_x_input.text = str(new_state.linear_velocity.x).pad_decimals(2)
+	linear_velocity_y_input.text = str(new_state.linear_velocity.y).pad_decimals(2)
+	linear_velocity_z_input.text = str(new_state.linear_velocity.z).pad_decimals(2)
+	
+	angular_velocity_x_input.text = str(new_state.angular_velocity.x).pad_decimals(2)
+	angular_velocity_y_input.text = str(new_state.angular_velocity.y).pad_decimals(2)
+	angular_velocity_z_input.text = str(new_state.angular_velocity.z).pad_decimals(2)
 
 func _set_boat_state_from_inputs():
 	var new_state := BoatController.BoatState.new(
@@ -59,7 +101,7 @@ func _set_boat_state_from_inputs():
 			Vector3(float(angular_velocity_x_input.text), float(angular_velocity_y_input.text), float(angular_velocity_z_input.text))
 		)
 	
-	calculation_boat.set_boat_state(new_state)
+	calculation_boat.boat_state = new_state
 
 func _evaluate_geometry():
 	var names := _output_holder_name.find_children("*", "Label")
