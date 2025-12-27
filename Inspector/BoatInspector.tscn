@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=14 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -6,11 +6,12 @@
 [ext_resource type="Script" uid="uid://dlwej14u6j545" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/CenterEvaluator.gd" id="4_7s5vx"]
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
-[ext_resource type="Material" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_7o47y"]
+[ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_7o47y"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
+[ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
-[ext_resource type="Script" uid="uid://bpmhoudtbohe" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/TorqueVsPitchAtSpeed.gd" id="12_7o47y"]
-[ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
+[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/TorqueVsPitchAtSpeed.gd" id="12_7o47y"]
+[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
 [node name="Node2D" type="Node2D"]
@@ -83,6 +84,7 @@ layout_mode = 2
 text = "Import"
 
 [node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
 [node name="Model view" type="VBoxContainer" parent="Control/HBoxContainer"]
@@ -93,91 +95,625 @@ layout_mode = 2
 text = "Model view
 "
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+[node name="Front and Side view" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="Front" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer"]
+[node name="Front" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Front and Side view"]
 layout_mode = 2
 
-[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer/Front"]
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Front and Side view/Front"]
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Front/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport"]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0, -6.0458403)
 projection = 1
 size = 5.1105313
 
-[node name="Side" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer"]
+[node name="Side" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Front and Side view"]
 layout_mode = 2
 
-[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer/Side"]
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Front and Side view/Side"]
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer/Side/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, -1.6765802)
 projection = 1
 size = 5.1105313
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+[node name="Iso and Top view" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="ISO" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer2"]
+[node name="ISO" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Iso and Top view"]
 layout_mode = 2
 
-[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO"]
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO"]
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport"]
+[node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport"]
 transform = Transform3D(0.6123724, -0.35355338, 0.7071067, 0.5, 0.8660254, 0, -0.6123724, 0.35355338, 0.7071067, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/ISO/SubViewport/Node3D2"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
 projection = 1
 size = 6.0
 far = 13.28
 
-[node name="Top" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/HBoxContainer2"]
+[node name="Top" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Iso and Top view"]
 layout_mode = 2
 
-[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top"]
+[node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Iso and Top view/Top"]
 handle_input_locally = false
 size = Vector2i(500, 250)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/HBoxContainer2/Top/SubViewport"]
+[node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport"]
 transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, -1.677)
 projection = 1
 size = 5.1105313
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
+[node name="Update buttons" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
+[node name="Button3" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Update underwater mesh"
+text = "Update"
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button" node_paths=PackedStringArray("calculation_boat", "visualization")]
-script = ExtResource("1_aak0k")
-calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
-visualization = NodePath("../../../../../../BoatView/UnderwaterVisualization")
-
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Model view/HBoxContainer3"]
+[node name="Setting states" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
-text = "Update centers"
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Model view/HBoxContainer3/Button2" node_paths=PackedStringArray("calculation_boat", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
+[node name="Calculator" type="Node" parent="Control/HBoxContainer/Model view/Setting states" node_paths=PackedStringArray("calculation_boat", "display_from_inputs", "height_position_input", "pitch_input", "yaw_input", "roll_input", "linear_velocity_x_input", "linear_velocity_y_input", "linear_velocity_z_input", "angular_velocity_x_input", "angular_velocity_y_input", "angular_velocity_z_input", "_output_holder_name", "_output_holder_x", "_output_holder_y", "_output_holder_z", "center_evaluator", "visualize_underwater_mesh")]
+script = ExtResource("6_7o47y")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+display_from_inputs = NodePath("../Input/HBoxContainer/CheckButton")
+height_position_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/height")
+pitch_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/pitch")
+yaw_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/yaw")
+roll_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer6/roll")
+linear_velocity_x_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/lin x")
+linear_velocity_y_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/lin y")
+linear_velocity_z_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer6/lin z")
+angular_velocity_x_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/ang x")
+angular_velocity_y_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/ang y")
+angular_velocity_z_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer6/ang z")
+_output_holder_name = NodePath("../Input2/Moment of inertia/Moment of inertia/Names")
+_output_holder_x = NodePath("../Input2/Moment of inertia/Moment of inertia/X")
+_output_holder_y = NodePath("../Input2/Moment of inertia/Moment of inertia/Y")
+_output_holder_z = NodePath("../Input2/Moment of inertia/Moment of inertia/Z")
+center_evaluator = NodePath("Update centers")
+visualize_underwater_mesh = NodePath("Visualize underwater mesh")
+
+[node name="Update centers" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("calculation_boat", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
 script = ExtResource("4_7s5vx")
 calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
 center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
 center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
 
+[node name="Visualize underwater mesh" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("calculation_boat", "visualization")]
+script = ExtResource("1_aak0k")
+calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+visualization = NodePath("../../../../../../BoatView/UnderwaterVisualization")
+
+[node name="Input" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+layout_mode = 2
+text = "Input        "
+
+[node name="CheckButton" type="CheckButton" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Display"
+
+[node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
+layout_mode = 2
+
+[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Height position"
+horizontal_alignment = 2
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Pitch, Yaw, Roll"
+horizontal_alignment = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Linear velocity"
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Angular velocity"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="height" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="pitch" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="lin x" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="ang x" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Empty" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="yaw" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="lin y" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="ang y" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="VBoxContainer6" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Empty" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="roll" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="lin z" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="ang z" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "0"
+placeholder_text = "height"
+alignment = 2
+max_length = 8
+expand_to_text_length = true
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states"]
+layout_mode = 2
+
+[node name="Input2" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/HBoxContainer"]
+layout_mode = 2
+text = "Output        "
+
+[node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2"]
+layout_mode = 2
+
+[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia"]
+layout_mode = 2
+
+[node name="Names" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Triangles below water"
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Water line points"
+horizontal_alignment = 2
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Water plane size"
+horizontal_alignment = 2
+
+[node name="Subtitle6" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Center of buoyancy"
+horizontal_alignment = 2
+
+[node name="Subtitle7" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Displaced volume"
+horizontal_alignment = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Buoyancy force"
+horizontal_alignment = 2
+
+[node name="Subtitle8" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Friction drag force"
+horizontal_alignment = 2
+
+[node name="Subtitle9" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Pressure drag force"
+horizontal_alignment = 2
+
+[node name="Subtitle10" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Total force"
+horizontal_alignment = 2
+
+[node name="Subtitle11" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Buoyancy torque"
+horizontal_alignment = 2
+
+[node name="Subtitle13" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Friction drag torque"
+horizontal_alignment = 2
+
+[node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Pressure drag torque"
+horizontal_alignment = 2
+
+[node name="Subtitle14" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Total toque"
+horizontal_alignment = 2
+
+[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="X" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle6" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle7" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle8" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle9" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle10" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle11" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle13" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle14" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Y" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle6" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle7" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle8" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle9" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle10" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle11" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle13" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle14" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="VSeparator4" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Z" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle6" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle7" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle8" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle9" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle10" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle11" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle13" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle14" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+layout_mode = 2
+
 [node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
 [node name="Model setup" type="VBoxContainer" parent="Control/HBoxContainer"]
@@ -399,6 +935,7 @@ text = "kg⋅m²"
 layout_mode = 2
 
 [node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
 [node name="Analysis" type="VBoxContainer" parent="Control/HBoxContainer"]
@@ -635,6 +1172,10 @@ text = "m"
 layout_mode = 2
 text = "m"
 
+[node name="VSeparator4" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
 [node name="Plots" type="VBoxContainer" parent="Control/HBoxContainer"]
 layout_mode = 2
 
@@ -697,8 +1238,7 @@ text = "Plot roll correction"
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button" to="Control/HBoxContainer/Model view/HBoxContainer3/Button/Node" method="update_underwater_mesh"]
-[connection signal="button_down" from="Control/HBoxContainer/Model view/HBoxContainer3/Button2" to="Control/HBoxContainer/Model view/HBoxContainer3/Button2/Node" method="update_centers"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Button3" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="update_state"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]

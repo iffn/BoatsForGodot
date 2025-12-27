@@ -1,5 +1,7 @@
 extends Node
 
+class_name VisualizeUnderwaterMesh
+
 @export var calculation_boat : BoatController
 @export var visualization : MeshInstance3D
 

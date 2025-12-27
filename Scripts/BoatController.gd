@@ -11,6 +11,12 @@ var hull : BoatHull:
 
 @export var _state := states.INGAME_UPDATE
 
+func set_boat_state(new_state : BoatState):
+	global_position = new_state.position
+	global_rotation = new_state.rotation
+	linear_velocity = new_state.linear_velocity
+	angular_velocity = new_state.angular_velocity
+
 var state : states:
 	get:
 		return _state
@@ -40,3 +46,15 @@ enum states {
 	INGAME_UPDATE,
 	IDLE
 }
+
+class BoatState:
+	var position : Vector3
+	var rotation : Vector3
+	var linear_velocity : Vector3
+	var angular_velocity : Vector3
+	
+	func _init(the_position : Vector3, the_rotation : Vector3, the_linear_velocity : Vector3, the_angular_velocity : Vector3):
+		position = the_position
+		rotation = the_rotation
+		linear_velocity = the_linear_velocity
+		angular_velocity = the_angular_velocity

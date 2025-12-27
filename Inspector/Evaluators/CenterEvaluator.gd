@@ -1,5 +1,7 @@
 extends Node
 
+class_name CenterEvaluator
+
 @export var calculation_boat : BoatController
 @export var center_of_mass_indicator : Node3D
 @export var center_of_buoyancy_indicator : Node3D
