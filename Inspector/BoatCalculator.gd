@@ -27,9 +27,33 @@ class_name BoatCalculator
 @export var visualize_underwater_mesh: VisualizeUnderwaterMesh
 
 var initial_state : BoatController.BoatState
+var _update_counter := 0
+var _current_update_state := update_states.FROZEN
+
+enum update_states {
+	FROZEN,
+	LIMITED_STEPS,
+	SIMULATING
+}
+
+var current_update_state : update_states:
+	get:
+		return _current_update_state
+	set(value):
+		match value:
+			update_states.FROZEN:
+				calculation_boat.state = BoatController.states.IDLE
+			update_states.LIMITED_STEPS:
+				calculation_boat.state = BoatController.states.INGAME_UPDATE
+				_update_counter = 0
+			update_states.SIMULATING:
+				calculation_boat.state = BoatController.states.INGAME_UPDATE
+		_current_update_state = value
 
 func _ready() -> void:
 	initial_state = calculation_boat.boat_state
+	
+	calculation_boat.state = BoatController.states.IDLE
 	
 	_set_input_state(initial_state)
 	
@@ -44,6 +68,33 @@ func _ready() -> void:
 		angular_velocity_x_input.text_submitted.connect(update_from_inputs)
 		angular_velocity_y_input.text_submitted.connect(update_from_inputs)
 		angular_velocity_z_input.text_submitted.connect(update_from_inputs)
+
+func _physics_process(delta: float) -> void:
+	if current_update_state == update_states.LIMITED_STEPS:
+		if _update_counter >= 1:
+			current_update_state = update_states.FROZEN
+		else:
+			_update_counter += 1
+			center_evaluator.update_centers()
+			visualize_underwater_mesh.update_underwater_mesh()
+			_evaluate_geometry()
+			
+	elif current_update_state == update_states.SIMULATING:
+		center_evaluator.update_centers()
+		visualize_underwater_mesh.update_underwater_mesh()
+		_evaluate_geometry()
+
+func play_pause():
+	match _current_update_state:
+		update_states.FROZEN:
+			current_update_state = update_states.SIMULATING
+		update_states.LIMITED_STEPS:
+			current_update_state = update_states.SIMULATING
+		update_states.SIMULATING:
+			current_update_state = update_states.FROZEN
+
+func calculate_next_step():
+	current_update_state = update_states.LIMITED_STEPS
 
 func get_state_from_rigidbody():
 	var state := calculation_boat.boat_state

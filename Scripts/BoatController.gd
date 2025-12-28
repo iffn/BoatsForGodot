@@ -25,7 +25,7 @@ var state : states:
 	get:
 		return _state
 	set(value):
-		match state:
+		match value:
 			states.INGAME_UPDATE:
 				sleeping = false
 				freeze = false
