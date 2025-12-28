@@ -44,7 +44,7 @@ input_backward = ExtResource("6_k7uqj")
 input_right = ExtResource("7_pno3k")
 input_left = ExtResource("8_bpxxw")
 linked_rigidbody = NodePath("..")
-thrust_output = NodePath("../VBoxContainer/f")
+thrust_output = NodePath("")
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Thruster"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.2)
@@ -65,34 +65,5 @@ water_level = NodePath("../DefaultWaterLevel")
 
 [node name="DefaultWaterLevel" type="Node" parent="."]
 script = ExtResource("11_xo8ma")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-visible = false
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="a" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "a"
-
-[node name="b" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "b"
-
-[node name="c" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "c"
-
-[node name="d" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "d"
-
-[node name="e" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "e"
-
-[node name="f" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "e"
 
 [editable path="SmallSpeedBoat"]
