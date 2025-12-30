@@ -1266,6 +1266,31 @@ text = "Plot roll correction"
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
+[node name="VSeparator5" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Idea liist" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Control/HBoxContainer/Idea liist"]
+layout_mode = 2
+text = "Idea list:"
+
+[node name="Title2" type="Label" parent="Control/HBoxContainer/Idea liist"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+text = "Architecture:
+- Inspector accesses Boat via 1 controller or view
+View:
+- View is centered on boat
+- Heading is indicated at the horizon
+Plots:
+- Level once -> Rotate around CoG -> Measure pitch torque
+- Create yaw AoA -> Plot yaw torque
+Save file:
+- glTF save and load"
+
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height3" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="play_pause"]
