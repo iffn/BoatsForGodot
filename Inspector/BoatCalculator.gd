@@ -42,18 +42,18 @@ var current_update_state : update_states:
 	set(value):
 		match value:
 			update_states.FROZEN:
-				calculation_boat.state = BoatController.states.IDLE
+				calculation_boat.current_update_state = BoatController.update_states.IDLE
 			update_states.LIMITED_STEPS:
-				calculation_boat.state = BoatController.states.INGAME_UPDATE
+				calculation_boat.current_update_state = BoatController.update_states.INGAME_UPDATE
 				_update_counter = 0
 			update_states.SIMULATING:
-				calculation_boat.state = BoatController.states.INGAME_UPDATE
+				calculation_boat.current_update_state = BoatController.update_states.INGAME_UPDATE
 		_current_update_state = value
 
 func _ready() -> void:
 	initial_state = calculation_boat.boat_state
 	
-	calculation_boat.state = BoatController.states.IDLE
+	calculation_boat.current_update_state = BoatController.update_states.IDLE
 	
 	_set_input_state(initial_state)
 	

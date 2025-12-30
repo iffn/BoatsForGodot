@@ -460,9 +460,6 @@ func assign_underwater_mesh(mesh_instance : MeshInstance3D, triangles_below_wate
 	var surface_tool := SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	print("Mesh: ", mesh_triangles.size())
-	print("Underwater: ", triangles_below_water.size())
-	
 	for triangle in triangles_below_water:
 		surface_tool.add_vertex(triangle.v0_world)
 		surface_tool.add_vertex(triangle.v1_world)

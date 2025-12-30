@@ -9,7 +9,7 @@ var hull : BoatHull:
 	get:
 		return _hull
 
-@export var _state := states.INGAME_UPDATE
+@export var _current_update_state := update_states.INGAME_UPDATE
 
 var boat_state : BoatState:
 	get:
@@ -21,19 +21,19 @@ var boat_state : BoatState:
 		angular_velocity = new_state.angular_velocity
 
 
-var state : states:
+var current_update_state : update_states:
 	get:
-		return _state
+		return _current_update_state
 	set(value):
 		match value:
-			states.INGAME_UPDATE:
+			update_states.INGAME_UPDATE:
 				sleeping = false
 				freeze = false
 				if _hull:
 					hull.set_physics_process(true)
 				if _thruster:
 					_thruster.set_physics_process(true)
-			states.IDLE:
+			update_states.IDLE:
 				sleeping = true
 				freeze = true
 				if _hull:
@@ -41,12 +41,12 @@ var state : states:
 				if _thruster:
 					_thruster.set_physics_process(false)
 				pass
-		_state = value
+		_current_update_state = value
 
 func _ready() -> void:
-	state = _state
+	current_update_state = _current_update_state
 
-enum states {
+enum update_states {
 	INGAME_UPDATE,
 	IDLE
 }

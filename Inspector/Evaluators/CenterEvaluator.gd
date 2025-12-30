@@ -11,4 +11,3 @@ func update_centers():
 	
 	center_of_mass_indicator.global_position = calculation_boat.global_transform * calculation_boat.center_of_mass
 	center_of_buoyancy_indicator.global_position = data.center_of_buoyancy_world
-	print("Center at: ", data.center_of_buoyancy_world)
