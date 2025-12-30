@@ -471,6 +471,8 @@ func assign_underwater_mesh(mesh_instance : MeshInstance3D, triangles_below_wate
 		surface_tool.add_vertex(triangle.v1_world)
 		surface_tool.add_vertex(triangle.v2_world)
 	
+	surface_tool.generate_normals()
+	
 	var array_mesh := ArrayMesh.new()
 	surface_tool.commit(array_mesh)
 	mesh_instance.mesh = array_mesh

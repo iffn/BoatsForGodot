@@ -1,14 +1,13 @@
-// NOTE: Shader automatically converted from Godot Engine 4.5.1.stable's StandardMaterial3D.
-
 shader_type spatial;
 render_mode unshaded, cull_disabled, wireframe;
 
 uniform vec4 albedo : source_color;
-
-uniform float outline_width : hint_range(0.0, 10.0, 0.1) = 3.0;
+// Renamed to 'offset' for clarity, though it works for outlines too
+uniform float normal_offset : hint_range(0.0, 1.0, 0.01) = 0.1; 
 
 void vertex() {
-	
+	// Add the normal vector (scaled by width) to the vertex position
+	VERTEX += NORMAL * normal_offset;
 }
 
 void fragment() {

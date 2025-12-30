@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=16 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="4_fm4hc"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
+[ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
@@ -26,7 +27,8 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
+[node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
+_camera_followers = [NodePath("WaterLevel"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
 
 [node name="SmallSpeedBoat" parent="BoatView" index="0"]
 mass = 7732.4
@@ -110,6 +112,9 @@ render_target_update_mode = 4
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0, -6.0458403)
 projection = 1
 size = 5.1105313
+script = ExtResource("5_vknsj")
+follow_horizontal_position = true
+follow_vertical_position = true
 
 [node name="Side" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Front and Side view"]
 layout_mode = 2
@@ -123,6 +128,9 @@ render_target_update_mode = 4
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, -1.6765802)
 projection = 1
 size = 5.1105313
+script = ExtResource("5_vknsj")
+follow_horizontal_position = true
+follow_vertical_position = true
 
 [node name="Iso and Top view" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
@@ -143,6 +151,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.88
 projection = 1
 size = 6.0
 far = 13.28
+script = ExtResource("5_vknsj")
+follow_horizontal_position = true
+follow_vertical_position = true
 
 [node name="Top" type="SubViewportContainer" parent="Control/HBoxContainer/Model view/Iso and Top view"]
 layout_mode = 2
@@ -156,6 +167,9 @@ render_target_update_mode = 4
 transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, -1.677)
 projection = 1
 size = 5.1105313
+script = ExtResource("5_vknsj")
+follow_horizontal_position = true
+follow_vertical_position = true
 
 [node name="Update buttons" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
@@ -1275,11 +1289,14 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
-- Inspector accesses Boat via 1 controller or view
 
 View:
 - View is centered on boat
 - Heading is indicated at the horizon
+
+Runtime testing:
+- Add thrusters
+- Add wave injection
 
 Plots:
 - Level once -> Rotate around CoG -> Measure pitch torque

@@ -3,11 +3,15 @@ extends RigidBody3D
 class_name BoatController
 
 @export var _hull : BoatHull
-@export var _thruster : BoatThruster
+@export var _thrusters : Array[BoatThruster]
 
 var hull : BoatHull:
 	get:
 		return _hull
+
+var thrusters : Array[BoatThruster]:
+	get:
+		return _thrusters
 
 @export var _current_update_state := update_states.INGAME_UPDATE
 
@@ -31,15 +35,15 @@ var current_update_state : update_states:
 				freeze = false
 				if _hull:
 					hull.set_physics_process(true)
-				if _thruster:
-					_thruster.set_physics_process(true)
+				for thruster in _thrusters:
+					thruster.set_physics_process(true)
 			update_states.IDLE:
 				sleeping = true
 				freeze = true
 				if _hull:
 					hull.set_physics_process(false)
-				if _thruster:
-					_thruster.set_physics_process(false)
+				for thruster in _thrusters:
+					thruster.set_physics_process(false)
 				pass
 		_current_update_state = value
 

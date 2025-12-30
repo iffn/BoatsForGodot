@@ -14,7 +14,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
 size = Vector3(2.5231934, 1, 7.1388397)
 
-[node name="SmallSpeedBoat" type="RigidBody3D" node_paths=PackedStringArray("_hull", "_thruster")]
+[node name="SmallSpeedBoat" type="RigidBody3D" node_paths=PackedStringArray("_hull", "_thrusters")]
 mass = 8727.2
 center_of_mass_mode = 1
 linear_damp_mode = 1
@@ -22,7 +22,7 @@ angular_damp_mode = 1
 angular_damp = 0.5
 script = ExtResource("1_cubwg")
 _hull = NodePath("HullCalculation")
-_thruster = NodePath("Thruster")
+_thrusters = [NodePath("Thruster")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2437253)
@@ -33,7 +33,7 @@ script = ExtResource("1_ydj72")
 linked_rigidbody = NodePath("../..")
 box_collision_shape = NodePath("..")
 
-[node name="Thruster" type="Node3D" parent="." node_paths=PackedStringArray("linked_rigidbody", "thrust_output")]
+[node name="Thruster" type="Node3D" parent="." node_paths=PackedStringArray("linked_rigidbody")]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 2.8755639)
 script = ExtResource("4_15i1o")
 engine_thrust = 150000.0
@@ -44,7 +44,6 @@ input_backward = ExtResource("6_k7uqj")
 input_right = ExtResource("7_pno3k")
 input_left = ExtResource("8_bpxxw")
 linked_rigidbody = NodePath("..")
-thrust_output = NodePath("")
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Thruster"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.2)

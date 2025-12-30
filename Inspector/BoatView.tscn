@@ -1,10 +1,11 @@
-[gd_scene load_steps=15 format=4 uid="uid://1k50il72p5qf"]
+[gd_scene load_steps=16 format=4 uid="uid://1k50il72p5qf"]
 
 [ext_resource type="Script" uid="uid://682d8p34i48m" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.gd" id="1_eesk3"]
 [ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="1_f1310"]
 [ext_resource type="PackedScene" uid="uid://br8m36qu8rl8k" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterSphereSide.blend" id="2_htfkw"]
 [ext_resource type="Script" uid="uid://67gg5gmyh4fi" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="3_6ad51"]
 [ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_vvj4a"]
+[ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="6_sfudi"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
 
@@ -61,9 +62,10 @@ shadow_mesh = SubResource("ArrayMesh_kwyvo")
 no_depth_test = true
 albedo_color = Color(0, 0.37254903, 1, 1)
 
-[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat")]
+[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat", "_camera_followers")]
 script = ExtResource("1_eesk3")
 _linked_boat = NodePath("SmallSpeedBoat")
+_camera_followers = [NodePath("WaterLevel")]
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
 
@@ -81,6 +83,9 @@ transform = Transform3D(-4.371139e-08, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 1
 light_energy = 0.2
 
 [node name="WaterLevel" type="Node3D" parent="."]
+script = ExtResource("6_sfudi")
+follow_horizontal_position = true
+follow_heading = true
 
 [node name="Top" type="CSGBox3D" parent="WaterLevel"]
 material_override = SubResource("StandardMaterial3D_f1310")
@@ -134,7 +139,6 @@ skeleton = NodePath("")
 script = ExtResource("3_6ad51")
 
 [node name="UnderwaterVisualization" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
 material_override = ExtResource("5_vvj4a")
 skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
 
