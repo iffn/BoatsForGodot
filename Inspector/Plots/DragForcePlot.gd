@@ -1,6 +1,10 @@
 extends Node
 
-@export var calculation_boat : BoatController
+@export var boat_view : BoatView
+var calculation_boat : BoatController:
+	get:
+		return boat_view.linked_boat
+
 @export var force_chart: Chart
 @export var position_chart: Chart
 @export var torque_chart: Chart

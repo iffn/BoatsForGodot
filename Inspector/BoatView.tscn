@@ -1,8 +1,10 @@
-[gd_scene load_steps=13 format=4 uid="uid://1k50il72p5qf"]
+[gd_scene load_steps=15 format=4 uid="uid://1k50il72p5qf"]
 
+[ext_resource type="Script" uid="uid://682d8p34i48m" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.gd" id="1_eesk3"]
 [ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="1_f1310"]
 [ext_resource type="PackedScene" uid="uid://br8m36qu8rl8k" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterSphereSide.blend" id="2_htfkw"]
 [ext_resource type="Script" uid="uid://67gg5gmyh4fi" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="3_6ad51"]
+[ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_vvj4a"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
 
@@ -59,12 +61,13 @@ shadow_mesh = SubResource("ArrayMesh_kwyvo")
 no_depth_test = true
 albedo_color = Color(0, 0.37254903, 1, 1)
 
-[node name="BoatView" type="Node3D"]
+[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat")]
+script = ExtResource("1_eesk3")
+_linked_boat = NodePath("SmallSpeedBoat")
 
 [node name="SmallSpeedBoat" parent="." instance=ExtResource("1_f1310")]
-_state = 1
 
-[node name="HullCalculation" parent="SmallSpeedBoat" index="4" node_paths=PackedStringArray("water_level")]
+[node name="HullCalculation" parent="SmallSpeedBoat" index="3" node_paths=PackedStringArray("water_level")]
 water_level = NodePath("../../EditorWaterLevel")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -130,8 +133,12 @@ skeleton = NodePath("")
 [node name="EditorWaterLevel" type="Node" parent="."]
 script = ExtResource("3_6ad51")
 
+[node name="UnderwaterVisualization" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
+material_override = ExtResource("5_vvj4a")
+skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
+
 [editable path="SmallSpeedBoat"]
-[editable path="SmallSpeedBoat/Cube1m3"]
 [editable path="SmallSpeedBoat/SmallSpeedBoat"]
 [editable path="Center of mass indicator"]
 [editable path="Center of buoyancy indicator"]

@@ -1,6 +1,10 @@
 extends Node
 
-@export var calculation_boat : BoatController
+@export var boat_view : BoatView
+var calculation_boat : BoatController:
+	get:
+		return boat_view.linked_boat
+
 @export var _basic_geometry_name_holder: Control 
 @export var _basic_geometry_output_holder: Control 
 

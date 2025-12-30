@@ -3,7 +3,10 @@ extends Node
 
 class_name BoatCalculator
 
-@export var calculation_boat : BoatController
+@export var boat_view : BoatView
+var calculation_boat : BoatController:
+	get:
+		return boat_view.linked_boat
 
 @export var display_from_inputs : CheckButton
 

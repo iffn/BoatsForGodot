@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=15 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://brji1u5rxf7c2" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/GeometryEvaluator.gd" id="4_aak0k"]
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="4_fm4hc"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
-[ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_7o47y"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
@@ -23,6 +22,10 @@ visible = false
 position = Vector2(639, 325)
 script = ExtResource("1_vakq3")
 
+[node name="SetupInputs" type="Node" parent="."]
+script = ExtResource("4_fm4hc")
+input_collection = ExtResource("5_w5bwg")
+
 [node name="BoatView" parent="." instance=ExtResource("2_gli4e")]
 
 [node name="SmallSpeedBoat" parent="BoatView" index="0"]
@@ -33,15 +36,6 @@ visible = false
 
 [node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
 visible = true
-
-[node name="UnderwaterVisualization" type="MeshInstance3D" parent="BoatView"]
-transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
-material_override = ExtResource("5_7o47y")
-skeleton = NodePath("../SmallSpeedBoat/SmallSpeedBoat/DisplacementMesh")
-
-[node name="SetupInputs" type="Node" parent="BoatView"]
-script = ExtResource("4_fm4hc")
-input_collection = ExtResource("5_w5bwg")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -184,9 +178,9 @@ text = "Run/Pause"
 [node name="Setting states" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="Calculator" type="Node" parent="Control/HBoxContainer/Model view/Setting states" node_paths=PackedStringArray("calculation_boat", "display_from_inputs", "height_position_input", "pitch_input", "yaw_input", "roll_input", "linear_velocity_x_input", "linear_velocity_y_input", "linear_velocity_z_input", "angular_velocity_x_input", "angular_velocity_y_input", "angular_velocity_z_input", "_output_holder_name", "_output_holder_x", "_output_holder_y", "_output_holder_z", "center_evaluator", "visualize_underwater_mesh")]
+[node name="Calculator" type="Node" parent="Control/HBoxContainer/Model view/Setting states" node_paths=PackedStringArray("boat_view", "display_from_inputs", "height_position_input", "pitch_input", "yaw_input", "roll_input", "linear_velocity_x_input", "linear_velocity_y_input", "linear_velocity_z_input", "angular_velocity_x_input", "angular_velocity_y_input", "angular_velocity_z_input", "_output_holder_name", "_output_holder_x", "_output_holder_y", "_output_holder_z", "center_evaluator", "visualize_underwater_mesh")]
 script = ExtResource("6_7o47y")
-calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../BoatView")
 display_from_inputs = NodePath("../Input/HBoxContainer/CheckButton")
 height_position_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/height")
 pitch_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/pitch")
@@ -205,15 +199,15 @@ _output_holder_z = NodePath("../Input2/Moment of inertia/Moment of inertia/Z")
 center_evaluator = NodePath("Update centers")
 visualize_underwater_mesh = NodePath("Visualize underwater mesh")
 
-[node name="Update centers" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("calculation_boat", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
+[node name="Update centers" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_view", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
 script = ExtResource("4_7s5vx")
-calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../../BoatView")
 center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
 center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
 
-[node name="Visualize underwater mesh" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("calculation_boat", "visualization")]
+[node name="Visualize underwater mesh" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_view", "visualization")]
 script = ExtResource("1_aak0k")
-calculation_boat = NodePath("../../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../../BoatView")
 visualization = NodePath("../../../../../../BoatView/UnderwaterVisualization")
 
 [node name="Input" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states"]
@@ -754,9 +748,9 @@ text = "Model setup"
 [node name="MassWaterline" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("calculation_boat", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("boat_view", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
 script = ExtResource("4_otdjp")
-calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../BoatView")
 _mass_or_waterline = NodePath("../OptionButton")
 _mass_line = NodePath("../Mass selection")
 _waterline_line = NodePath("../Waterline selection")
@@ -984,9 +978,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Mesh info:"
 
-[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Mesh info" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Mesh info" node_paths=PackedStringArray("boat_view", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
 script = ExtResource("5_uk4ya")
-calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../BoatView")
 _basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
 _basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
 
@@ -1088,9 +1082,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Basic geometry:"
 
-[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("calculation_boat", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("boat_view", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
 script = ExtResource("4_aak0k")
-calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../../BoatView")
 _basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
 _basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
 
@@ -1211,11 +1205,11 @@ layout_mode = 2
 layout_mode = 2
 text = "Plots"
 
-[node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
+[node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "chart")]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 script = ExtResource("13_7o47y")
-calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../BoatView")
 chart = NodePath("Chart")
 
 [node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Roll correction"]
@@ -1226,11 +1220,11 @@ text = "Plot roll correction"
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[node name="At speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "force_chart", "position_chart", "torque_chart")]
+[node name="At speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "force_chart", "position_chart", "torque_chart")]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 script = ExtResource("12_jf4no")
-calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../BoatView")
 force_chart = NodePath("Forces")
 position_chart = NodePath("Position")
 torque_chart = NodePath("Torque")
@@ -1251,11 +1245,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[node name="Pitch torque at speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("calculation_boat", "chart")]
+[node name="Pitch torque at speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "chart")]
 custom_minimum_size = Vector2(800, 500)
 layout_mode = 2
 script = ExtResource("12_7o47y")
-calculation_boat = NodePath("../../../../BoatView/SmallSpeedBoat")
+boat_view = NodePath("../../../../BoatView")
 chart = NodePath("Chart")
 
 [node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Pitch torque at speed"]
@@ -1282,12 +1276,15 @@ custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
 - Inspector accesses Boat via 1 controller or view
+
 View:
 - View is centered on boat
 - Heading is indicated at the horizon
+
 Plots:
 - Level once -> Rotate around CoG -> Measure pitch torque
 - Create yaw AoA -> Plot yaw torque
+
 Save file:
 - glTF save and load"
 
