@@ -2,8 +2,15 @@ extends RigidBody3D
 
 class_name BoatController
 
-@export var _hull : BoatHull
-@export var _thrusters : Array[BoatThruster]
+@export var _water_level: WaterLevelProvider
+@export var drag_multiplier : float  = 1.0
+@export var buoyancy_multiplier : float  = 1.0
+@export var intertia_calculator : InertiaCalculator
+@export var _current_update_state := update_states.INGAME_UPDATE
+@export var input_forward : InputResource
+@export var input_backward : InputResource
+@export var input_right : InputResource
+@export var input_left : InputResource
 
 var hull : BoatHull:
 	get:
@@ -13,7 +20,8 @@ var thrusters : Array[BoatThruster]:
 	get:
 		return _thrusters
 
-@export var _current_update_state := update_states.INGAME_UPDATE
+var _hull : BoatHull
+var _thrusters : Array[BoatThruster]
 
 var boat_state : BoatState:
 	get:
@@ -23,7 +31,6 @@ var boat_state : BoatState:
 		global_rotation = new_state.rotation
 		linear_velocity = new_state.linear_velocity
 		angular_velocity = new_state.angular_velocity
-
 
 var current_update_state : update_states:
 	get:
@@ -48,7 +55,42 @@ var current_update_state : update_states:
 		_current_update_state = value
 
 func _ready() -> void:
+	gather_stuff()
 	current_update_state = _current_update_state
+
+func gather_stuff():
+	var all_descendants := find_children("*", "", true)
+	for child in all_descendants:
+		if child.has_meta("extras"):
+			var extras := child.get_meta("extras") as Dictionary
+			if extras.has("ElementType"):
+				if extras.get("ElementType") == "DisplacementMesh":
+					mass = (float)(extras.get("Mass"))
+					_hull = BoatHull.new()
+					add_child(_hull)
+					var hull_mesh := child as MeshInstance3D
+					_hull.hull_mesh = child as MeshInstance3D
+					_hull.rigidbody = self
+					_hull.water_level = _water_level
+					_hull.drag_multiplier = drag_multiplier
+					_hull.buoyancy_multiplier = buoyancy_multiplier
+					_hull.setup()
+				if extras.get("ElementType") == "Thruster":
+					var MaxHorizontalRotationDeg := (float)(extras.get("MaxHorizontalRotationDeg"))
+					var MaxVerticalRotationDeg := (float)(extras.get("MaxVerticalRotationDeg"))
+					var Thrust := (float)(extras.get("Thrust"))
+					child.set_script(BoatThruster)
+					var thruster := child as BoatThruster
+					thruster.engine_thrust = Thrust
+					thruster.engine_pitch_deg = MaxVerticalRotationDeg
+					thruster.engine_rotation_deg = MaxHorizontalRotationDeg
+					thruster.input_forward = input_forward
+					thruster.input_backward = input_backward
+					thruster.input_right = input_right
+					thruster.input_left = input_left
+					thruster.linked_rigidbody = self
+					_thrusters.append(thruster)
+	intertia_calculator.calculate_and_set_inertia()
 
 enum update_states {
 	INGAME_UPDATE,

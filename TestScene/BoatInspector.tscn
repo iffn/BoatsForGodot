@@ -30,15 +30,6 @@ input_collection = ExtResource("5_w5bwg")
 [node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
 _camera_followers = [NodePath("WaterLevel"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
 
-[node name="SmallSpeedBoat" parent="BoatView" index="0"]
-mass = 7732.4
-
-[node name="Hull" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="0"]
-visible = false
-
-[node name="DisplacementMesh" parent="BoatView/SmallSpeedBoat/SmallSpeedBoat" index="1"]
-visible = true
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -1300,6 +1291,7 @@ Plots:
 - Create yaw AoA -> Plot yaw torque
 
 Save file:
+- Set inertia directly in setup
 - glTF save and load"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
@@ -1317,7 +1309,5 @@ Save file:
 [connection signal="button_down" from="Control/HBoxContainer/Plots/Pitch torque at speed/Button2" to="Control/HBoxContainer/Plots/Pitch torque at speed" method="plot_graph"]
 
 [editable path="BoatView"]
-[editable path="BoatView/SmallSpeedBoat"]
-[editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]
 [editable path="BoatView/Center of mass indicator"]
 [editable path="BoatView/Center of buoyancy indicator"]

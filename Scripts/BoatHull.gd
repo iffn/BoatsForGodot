@@ -30,6 +30,10 @@ var bounding_box : AABB:
 		return hull_mesh.get_aabb()
 
 func _ready() -> void:
+	if hull_mesh != null:
+		setup()
+
+func setup():
 	convert_mesh()
 
 func _physics_process(delta: float) -> void:

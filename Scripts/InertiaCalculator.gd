@@ -1,5 +1,7 @@
 extends Node
 
+class_name InertiaCalculator
+
 @export var linked_rigidbody: RigidBody3D
 @export var box_collision_shape: CollisionShape3D
 

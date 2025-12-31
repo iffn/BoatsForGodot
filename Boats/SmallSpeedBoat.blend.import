@@ -3,7 +3,7 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://u3a1nn3shhfp"
+uid="uid://cx8bv6kdbg1jk"
 path="res://.godot/imported/SmallSpeedBoat.blend-076dcf3dd0e38114238a5a9e223500af.scn"
 
 [deps]
@@ -13,7 +13,7 @@ dest_files=["res://.godot/imported/SmallSpeedBoat.blend-076dcf3dd0e38114238a5a9e
 
 [params]
 
-nodes/root_type=""
+nodes/root_type="RigidBody3D"
 nodes/root_name=""
 nodes/root_script=null
 nodes/apply_root_scale=true
