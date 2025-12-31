@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://1k50il72p5qf"]
+[gd_scene load_steps=19 format=4 uid="uid://1k50il72p5qf"]
 
 [ext_resource type="Script" uid="uid://682d8p34i48m" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.gd" id="1_eesk3"]
 [ext_resource type="PackedScene" uid="uid://chaqngu1cpmu8" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.tscn" id="1_f1310"]
@@ -13,9 +13,50 @@
 transparency = 1
 albedo_color = Color(0, 1.5386635, 3.0288723, 0.36862746)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_htfkw"]
-shading_mode = 0
-albedo_color = Color(0, 0.49019608, 1, 1)
+[sub_resource type="Shader" id="Shader_sfudi"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx, unshaded;
+
+uniform vec4 color_1 : source_color;
+uniform vec4 color_2 : source_color;
+uniform sampler2D noise_texture : source_color, filter_linear_mipmap, repeat_enable;
+
+uniform float scale = 1.0;
+
+varying vec3 world_pos;
+varying vec3 world_normal;
+
+void vertex() {
+    world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+    world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
+}
+
+void fragment() {
+    vec3 weights = abs(world_normal);
+    weights /= (weights.x + weights.y + weights.z);
+
+    float noise_x = texture(noise_texture, world_pos.zy * scale).r; // Side
+    float noise_y = texture(noise_texture, world_pos.xz * scale).r; // Top/Bottom
+    float noise_z = texture(noise_texture, world_pos.xy * scale).r; // Front/Back
+
+    float final_noise = noise_x * weights.x + noise_y * weights.y + noise_z * weights.z;
+
+    ALBEDO = mix(color_1, color_2, final_noise).rgb;
+}"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_sfudi"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4kpyc"]
+noise = SubResource("FastNoiseLite_sfudi")
+seamless = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4kpyc"]
+render_priority = 0
+shader = SubResource("Shader_sfudi")
+shader_parameter/color_1 = Color(0, 0.6392157, 1, 1)
+shader_parameter/color_2 = Color(0, 0.4627451, 1, 1)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_4kpyc")
+shader_parameter/scale = 0.1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ad51"]
 no_depth_test = true
@@ -88,28 +129,48 @@ follow_horizontal_position = true
 follow_heading = true
 
 [node name="Top" type="CSGBox3D" parent="WaterLevel"]
+visible = false
 material_override = SubResource("StandardMaterial3D_f1310")
 size = Vector3(20, 0, 20)
 
 [node name="Side +X" type="CSGBox3D" parent="WaterLevel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -25, 0)
-material_override = SubResource("StandardMaterial3D_htfkw")
+visible = false
+material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
 [node name="Side -X" type="CSGBox3D" parent="WaterLevel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -25, 0)
-material_override = SubResource("StandardMaterial3D_htfkw")
+visible = false
+material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
 [node name="Side +Z" type="CSGBox3D" parent="WaterLevel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 10)
-material_override = SubResource("StandardMaterial3D_htfkw")
+visible = false
+material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
 
 [node name="Side -Z" type="CSGBox3D" parent="WaterLevel"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, -10)
-material_override = SubResource("StandardMaterial3D_htfkw")
+visible = false
+material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WaterLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+material_override = SubResource("ShaderMaterial_4kpyc")
+flip_faces = true
+radius = 20.0
+height = 40.0
+sides = 32
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="WaterLevel"]
+material_override = SubResource("ShaderMaterial_4kpyc")
+flip_faces = true
+radius = 20.0
+height = 0.001
+sides = 32
 
 [node name="Center of mass indicator" parent="." instance=ExtResource("2_htfkw")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)

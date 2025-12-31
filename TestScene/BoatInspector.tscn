@@ -105,13 +105,13 @@ layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Front and Side view/Front"]
 handle_input_locally = false
-size = Vector2i(500, 250)
+size = Vector2i(500, 300)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0, -6.0458403)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.12800005, 0.40942192, -6.0458403)
 projection = 1
-size = 5.1105313
+size = 10.0
 script = ExtResource("5_vknsj")
 follow_horizontal_position = true
 follow_vertical_position = true
@@ -121,13 +121,13 @@ layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Front and Side view/Side"]
 handle_input_locally = false
-size = Vector2i(500, 250)
+size = Vector2i(500, 300)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, -1.6765802)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0.40942192, -0.50638556)
 projection = 1
-size = 5.1105313
+size = 10.0
 script = ExtResource("5_vknsj")
 follow_horizontal_position = true
 follow_vertical_position = true
@@ -140,7 +140,7 @@ layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO"]
 handle_input_locally = false
-size = Vector2i(500, 250)
+size = Vector2i(500, 300)
 render_target_update_mode = 4
 
 [node name="Node3D2" type="Node3D" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport"]
@@ -149,8 +149,8 @@ transform = Transform3D(0.6123724, -0.35355338, 0.7071067, 0.5, 0.8660254, 0, -0
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.885598, 0, 0)
 projection = 1
-size = 6.0
-far = 13.28
+size = 10.0
+far = 75.39
 script = ExtResource("5_vknsj")
 follow_horizontal_position = true
 follow_vertical_position = true
@@ -160,13 +160,13 @@ layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="Control/HBoxContainer/Model view/Iso and Top view/Top"]
 handle_input_locally = false
-size = Vector2i(500, 250)
+size = Vector2i(500, 300)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport"]
-transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 0, 5, -1.677)
+transform = Transform3D(-4.371139e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, 4.371139e-08, 1.9106855e-15, 1.7976106e-08, 5.7589493, -0.5068054)
 projection = 1
-size = 5.1105313
+size = 10.0
 script = ExtResource("5_vknsj")
 follow_horizontal_position = true
 follow_vertical_position = true
@@ -1290,12 +1290,9 @@ custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
 
-View:
-- View is centered on boat
-- Heading is indicated at the horizon
-
 Runtime testing:
-- Add thrusters
+- Add save and load state
+- Add constant thruster output
 - Add wave injection
 
 Plots:
