@@ -1287,12 +1287,19 @@ Runtime testing:
 - Add wave injection
 
 Plots:
+- Use consistent world -Z velocity -> Pitch and level -> Measure pitch torque
 - Level once -> Rotate around CoG -> Measure pitch torque
-- Create yaw AoA -> Plot yaw torque
+- Set Yaw AoA -> Plot yaw torque
 
 Save file:
 - Set inertia directly in setup
-- glTF save and load"
+- glTF save and load
+
+Bugs:
+- Don't reset velocity when pausing and playing
+
+Check physics:
+- Set 0 except except X velocity -> Why does it keep spinning? Is the pressure drag torque correct?"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
