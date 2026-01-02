@@ -1293,13 +1293,17 @@ Plots:
 
 Save file:
 - Set inertia directly in setup
-- glTF save and load
+- glTF save and load test on itch
 
 Bugs:
 - Don't reset velocity when pausing and playing
+- Implement angular velocity into the physics calculation
 
 Check physics:
-- Set 0 except except X velocity -> Why does it keep spinning? Is the pressure drag torque correct?"
+- Center of Buoyancy should be inside the hull at depth
+- Displaced volume should stay consistent at different depths when fully submerged
+- Buoyancy force should stay consistent at different depths when fully submerged
+- Buoyancy force should X Z should be 0"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
@@ -1318,3 +1322,4 @@ Check physics:
 [editable path="BoatView"]
 [editable path="BoatView/Center of mass indicator"]
 [editable path="BoatView/Center of buoyancy indicator"]
+[editable path="BoatView/SmallSpeedBoat"]
