@@ -11,6 +11,7 @@ class_name BoatController
 @export var input_backward : InputResource
 @export var input_right : InputResource
 @export var input_left : InputResource
+@export var boat_model : Node3D
 
 var hull : BoatHull:
 	get:
@@ -44,6 +45,7 @@ var current_update_state : update_states:
 					hull.set_physics_process(true)
 				for thruster in _thrusters:
 					thruster.set_physics_process(true)
+					pass
 			update_states.IDLE:
 				sleeping = true
 				freeze = true
@@ -55,11 +57,23 @@ var current_update_state : update_states:
 		_current_update_state = value
 
 func _ready() -> void:
-	gather_stuff()
-	current_update_state = _current_update_state
+	setup()
 
-func gather_stuff():
-	var all_descendants := find_children("*", "", true)
+func replace_boat_model(new_boat_model : Node3D):
+	boat_model.queue_free()
+	
+	boat_model = new_boat_model
+	
+	boat_model.position = Vector3.ZERO
+	boat_model.rotation = Vector3.ZERO
+	boat_model.scale = Vector3.ONE
+	
+	setup()
+
+func setup():
+	_thrusters = []
+	
+	var all_descendants := boat_model.find_children("*", "", true)
 	for child in all_descendants:
 		if child.has_meta("extras"):
 			var extras := child.get_meta("extras") as Dictionary
@@ -69,12 +83,15 @@ func gather_stuff():
 					_hull = BoatHull.new()
 					add_child(_hull)
 					var hull_mesh := child as MeshInstance3D
-					_hull.hull_mesh = child as MeshInstance3D
-					_hull.rigidbody = self
-					_hull.water_level = _water_level
+					if hull_mesh == null:
+						print("Hull mesh not found")
+					else:
+						print("Hull mesh found")
+					
 					_hull.drag_multiplier = drag_multiplier
 					_hull.buoyancy_multiplier = buoyancy_multiplier
-					_hull.setup()
+					_hull.setup(hull_mesh, self, _water_level)
+					print("Hull set up")
 				if extras.get("ElementType") == "Thruster":
 					var MaxHorizontalRotationDeg := (float)(extras.get("MaxHorizontalRotationDeg"))
 					var MaxVerticalRotationDeg := (float)(extras.get("MaxVerticalRotationDeg"))
@@ -90,7 +107,10 @@ func gather_stuff():
 					thruster.input_left = input_left
 					thruster.linked_rigidbody = self
 					_thrusters.append(thruster)
+	
 	intertia_calculator.calculate_and_set_inertia()
+	
+	current_update_state = _current_update_state
 
 enum update_states {
 	INGAME_UPDATE,

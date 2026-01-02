@@ -115,7 +115,7 @@ size = Vector3(2.5231934, 1, 7.1388397)
 [node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat", "_camera_followers")]
 script = ExtResource("1_eesk3")
 _linked_boat = NodePath("SmallSpeedBoat")
-_camera_followers = [NodePath("WaterLevel")]
+_camera_followers = [NodePath("Water")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f1310")
@@ -127,42 +127,42 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.95
 transform = Transform3D(-4.371139e-08, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 1, 4.371139e-08, -3.5527137e-15, 5.950036, 0, 0)
 light_energy = 0.2
 
-[node name="WaterLevel" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+[node name="Water" type="Node3D" parent="." node_paths=PackedStringArray("target")]
 script = ExtResource("6_sfudi")
 target = NodePath("../SmallSpeedBoat")
 follow_horizontal_position = true
 follow_heading = true
 
-[node name="Top" type="CSGBox3D" parent="WaterLevel"]
+[node name="Top" type="CSGBox3D" parent="Water"]
 visible = false
 material_override = SubResource("StandardMaterial3D_f1310")
 size = Vector3(20, 0, 20)
 
-[node name="Side +X" type="CSGBox3D" parent="WaterLevel"]
+[node name="Side +X" type="CSGBox3D" parent="Water"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -25, 0)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
-[node name="Side -X" type="CSGBox3D" parent="WaterLevel"]
+[node name="Side -X" type="CSGBox3D" parent="Water"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -25, 0)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
-[node name="Side +Z" type="CSGBox3D" parent="WaterLevel"]
+[node name="Side +Z" type="CSGBox3D" parent="Water"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 10)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
 
-[node name="Side -Z" type="CSGBox3D" parent="WaterLevel"]
+[node name="Side -Z" type="CSGBox3D" parent="Water"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, -10)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="WaterLevel"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Water"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 material_override = SubResource("ShaderMaterial_4kpyc")
 flip_faces = true
@@ -170,7 +170,7 @@ radius = 20.0
 height = 40.0
 sides = 32
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="WaterLevel"]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Water"]
 material_override = SubResource("ShaderMaterial_4kpyc")
 flip_faces = true
 radius = 20.0
@@ -204,11 +204,11 @@ skeleton = NodePath("")
 [node name="EditorWaterLevel" type="Node" parent="."]
 script = ExtResource("3_6ad51")
 
-[node name="UnderwaterVisualization" type="MeshInstance3D" parent="."]
+[node name="Underwater hull visualization" type="MeshInstance3D" parent="."]
 material_override = ExtResource("5_vvj4a")
 skeleton = NodePath("")
 
-[node name="SmallSpeedBoat" parent="." node_paths=PackedStringArray("_water_level", "intertia_calculator") instance=ExtResource("2_forn3")]
+[node name="SmallSpeedBoat" type="RigidBody3D" parent="." node_paths=PackedStringArray("_water_level", "intertia_calculator", "boat_model")]
 script = ExtResource("3_forn3")
 _water_level = NodePath("../EditorWaterLevel")
 intertia_calculator = NodePath("CollisionShape3D/InertiaCalculation")
@@ -216,6 +216,7 @@ input_forward = ExtResource("8_pllas")
 input_backward = ExtResource("9_ise16")
 input_right = ExtResource("10_jpwgn")
 input_left = ExtResource("11_8vvjr")
+boat_model = NodePath("SmallSpeedBoat")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SmallSpeedBoat"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2437253)
@@ -226,5 +227,8 @@ script = ExtResource("4_forn3")
 linked_rigidbody = NodePath("../..")
 box_collision_shape = NodePath("..")
 
+[node name="SmallSpeedBoat" parent="SmallSpeedBoat" instance=ExtResource("2_forn3")]
+
 [editable path="Center of mass indicator"]
 [editable path="Center of buoyancy indicator"]
+[editable path="SmallSpeedBoat/SmallSpeedBoat"]

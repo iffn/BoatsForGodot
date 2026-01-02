@@ -7,12 +7,13 @@ class_name BoatHull
 # https://www.habrador.com/tutorials/unity-boat-tutorial
 # https://github.com/iffn/iffnsBoatsForVRChat/blob/main/Scripts/HullCalculator.cs
 
-@export var drag_coefficient : float = 0.05
-@export var drag_multiplier : float  = 1.0
-@export var buoyancy_multiplier : float  = 1.0
-@export var hull_mesh: MeshInstance3D
-@export var rigidbody: RigidBody3D
-@export var water_level: WaterLevelProvider
+var drag_coefficient : float = 0.05
+var drag_multiplier : float  = 1.0
+var buoyancy_multiplier : float  = 1.0
+
+var hull_mesh: MeshInstance3D
+var rigidbody: RigidBody3D
+var water_level: WaterLevelProvider
 
 var mesh_vertices_local : Array[Vector3]
 var mesh_triangles : Array[MeshTriangle]
@@ -29,11 +30,10 @@ var bounding_box : AABB:
 	get:
 		return hull_mesh.get_aabb()
 
-func _ready() -> void:
-	if hull_mesh != null:
-		setup()
-
-func setup():
+func setup(the_hull_mesh: MeshInstance3D, the_rigidbody: RigidBody3D, the_water_level: WaterLevelProvider):
+	hull_mesh = the_hull_mesh
+	rigidbody = the_rigidbody
+	water_level = the_water_level
 	convert_mesh()
 
 func _physics_process(delta: float) -> void:
