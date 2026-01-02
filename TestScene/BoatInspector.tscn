@@ -1307,7 +1307,10 @@ Plots:
 
 Save file:
 - Set inertia directly in setup
-- glTF save and load test on itch
+- Save as glb
+- Import notifications
+- Import tree and setup
+- Separate mass into center of gravity object
 
 Bugs:
 - Don't reset velocity when pausing and playing
