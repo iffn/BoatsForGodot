@@ -77,6 +77,10 @@ func update_mesh_positions():
 	for triangle in mesh_triangles:
 		triangle.normal_world = (hull_transform.basis * triangle.normal_local).normalized()
 
+func calculate_velocity_at_point(point_global : Vector3, center_of_mass : Vector3, linear_velocity : Vector3, angular_velocity : Vector3) -> Vector3:
+	var r = point_global - center_of_mass
+	return linear_velocity + angular_velocity.cross(r)
+
 func apply_to_rigidbody():
 	var triangles_below_water : Array[BelowWaterTriangle] = []
 	
@@ -91,7 +95,11 @@ func apply_to_rigidbody():
 	var friction_coefficient_divider_part : float = (BoatHull.log_10(reynolds_number) - 2.0)
 	var frictional_drag_coefficient := 0.075 / (friction_coefficient_divider_part * friction_coefficient_divider_part)
 	
+	var center_of_mass := rigidbody.global_transform * rigidbody.center_of_mass
+	
 	for triangle in triangles_below_water:
+		triangle.calculate_point_velocities(center_of_mass, velocity_world, rigidbody.angular_velocity)
+		
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
 		# Buoyancy
 		#var application_position := triangle.geometric_center_world - rigidbody.global_position
@@ -101,12 +109,12 @@ func apply_to_rigidbody():
 		buoyancy_application.z = 0.0
 		rigidbody.apply_force(buoyancy_application, hydrostatic_center_application)
 		
-		var geometric_center_application := triangle.geometric_center_world - rigidbody.global_position
-		var friction_drag_application := drag_multiplier * triangle.friction_drag_force
-		var pressure_drag_application := drag_multiplier * triangle.pressure_drag_force
-		
-		rigidbody.apply_force(friction_drag_application, geometric_center_application)
-		rigidbody.apply_force(pressure_drag_application, geometric_center_application)
+		rigidbody.apply_force(drag_multiplier * triangle.f0_friction_drag, triangle.p0_world - rigidbody.global_position)
+		rigidbody.apply_force(drag_multiplier * triangle.f0_pressure_drag, triangle.p0_world - rigidbody.global_position)
+		rigidbody.apply_force(drag_multiplier * triangle.f1_friction_drag, triangle.p1_world - rigidbody.global_position)
+		rigidbody.apply_force(drag_multiplier * triangle.f1_pressure_drag, triangle.p1_world - rigidbody.global_position)
+		rigidbody.apply_force(drag_multiplier * triangle.f2_friction_drag, triangle.p2_world - rigidbody.global_position)
+		rigidbody.apply_force(drag_multiplier * triangle.f2_pressure_drag, triangle.p2_world - rigidbody.global_position)
 
 func calculate_all() -> BoatCalculationData:
 	var output := BoatCalculationData.new()
@@ -141,19 +149,21 @@ func calculate_all() -> BoatCalculationData:
 	var friction_drag_force := Vector3(0,0,0)
 	var pressure_drag_force := Vector3(0,0,0)
 	
+	var center_of_mass := rigidbody.global_transform * rigidbody.center_of_mass
 	var buoyancy_torque := Vector3(0,0,0)
 	var friction_drag_torque := Vector3(0,0,0)
 	var pressure_drag_torque := Vector3(0,0,0)
 	
 	for triangle in triangles_below_water:
+		triangle.calculate_point_velocities(center_of_mass, velocity_world, rigidbody.angular_velocity)
 		triangle.calculate_all(velocity_world, frictional_drag_coefficient)
 		
-		var a := triangle.v0_world - water_line_point;
-		var b := triangle.v1_world - water_line_point;
-		var c := triangle.v2_world - water_line_point;
+		var a := triangle.p0_world - water_line_point;
+		var b := triangle.p1_world - water_line_point;
+		var c := triangle.p2_world - water_line_point;
 		
 		var tetrahedron_volume := (-0.1666666667) * a.dot(b.cross(c));
-		var tetrahedron_center := 0.25 * (triangle.v0_world + triangle.v1_world + triangle.v2_world + water_line_point)
+		var tetrahedron_center := 0.25 * (triangle.p0_world + triangle.p1_world + triangle.p2_world + water_line_point)
 		
 		displaced_volume_additive += tetrahedron_volume
 		center_of_buoyancy_world_additive += tetrahedron_volume * tetrahedron_center	
@@ -164,16 +174,24 @@ func calculate_all() -> BoatCalculationData:
 		water_y_min = min(triangle.v2_world.y, water_y_min)
 		
 		area += triangle.area
-		friction_drag_force += triangle.friction_drag_force
-		pressure_drag_force += triangle.pressure_drag_force
+		friction_drag_force += triangle.f0_friction_drag
+		pressure_drag_force += triangle.f0_pressure_drag
+		friction_drag_force += triangle.f1_friction_drag
+		pressure_drag_force += triangle.f1_pressure_drag
+		friction_drag_force += triangle.f2_friction_drag
+		pressure_drag_force += triangle.f2_pressure_drag
 		
 		var center_of_mass_world := rigidbody.global_transform * rigidbody.center_of_mass
 		var lever_arm_hydrostatic_center := triangle.hydrostatic_center_world - center_of_mass_world
-		var lever_arm_geometric_center := triangle.geometric_center_world - center_of_mass_world
 		
 		buoyancy_torque += (lever_arm_hydrostatic_center).cross(Vector3(0, triangle.static_pressure_force_world.y, 0))
-		friction_drag_torque += (lever_arm_geometric_center).cross(triangle.friction_drag_force)
-		pressure_drag_torque += (lever_arm_geometric_center).cross(triangle.pressure_drag_force)
+		
+		friction_drag_torque += (triangle.p0_world - center_of_mass_world).cross(triangle.f0_friction_drag)
+		pressure_drag_torque += (triangle.p0_world - center_of_mass_world).cross(triangle.f0_pressure_drag)
+		friction_drag_torque += (triangle.p1_world - center_of_mass_world).cross(triangle.f1_friction_drag)
+		pressure_drag_torque += (triangle.p1_world - center_of_mass_world).cross(triangle.f1_pressure_drag)
+		friction_drag_torque += (triangle.p2_world - center_of_mass_world).cross(triangle.f2_friction_drag)
+		pressure_drag_torque += (triangle.p2_world - center_of_mass_world).cross(triangle.f2_pressure_drag)
 	
 	for point in waterline_points:
 		water_x_max = max(point.x, water_x_max)
@@ -212,13 +230,13 @@ func calculate_buoyancy_force() -> Vector3:
 	return output
 
 func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> void:
-	var v0 := triangle.v0_world
-	var v1 := triangle.v1_world
-	var v2 := triangle.v2_world
+	var p0 := triangle.p0_world
+	var p1 := triangle.p1_world
+	var p2 := triangle.p2_world
 	
-	var distance_to_water_0 := water_level.get_distance_to_water(v0)
-	var distance_to_water_1 := water_level.get_distance_to_water(v1)
-	var distance_to_water_2 := water_level.get_distance_to_water(v2)
+	var distance_to_water_0 := water_level.get_distance_to_water(p0)
+	var distance_to_water_1 := water_level.get_distance_to_water(p1)
+	var distance_to_water_2 := water_level.get_distance_to_water(p2)
 	
 	var above_water_counter := 0
 	
@@ -238,37 +256,37 @@ func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> vo
 		var distance_to_water_low_1 : float
 		var distance_to_water_low_2 : float
 		
-		if v0.y > v1.y:
-			if v0.y > v2.y:
+		if p0.y > p1.y:
+			if p0.y > p2.y:
 				# Order tested
-				high_point = v0
-				low_point_1 = v1
-				low_point_2 = v2
+				high_point = p0
+				low_point_1 = p1
+				low_point_2 = p2
 				distance_to_water_high = distance_to_water_0
 				distance_to_water_low_1 = distance_to_water_1
 				distance_to_water_low_2 = distance_to_water_2
 			else:
 				# Order not tested
-				high_point = v2
-				low_point_1 = v0
-				low_point_2 = v1
+				high_point = p2
+				low_point_1 = p0
+				low_point_2 = p1
 				distance_to_water_high = distance_to_water_2
 				distance_to_water_low_1 = distance_to_water_0
 				distance_to_water_low_2 = distance_to_water_1
 		else:
-			if v1.y > v2.y:
+			if p1.y > p2.y:
 				# Order tested
-				high_point = v1
-				low_point_1 = v2
-				low_point_2 = v0
+				high_point = p1
+				low_point_1 = p2
+				low_point_2 = p0
 				distance_to_water_high = distance_to_water_1
 				distance_to_water_low_1 = distance_to_water_2
 				distance_to_water_low_2 = distance_to_water_0
 			else:
 				# Order not tested
-				high_point = v2
-				low_point_1 = v0
-				low_point_2 = v1
+				high_point = p2
+				low_point_1 = p0
+				low_point_2 = p1
 				distance_to_water_high = distance_to_water_2
 				distance_to_water_low_1 = distance_to_water_0
 				distance_to_water_low_2 = distance_to_water_1
@@ -286,37 +304,37 @@ func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> vo
 		var distance_to_water_high_1 : float
 		var distance_to_water_high_2 : float
 		
-		if v0.y < v1.y:
-			if v0.y < v2.y:
+		if p0.y < p1.y:
+			if p0.y < p2.y:
 				# Order tested
-				low_point = v0
-				high_point_1 = v1
-				high_point_2 = v2
+				low_point = p0
+				high_point_1 = p1
+				high_point_2 = p2
 				distance_to_water_low = distance_to_water_0
 				distance_to_water_high_1 = distance_to_water_1
 				distance_to_water_high_2 = distance_to_water_2
 			else:
 				# Order not tested
-				low_point = v2
-				high_point_1 = v0
-				high_point_2 = v1
+				low_point = p2
+				high_point_1 = p0
+				high_point_2 = p1
 				distance_to_water_low = distance_to_water_2
 				distance_to_water_high_1 = distance_to_water_0
 				distance_to_water_high_2 = distance_to_water_1
 		else:
-			if v1.y < v2.y:
+			if p1.y < p2.y:
 				# Order tested
-				low_point = v1
-				high_point_1 = v2
-				high_point_2 = v0
+				low_point = p1
+				high_point_1 = p2
+				high_point_2 = p0
 				distance_to_water_low = distance_to_water_1
 				distance_to_water_high_1 = distance_to_water_2
 				distance_to_water_high_2 = distance_to_water_0
 			else:
 				# Order not tested
-				low_point = v2
-				high_point_1 = v0
-				high_point_2 = v1
+				low_point = p2
+				high_point_1 = p0
+				high_point_2 = p1
 				distance_to_water_low = distance_to_water_2
 				distance_to_water_high_1 = distance_to_water_0
 				distance_to_water_high_2 = distance_to_water_1
@@ -329,9 +347,9 @@ func assign_water_line(triangle: MeshTriangle, water_line: Array[Vector3]) -> vo
 		pass
 
 func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTriangle]) -> void:
-	var v0 := triangle.v0_world
-	var v1 := triangle.v1_world
-	var v2 := triangle.v2_world
+	var p0 := triangle.p0_world
+	var p1 := triangle.p1_world
+	var p2 := triangle.p2_world
 	var normal := triangle.normal_world
 	
 	var h0 := triangle.distance_to_water_0
@@ -359,34 +377,34 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		if h0 > h1:
 			if h0 > h2:
 				# Order tested
-				high_point = v0
-				low_point_1 = v1
-				low_point_2 = v2
+				high_point = p0
+				low_point_1 = p1
+				low_point_2 = p2
 				h_high = h0
 				h_low_1 = h1
 				h_low_2 = h2
 			else:
 				# Order not tested
-				high_point = v2
-				low_point_1 = v0
-				low_point_2 = v1
+				high_point = p2
+				low_point_1 = p0
+				low_point_2 = p1
 				h_high = h2
 				h_low_1 = h0
 				h_low_2 = h1
 		else:
 			if h1 > h2:
 				# Order tested
-				high_point = v1
-				low_point_1 = v2
-				low_point_2 = v0
+				high_point = p1
+				low_point_1 = p2
+				low_point_2 = p0
 				h_high = h1
 				h_low_1 = h2
 				h_low_2 = h0
 			else:
 				# Order not tested
-				high_point = v2
-				low_point_1 = v0
-				low_point_2 = v1
+				high_point = p2
+				low_point_1 = p0
+				low_point_2 = p1
 				h_high = h2
 				h_low_1 = h0
 				h_low_2 = h1
@@ -414,34 +432,34 @@ func assign_below_water(triangle: MeshTriangle, below_water: Array[BelowWaterTri
 		if h0 < h1:
 			if h0 < h2:
 				# Order tested
-				low_point = v0
-				high_point_1 = v1
-				high_point_2 = v2
+				low_point = p0
+				high_point_1 = p1
+				high_point_2 = p2
 				h_low = h0
 				h_high_1 = h1
 				h_high_2 = h2
 			else:
 				# Order not tested
-				low_point = v2
-				high_point_1 = v0
-				high_point_2 = v1
+				low_point = p2
+				high_point_1 = p0
+				high_point_2 = p1
 				h_low = h2
 				h_high_1 = h0
 				h_high_2 = h1
 		else:
 			if h1 < h2:
 				# Order tested
-				low_point = v1
-				high_point_1 = v2
-				high_point_2 = v0
+				low_point = p1
+				high_point_1 = p2
+				high_point_2 = p0
 				h_low = h1
 				h_high_1 = h2
 				h_high_2 = h0
 			else:
 				# Order not tested
-				low_point = v2
-				high_point_1 = v0
-				high_point_2 = v1
+				low_point = p2
+				high_point_1 = p0
+				high_point_2 = p1
 				h_low = h2
 				h_high_1 = h0
 				h_high_2 = h1
@@ -467,15 +485,15 @@ func assign_underwater_mesh(mesh_instance : MeshInstance3D, triangles_below_wate
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
 	for triangle in triangles_below_water:
-		surface_tool.add_vertex(triangle.v0_world)
-		surface_tool.add_vertex(triangle.v1_world)
-		surface_tool.add_vertex(triangle.v2_world)
+		surface_tool.add_vertex(triangle.p0_world)
+		surface_tool.add_vertex(triangle.p1_world)
+		surface_tool.add_vertex(triangle.p2_world)
 	
 	for triangle in mesh_triangles:
 		break
-		surface_tool.add_vertex(triangle.v0_world)
-		surface_tool.add_vertex(triangle.v1_world)
-		surface_tool.add_vertex(triangle.v2_world)
+		surface_tool.add_vertex(triangle.p0_world)
+		surface_tool.add_vertex(triangle.p1_world)
+		surface_tool.add_vertex(triangle.p2_world)
 	
 	surface_tool.generate_normals()
 	
@@ -579,23 +597,23 @@ class MeshTriangle:
 	var mesh_vertices_world : Array[Vector3]
 	var distances_to_water : Array[float]
 	
-	var v0_local : Vector3:
+	var p0_local : Vector3:
 		get:
 			return mesh_vertices_local[i0]
-	var v1_local : Vector3:
+	var p1_local : Vector3:
 		get:
 			return mesh_vertices_local[i1]
-	var v2_local : Vector3:
+	var p2_local : Vector3:
 		get:
 			return mesh_vertices_local[i2]
 	
-	var v0_world : Vector3:
+	var p0_world : Vector3:
 		get:
 			return mesh_vertices_world[i0]
-	var v1_world : Vector3:
+	var p1_world : Vector3:
 		get:
 			return mesh_vertices_world[i1]
-	var v2_world : Vector3:
+	var p2_world : Vector3:
 		get:
 			return mesh_vertices_world[i2]
 	
@@ -626,7 +644,7 @@ class MeshTriangle:
 		i2 = the_i2
 		
 		normal_local = the_normal_local
-		area = get_triangle_area_times_normal_from_points(v0_local, v1_local, v2_local).length()
+		area = get_triangle_area_times_normal_from_points(p0_local, p1_local, p2_local).length()
 	
 	static func get_triangle_area_times_normal_from_points(A: Vector3, B: Vector3, C: Vector3) -> Vector3:
 		var ab := B - A
@@ -634,6 +652,9 @@ class MeshTriangle:
 		return 0.5 * ac.cross(ab)
 
 class BelowWaterTriangle:
+	var p0_world : Vector3
+	var p1_world : Vector3
+	var p2_world : Vector3
 	var v0_world : Vector3
 	var v1_world : Vector3
 	var v2_world : Vector3
@@ -649,8 +670,13 @@ class BelowWaterTriangle:
 	
 	var geometric_center_world : Vector3
 	
-	var friction_drag_force : Vector3
-	var pressure_drag_force : Vector3
+	var f0_friction_drag : Vector3
+	var f1_friction_drag : Vector3
+	var f2_friction_drag : Vector3
+	
+	var f0_pressure_drag : Vector3
+	var f1_pressure_drag : Vector3
+	var f2_pressure_drag : Vector3
 	
 	static var WATER_DENSITY := 1000
 	static var GRAVITATIONAL_ACCELERATION := 9.81
@@ -658,10 +684,10 @@ class BelowWaterTriangle:
 	static var PRESSURE_DRAG_COEFFICIENT := 0.5
 	static var SUCTION_DRAG_COEFFICIENT := 0.05
 	
-	func _init(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float, the_area : float, the_normal_world : Vector3):
-		v0_world = the_v0_world
-		v1_world = the_v1_world
-		v2_world = the_v2_world
+	func _init(the_p0_world: Vector3, the_p1_world: Vector3, the_p2_world, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float, the_area : float, the_normal_world : Vector3):
+		p0_world = the_p0_world
+		p1_world = the_p1_world
+		p2_world = the_p2_world
 		distance_to_water_0 = the_distance_to_water_0
 		distance_to_water_1 = the_distance_to_water_1
 		distance_to_water_2 = the_distance_to_water_2
@@ -669,32 +695,49 @@ class BelowWaterTriangle:
 		normal_world = the_normal_world
 	
 	static func create_from_triangle(triangle : MeshTriangle) -> BelowWaterTriangle:
-		return BelowWaterTriangle.new(triangle.v0_world, triangle.v1_world, triangle.v2_world, triangle.distance_to_water_0, triangle.distance_to_water_1, triangle.distance_to_water_2, triangle.area, triangle.normal_world)
+		return BelowWaterTriangle.new(triangle.p0_world, triangle.p1_world, triangle.p2_world, triangle.distance_to_water_0, triangle.distance_to_water_1, triangle.distance_to_water_2, triangle.area, triangle.normal_world)
 	
-	static func create_from_points(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world : Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float, the_normal_world: Vector3)  -> BelowWaterTriangle:
-		var the_area = MeshTriangle.get_triangle_area_times_normal_from_points(the_v0_world, the_v1_world, the_v2_world).length()
-		return BelowWaterTriangle.new(the_v0_world, the_v1_world, the_v2_world, the_distance_to_water_0, the_distance_to_water_1, the_distance_to_water_2, the_area, the_normal_world)
+	static func create_from_points(the_p0_world: Vector3, the_p1_world: Vector3, the_p2_world : Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float, the_normal_world: Vector3)  -> BelowWaterTriangle:
+		var the_area = MeshTriangle.get_triangle_area_times_normal_from_points(the_p0_world, the_p1_world, the_p2_world).length()
+		return BelowWaterTriangle.new(the_p0_world, the_p1_world, the_p2_world, the_distance_to_water_0, the_distance_to_water_1, the_distance_to_water_2, the_area, the_normal_world)
 	
-	func calculate_all(world_velocity : Vector3, frictional_drag_coefficient):
-		geometric_center_world = 0.33333333 * (v0_world + v1_world + v2_world)
-		hydrostatic_center_world = calculate_hydrostatic_center_world(v0_world, v1_world, v2_world, distance_to_water_0, distance_to_water_1, distance_to_water_2)
-		hydrostatic_depth = barycentric_interpolation(v0_world, v1_world, v2_world, distance_to_water_0, distance_to_water_1, distance_to_water_2, hydrostatic_center_world)
+	func calculate_point_velocities(center_of_mass : Vector3, linear_velocity : Vector3, angular_velocity : Vector3):
+		v0_world = linear_velocity + angular_velocity.cross(p0_world - center_of_mass)
+		v1_world = linear_velocity + angular_velocity.cross(p1_world - center_of_mass)
+		v2_world = linear_velocity + angular_velocity.cross(p2_world - center_of_mass)
+	
+	func calculate_all(world_linear_velocity : Vector3, frictional_drag_coefficient):
+		geometric_center_world = 0.33333333 * (p0_world + p1_world + p2_world)
+		hydrostatic_center_world = calculate_hydrostatic_center_world(p0_world, p1_world, p2_world, distance_to_water_0, distance_to_water_1, distance_to_water_2)
+		hydrostatic_depth = barycentric_interpolation(p0_world, p1_world, p2_world, distance_to_water_0, distance_to_water_1, distance_to_water_2, hydrostatic_center_world)
 		static_pressure_force_world = WATER_DENSITY * GRAVITATIONAL_ACCELERATION * hydrostatic_depth * area * normal_world
-		var normal_velocity_magnitude := world_velocity.dot(normal_world)
-		var normal_velocity := normal_velocity_magnitude * normal_world
-		var tangential_velocity := world_velocity - normal_velocity
 		
-		friction_drag_force = -0.5 * WATER_DENSITY * area * frictional_drag_coefficient * tangential_velocity.length() * tangential_velocity
+		var thrid_area = area * 0.333333333
 		
-		var c_p = PRESSURE_DRAG_COEFFICIENT
-		if normal_velocity_magnitude < 0: 
-			c_p = SUCTION_DRAG_COEFFICIENT
+		var v0_normal_magnitude := v0_world.dot(normal_world)
+		var v0_normal := v0_normal_magnitude * normal_world
+		var v0_tangential := v0_world - v0_normal
+		f0_friction_drag = -0.5 * WATER_DENSITY * thrid_area * frictional_drag_coefficient * v0_tangential.length() * v0_tangential
+		var v0_cp = PRESSURE_DRAG_COEFFICIENT if v0_normal_magnitude > 0 else SUCTION_DRAG_COEFFICIENT
+		f0_pressure_drag = -0.5 * WATER_DENSITY * thrid_area * v0_cp * v0_normal_magnitude * abs(v0_normal_magnitude) * normal_world
 		
-		pressure_drag_force = -0.5 * WATER_DENSITY * area * c_p * normal_velocity_magnitude * abs(normal_velocity_magnitude) * normal_world
+		var v1_normal_magnitude := v1_world.dot(normal_world)
+		var v1_normal := v1_normal_magnitude * normal_world
+		var v1_tangential := v1_world - v1_normal
+		f1_friction_drag = -0.5 * WATER_DENSITY * thrid_area * frictional_drag_coefficient * v1_tangential.length() * v1_tangential
+		var v1_cp = PRESSURE_DRAG_COEFFICIENT if v1_normal_magnitude > 0 else SUCTION_DRAG_COEFFICIENT
+		f1_pressure_drag = -0.5 * WATER_DENSITY * thrid_area * v1_cp * v1_normal_magnitude * abs(v1_normal_magnitude) * normal_world
 		
-	static func calculate_hydrostatic_center_world(the_v0_world: Vector3, the_v1_world: Vector3, the_v2_world: Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float) -> Vector3:
+		var v2_normal_magnitude := v2_world.dot(normal_world)
+		var v2_normal := v2_normal_magnitude * normal_world
+		var v2_tangential := v2_world - v2_normal
+		f2_friction_drag = -0.5 * WATER_DENSITY * thrid_area * frictional_drag_coefficient * v2_tangential.length() * v2_tangential
+		var v2_cp = PRESSURE_DRAG_COEFFICIENT if v2_normal_magnitude > 0 else SUCTION_DRAG_COEFFICIENT
+		f2_pressure_drag = -0.5 * WATER_DENSITY * thrid_area * v2_cp * v2_normal_magnitude * abs(v2_normal_magnitude) * normal_world
+	
+	static func calculate_hydrostatic_center_world(the_p0_world: Vector3, the_p1_world: Vector3, the_p2_world: Vector3, the_distance_to_water_0 : float, the_distance_to_water_1 : float, the_distance_to_water_2 : float) -> Vector3:
 		var H := the_distance_to_water_0 + the_distance_to_water_1 + the_distance_to_water_2
-		var center_of_pressure := ((the_distance_to_water_0 + H) * the_v0_world + (the_distance_to_water_1 + H) * the_v1_world + (the_distance_to_water_2 + H) * the_v2_world) / (4.0 * H)
+		var center_of_pressure := ((the_distance_to_water_0 + H) * the_p0_world + (the_distance_to_water_1 + H) * the_p1_world + (the_distance_to_water_2 + H) * the_p2_world) / (4.0 * H)
 		#ToDo: Formula generated by AI. Unsure if correct. To be tested.
 		return center_of_pressure
 	
