@@ -24,10 +24,12 @@ var thrusters : Array[BoatThruster]:
 var _hull : BoatHull
 var _thrusters : Array[BoatThruster]
 
+var _boat_sate : BoatState
 var boat_state : BoatState:
 	get:
 		return BoatState.new(global_position, global_rotation, linear_velocity, angular_velocity)
 	set(new_state):
+		_boat_sate = new_state
 		global_position = new_state.position
 		global_rotation = new_state.rotation
 		linear_velocity = new_state.linear_velocity
@@ -46,7 +48,11 @@ var current_update_state : update_states:
 				for thruster in _thrusters:
 					thruster.set_physics_process(true)
 					pass
+				_boat_sate.position = global_position
+				_boat_sate.rotation = global_rotation
+				boat_state = _boat_sate # Recovers the velocity from before freezing
 			update_states.IDLE:
+				_boat_sate = boat_state # Saves the velocity before freezing
 				sleeping = true
 				freeze = true
 				if _hull:
@@ -57,6 +63,7 @@ var current_update_state : update_states:
 		_current_update_state = value
 
 func _ready() -> void:
+	_boat_sate = boat_state
 	setup()
 
 func replace_boat_model(new_boat_model : Node3D):

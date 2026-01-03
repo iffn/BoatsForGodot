@@ -1323,11 +1323,9 @@ text = "Architecture:
 
 Runtime testing:
 - Add save and load state
-- Add constant thruster output
 - Add wave injection
 
 Plots:
-- Use consistent world -Z velocity -> Pitch and level -> Measure pitch torque
 - Level once -> Rotate around CoG -> Measure pitch torque
 - Set Yaw AoA -> Plot yaw torque
 
@@ -1339,7 +1337,6 @@ Save file:
 - Separate mass into center of gravity object
 
 Bugs:
-- Don't reset velocity when pausing and playing
 - Implement angular velocity into the physics calculation
 
 Check physics:
