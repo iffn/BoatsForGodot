@@ -16,9 +16,9 @@ func _ready() -> void:
 	boat_syncronizer.boat_modified.connect(get_center_of_mass)
 
 func get_center_of_mass():
-	input_x.value = calculation_boat.center_of_mass.x
-	input_y.value = calculation_boat.center_of_mass.y
-	input_z.value = calculation_boat.center_of_mass.z
+	input_x.set_value_no_signal(calculation_boat.center_of_mass.x)
+	input_y.set_value_no_signal(calculation_boat.center_of_mass.y)
+	input_z.set_value_no_signal(calculation_boat.center_of_mass.z)
 
 func set_com_x(x : float):
 	calculation_boat.center_of_mass.x = x

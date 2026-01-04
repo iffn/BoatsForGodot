@@ -16,13 +16,16 @@ const mass_from_waterline := 1
 
 func _ready() -> void:
 	boat_syncronizer.boat_modified.connect(boat_modified)
+	_mass_input.connect("value_changed", set_mass)
+	_waterline_input.connect("value_changed", set_waterline)
 
 func boat_modified():
-	_mass_input.value = calculation_boat.mass
+	_mass_input.set_value_no_signal(calculation_boat.mass) 
 	
 	_evaluate_button.text = "Out of date. Click to update"
 	
-	mass_or_waterline_selected(_mass_or_waterline.selected)
+	_waterline_line.visible = _mass_or_waterline.selected == mass_from_waterline
+	_mass_line.visible = _mass_or_waterline.selected == waterline_from_mass
 
 func mass_or_waterline_selected(selected: int):
 	_waterline_line.visible = selected == mass_from_waterline
@@ -35,9 +38,7 @@ func evaluate_waterline():
 	
 	match _mass_or_waterline.selected:
 		waterline_from_mass:
-			var mass := _mass_input.value
-			set_mass(mass)
-			var buoyancy_goal := mass * 9.81
+			var buoyancy_goal := calculation_boat.mass * 9.81
 			var waterline := calculation_boat.hull.find_waterline(buoyancy_goal)
 			_output.text = "Waterline from origin: " + str(waterline).pad_decimals(2) + " m"
 			set_waterline(waterline)
@@ -49,13 +50,14 @@ func evaluate_waterline():
 			_output.text = "Boat mass: " + str(mass).pad_decimals(1) +  " kg"
 			set_mass(mass)
 	
-	boat_syncronizer.boat_modified.emit()
 	_evaluate_button.text = "Up to date"
 
 func set_mass(value : float):
 	calculation_boat.mass = value
-	_mass_input.value = value
+	_mass_input.set_value_no_signal(value)
+	boat_syncronizer.boat_modified.emit()
 
 func set_waterline(value : float):
-	_waterline_input.value = value
+	_waterline_input.set_value_no_signal(value)
 	calculation_boat.position.y = value
+	boat_syncronizer.boat_modified.emit()
