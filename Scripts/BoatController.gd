@@ -85,8 +85,12 @@ func setup():
 		if child.has_meta("extras"):
 			var extras := child.get_meta("extras") as Dictionary
 			if extras.has("ElementType"):
+				if extras.get("ElementType") == "CenterOfGravity":
+					if child is Node3D:
+						center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
+						center_of_mass = (child as Node3D).position
+						mass = (float)(extras.get("Mass"))
 				if extras.get("ElementType") == "DisplacementMesh":
-					mass = (float)(extras.get("Mass"))
 					_hull = BoatHull.new()
 					add_child(_hull)
 					var hull_mesh := child as MeshInstance3D
