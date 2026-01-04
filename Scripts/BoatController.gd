@@ -85,7 +85,7 @@ func setup():
 		if child.has_meta("extras"):
 			var extras := child.get_meta("extras") as Dictionary
 			if extras.has("ElementType"):
-				if extras.get("ElementType") == "CenterOfGravity":
+				if extras.get("ElementType") == "CenterOfMass":
 					if child is Node3D:
 						center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
 						center_of_mass = (child as Node3D).position
