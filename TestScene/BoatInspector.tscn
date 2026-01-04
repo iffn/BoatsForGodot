@@ -203,10 +203,10 @@ text = "Run/Pause"
 [node name="Setting states" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
-[node name="Calculator" type="Node" parent="Control/HBoxContainer/Model view/Setting states" node_paths=PackedStringArray("boat_view", "display_from_inputs", "height_position_input", "pitch_input", "yaw_input", "roll_input", "linear_velocity_x_input", "linear_velocity_y_input", "linear_velocity_z_input", "angular_velocity_x_input", "angular_velocity_y_input", "angular_velocity_z_input", "_output_holder_name", "_output_holder_x", "_output_holder_y", "_output_holder_z", "center_evaluator", "visualize_underwater_mesh")]
+[node name="Calculator" type="Node" parent="Control/HBoxContainer/Model view/Setting states" node_paths=PackedStringArray("boat_view", "active_toggle", "height_position_input", "pitch_input", "yaw_input", "roll_input", "linear_velocity_x_input", "linear_velocity_y_input", "linear_velocity_z_input", "angular_velocity_x_input", "angular_velocity_y_input", "angular_velocity_z_input", "_output_holder_name", "_output_holder_x", "_output_holder_y", "_output_holder_z", "center_evaluator", "visualize_underwater_mesh")]
 script = ExtResource("6_7o47y")
 boat_view = NodePath("../../../../../BoatView")
-display_from_inputs = NodePath("../Input/HBoxContainer/CheckButton")
+active_toggle = NodePath("../Input/HBoxContainer/Active toggle")
 height_position_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/height")
 pitch_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer3/pitch")
 yaw_input = NodePath("../Input/Moment of inertia/Moment of inertia/VBoxContainer5/yaw")
@@ -245,7 +245,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Input        "
 
-[node name="CheckButton" type="CheckButton" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
+[node name="Active toggle" type="CheckButton" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
 layout_mode = 2
 button_pressed = true
 text = "Active"
@@ -261,6 +261,25 @@ text = "Get"
 [node name="Reset" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer"]
 layout_mode = 2
 text = "Reset"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
+layout_mode = 2
+
+[node name="Save 1" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3"]
+layout_mode = 2
+text = "Save 1"
+
+[node name="Load 1" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3"]
+layout_mode = 2
+text = "Load 1"
+
+[node name="Save 2" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3"]
+layout_mode = 2
+text = "Save 2"
+
+[node name="Load 2" type="Button" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3"]
+layout_mode = 2
+text = "Load 2"
 
 [node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
@@ -306,71 +325,63 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 horizontal_alignment = 2
 
-[node name="pitch" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="pitch" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -360.0
+max_value = 360.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="lin x" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="lin x" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.01
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="ang x" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="ang x" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
 [node name="VBoxContainer5" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
-[node name="height" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+[node name="height" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -100.0
+step = 0.01
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="yaw" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+[node name="yaw" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -360.0
+max_value = 360.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="lin y" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+[node name="lin y" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.01
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="ang y" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
+[node name="ang y" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
 [node name="VBoxContainer6" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
 layout_mode = 2
@@ -380,35 +391,52 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 horizontal_alignment = 2
 
-[node name="roll" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+[node name="roll" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -360.0
+max_value = 360.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="lin z" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+[node name="lin z" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.01
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="ang z" type="LineEdit" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
+[node name="ang z" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer6"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
+min_value = -200.0
+max_value = 200.0
+step = 0.1
 alignment = 2
-max_length = 8
-expand_to_text_length = true
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
+[node name="VBoxContainer7" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia"]
 layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer7"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "m"
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer7"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "°"
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer7"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "m/s"
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer7"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "°/s"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
@@ -538,6 +566,7 @@ horizontal_alignment = 2
 layout_mode = 2
 
 [node name="X" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
@@ -619,6 +648,7 @@ horizontal_alignment = 2
 layout_mode = 2
 
 [node name="Y" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
@@ -700,6 +730,7 @@ horizontal_alignment = 2
 layout_mode = 2
 
 [node name="Z" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
@@ -1420,6 +1451,10 @@ paragraph_separator = "\\"
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Apply" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="update_state"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Get" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="get_state_from_rigidbody"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Reset" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="reset_state"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Save 1" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="save_to_1"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Load 1" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="load_from_1"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Save 2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="save_to_2"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Load 2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="load_from_2"]
 [connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/HSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="set_throttle"]
 [connection signal="toggled" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/CheckBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="enabled"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="mass_or_waterline_selected"]
