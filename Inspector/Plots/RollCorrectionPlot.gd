@@ -1,9 +1,4 @@
-extends Node
-
-@export var boat_view : BoatView
-var calculation_boat : BoatController:
-	get:
-		return boat_view.linked_boat
+extends BaseBoatPlot
 
 @export var chart: Chart
 
@@ -12,6 +7,8 @@ var function: Function
 var cp: ChartProperties = ChartProperties.new()
 
 func _ready() -> void:
+	super._ready()
+	
 	var x: Array[float] = [-180.0, 180.0]
 	var y: Array[float] = [0.0, 0.0]
 	
@@ -38,6 +35,7 @@ func _ready() -> void:
 	chart.plot([function], cp)
 
 func plot_graph():
+	super.plot_graph()
 	var original_position := calculation_boat.position
 	var original_rotation := calculation_boat.rotation
 	

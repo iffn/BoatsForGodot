@@ -1312,12 +1312,13 @@ layout_mode = 2
 layout_mode = 2
 text = "Plots"
 
-[node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "chart")]
+[node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("chart", "boat_syncronizer", "update_button")]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 script = ExtResource("13_7o47y")
-boat_view = NodePath("../../../../BoatView")
 chart = NodePath("Chart")
+boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+update_button = NodePath("Button2")
 
 [node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Roll correction"]
 layout_mode = 2
@@ -1327,14 +1328,15 @@ text = "Plot roll correction"
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[node name="At speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "force_chart", "position_chart", "torque_chart")]
+[node name="At speed" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("force_chart", "position_chart", "torque_chart", "boat_syncronizer", "update_button")]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 script = ExtResource("12_jf4no")
-boat_view = NodePath("../../../../BoatView")
 force_chart = NodePath("Forces")
 position_chart = NodePath("Position")
 torque_chart = NodePath("Torque")
+boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+update_button = NodePath("Button2")
 
 [node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/At speed"]
 layout_mode = 2
@@ -1352,13 +1354,14 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[node name="Pitch torque at pitch angle2" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("boat_view", "chart")]
+[node name="Pitch torque at pitch angle2" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("chart", "boat_syncronizer", "update_button")]
 custom_minimum_size = Vector2(800, 500)
 layout_mode = 2
 script = ExtResource("12_7o47y")
-boat_view = NodePath("../../../../BoatView")
 chart = NodePath("Chart")
 speeds = Array[float]([5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0])
+boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+update_button = NodePath("Button2")
 
 [node name="Button2" type="Button" parent="Control/HBoxContainer/Plots/Pitch torque at pitch angle2"]
 layout_mode = 2
@@ -1424,9 +1427,6 @@ paragraph_separator = "\\"
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/Button2" to="Control/HBoxContainer/Plots/Roll correction" method="plot_graph"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/At speed/Button2" to="Control/HBoxContainer/Plots/At speed" method="plot_graph"]
-[connection signal="button_down" from="Control/HBoxContainer/Plots/Pitch torque at pitch angle2/Button2" to="Control/HBoxContainer/Plots/Pitch torque at pitch angle2" method="plot_graph"]
 
 [editable path="BoatView"]
 [editable path="BoatView/Center of mass indicator"]
