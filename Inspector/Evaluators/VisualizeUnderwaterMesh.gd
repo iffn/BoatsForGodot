@@ -2,12 +2,15 @@ extends Node
 
 class_name VisualizeUnderwaterMesh
 
-@export var boat_view : BoatView
+@export var boat_syncronizer : BoatEditSyncronizer
 var calculation_boat : BoatController:
 	get:
-		return boat_view.linked_boat
+		return boat_syncronizer.calculation_boat
 
 @export var visualization : MeshInstance3D
+
+func _ready() -> void:
+	boat_syncronizer.boat_modified.connect(update_underwater_mesh)
 
 func update_underwater_mesh() -> void:
 	var result := calculation_boat.hull.calculate_all()
