@@ -1,12 +1,19 @@
 extends Node
 
-@export var boat_view : BoatView
+@export var boat_syncronizer : BoatEditSyncronizer
 var calculation_boat : BoatController:
 	get:
-		return boat_view.linked_boat
+		return boat_syncronizer.calculation_boat
 
+@export var _update_button: Button
 @export var _basic_geometry_name_holder: Control 
 @export var _basic_geometry_output_holder: Control 
+
+func _ready() -> void:
+	boat_syncronizer.boat_modified.connect(boat_modified)
+
+func boat_modified():
+	_update_button.text = "Out of date. Click to update"
 
 func evaluate_geometry():
 	var names := _basic_geometry_name_holder.find_children("*", "Label")
@@ -45,3 +52,5 @@ func evaluate_geometry():
 	names[i].text = "Freeboard"
 	output[i].text = str(bounding_box.size.y - data.draft).pad_decimals(2)
 	i+=1
+	
+	_update_button.text = "Up to date"

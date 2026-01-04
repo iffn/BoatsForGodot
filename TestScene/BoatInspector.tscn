@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=20 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="4_fm4hc"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Script" uid="uid://cbkttc3885icy" path="res://iffnsStuff/BoatsForGodot/Scripts/SaveAndLoad.gd" id="4_vknsj"]
+[ext_resource type="Script" uid="uid://bnm3ffgvhcvi" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatEditSyncronizer.gd" id="5_80gaq"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
 [ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
@@ -34,8 +35,12 @@ input_collection = ExtResource("5_w5bwg")
 script = ExtResource("4_vknsj")
 boat = NodePath("../BoatView/SmallSpeedBoat")
 
+[node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
+script = ExtResource("5_80gaq")
+boat_view = NodePath("../BoatView")
+
 [node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
-_camera_followers = [null, NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
+_camera_followers = [NodePath("Water"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -220,9 +225,9 @@ _output_holder_z = NodePath("../Input2/Moment of inertia/Moment of inertia/Z")
 center_evaluator = NodePath("Update centers")
 visualize_underwater_mesh = NodePath("Visualize underwater mesh")
 
-[node name="Update centers" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_view", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
+[node name="Update centers" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_syncronizer", "center_of_mass_indicator", "center_of_buoyancy_indicator")]
 script = ExtResource("4_7s5vx")
-boat_view = NodePath("../../../../../../BoatView")
+boat_syncronizer = NodePath("../../../../../../BoatEditSyncronizer")
 center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
 center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
 
@@ -867,11 +872,12 @@ layout_mode = 2
 [node name="Center of mass" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Model setup/Center of mass" node_paths=PackedStringArray("calculation_boat", "input_x", "input_y")]
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model setup/Center of mass" node_paths=PackedStringArray("boat_syncronizer", "input_x", "input_y", "input_z")]
 script = ExtResource("12_gtuxg")
-calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
 input_x = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer/SpinBox")
 input_y = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer2/SpinBox2")
+input_z = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer3/SpinBox3")
 
 [node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Center of mass"]
 layout_mode = 2
@@ -1185,9 +1191,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Basic geometry:"
 
-[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("boat_view", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
+[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("boat_syncronizer", "_update_button", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
 script = ExtResource("4_aak0k")
-boat_view = NodePath("../../../../../BoatView")
+boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
+_update_button = NodePath("../../Button")
 _basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
 _basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
 

@@ -112,10 +112,9 @@ albedo_color = Color(0, 0.37254903, 1, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
 size = Vector3(2.5231934, 1, 7.1388397)
 
-[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat", "_camera_followers")]
+[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat")]
 script = ExtResource("1_eesk3")
 _linked_boat = NodePath("SmallSpeedBoat")
-_camera_followers = [NodePath("Water")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f1310")
