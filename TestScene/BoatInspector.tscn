@@ -31,9 +31,8 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat")]
+[node name="SaveAndLoad" type="Node" parent="."]
 script = ExtResource("4_vknsj")
-boat = NodePath("../BoatView/SmallSpeedBoat")
 
 [node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
 script = ExtResource("5_80gaq")
@@ -798,14 +797,15 @@ text = "Model setup"
 [node name="MassWaterline" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Evaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("boat_view", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
+[node name="MassAndWaterlineEvaluation" type="Node" parent="Control/HBoxContainer/Model setup/MassWaterline" node_paths=PackedStringArray("boat_syncronizer", "_evaluate_button", "_mass_or_waterline", "_mass_line", "_waterline_line", "_mass_input", "_waterline_input", "_output")]
 script = ExtResource("4_otdjp")
-boat_view = NodePath("../../../../../BoatView")
+boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
+_evaluate_button = NodePath("../Button")
 _mass_or_waterline = NodePath("../OptionButton")
 _mass_line = NodePath("../Mass selection")
 _waterline_line = NodePath("../Waterline selection")
-_mass_input = NodePath("../Mass selection/LineEdit")
-_waterline_input = NodePath("../Waterline selection/LineEdit")
+_mass_input = NodePath("../Mass selection/Mass input")
+_waterline_input = NodePath("../Waterline selection/Waterline input")
 _output = NodePath("../Mass_WaterLine output")
 
 [node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline"]
@@ -828,12 +828,11 @@ layout_mode = 2
 layout_mode = 2
 text = "Mass:"
 
-[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
+[node name="Mass input" type="SpinBox" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
+custom_minimum_size = Vector2(95, 0)
 layout_mode = 2
-placeholder_text = "Mass"
-alignment = 2
-max_length = 12
-expand_to_text_length = true
+step = 10.0
+allow_greater = true
 
 [node name="Title2" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Mass selection"]
 layout_mode = 2
@@ -846,13 +845,11 @@ layout_mode = 2
 layout_mode = 2
 text = "Waterline from origin"
 
-[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
+[node name="Waterline input" type="SpinBox" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
+custom_minimum_size = Vector2(95, 0)
 layout_mode = 2
-text = "0"
-placeholder_text = "height"
-alignment = 2
-max_length = 8
-expand_to_text_length = true
+min_value = -100.0
+step = 0.1
 
 [node name="Title2" type="Label" parent="Control/HBoxContainer/Model setup/MassWaterline/Waterline selection"]
 layout_mode = 2
@@ -872,7 +869,7 @@ layout_mode = 2
 [node name="Center of mass" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Node" type="Node" parent="Control/HBoxContainer/Model setup/Center of mass" node_paths=PackedStringArray("boat_syncronizer", "input_x", "input_y", "input_z")]
+[node name="CenterOfMassEditor" type="Node" parent="Control/HBoxContainer/Model setup/Center of mass" node_paths=PackedStringArray("boat_syncronizer", "input_x", "input_y", "input_z")]
 script = ExtResource("12_gtuxg")
 boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
 input_x = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer/SpinBox")
@@ -1423,8 +1420,8 @@ paragraph_separator = "\\"
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Reset" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="reset_state"]
 [connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/HSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="set_throttle"]
 [connection signal="toggled" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/CheckBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="enabled"]
-[connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="mass_or_waterline_selected"]
-[connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/Evaluation" method="evaluate_waterline"]
+[connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="mass_or_waterline_selected"]
+[connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 [connection signal="button_down" from="Control/HBoxContainer/Plots/Roll correction/Button2" to="Control/HBoxContainer/Plots/Roll correction" method="plot_graph"]

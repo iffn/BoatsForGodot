@@ -1,6 +1,9 @@
 extends Node
 
-@export var boat : BoatController
+@export var boat_syncronizer : BoatEditSyncronizer
+var boat : BoatController:
+	get:
+		return boat_syncronizer.calculation_boat
 
 func _ready():
 	# Connect to the engine's global signal for dropped files
@@ -21,4 +24,5 @@ func load_glb_at_runtime(path: String):
 		var boat_model := gltf_doc.generate_scene(gltf_state) as Node3D
 		boat.add_child(boat_model)
 		boat.replace_boat_model(boat_model)
-		
+	
+	boat_syncronizer.boat_modified.emit()

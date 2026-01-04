@@ -5,7 +5,6 @@ var calculation_boat : BoatController:
 	get:
 		return boat_syncronizer.calculation_boat
 
-
 @export var input_x : SpinBox
 @export var input_y : SpinBox
 @export var input_z : SpinBox

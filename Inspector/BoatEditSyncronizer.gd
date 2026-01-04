@@ -8,3 +8,6 @@ var calculation_boat : BoatController:
 		return boat_view.linked_boat
 
 signal boat_modified
+
+func _ready() -> void:
+	boat_modified.emit.call_deferred() # Emits signal at the end of the frame
