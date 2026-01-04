@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=19 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/ThrottleController.gd" id="10_7h35j"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
 [ext_resource type="Script" uid="uid://bpmhoudtbohe" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/PitchTorqueAtPitchAngle.gd" id="12_7o47y"]
+[ext_resource type="Script" uid="uid://0b14erwylor4" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterOfMassEditor.gd" id="12_gtuxg"]
 [ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
@@ -34,7 +35,7 @@ script = ExtResource("4_vknsj")
 boat = NodePath("../BoatView/SmallSpeedBoat")
 
 [node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
-_camera_followers = [NodePath("Water"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
+_camera_followers = [null, NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -863,86 +864,144 @@ text = "Not yet calculated"
 [node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Moment of inertia" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
+[node name="Center of mass" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
 
-[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia"]
+[node name="Node" type="Node" parent="Control/HBoxContainer/Model setup/Center of mass" node_paths=PackedStringArray("calculation_boat", "input_x", "input_y")]
+script = ExtResource("12_gtuxg")
+calculation_boat = NodePath("../../../../../BoatView/SmallSpeedBoat")
+input_x = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer/SpinBox")
+input_y = NodePath("../Moment of inertia/HBoxContainer/VBoxContainer2/SpinBox2")
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Center of mass"]
+layout_mode = 2
+text = "Center of mass:"
+
+[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/Center of mass"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "X"
+
+[node name="SpinBox" type="SpinBox" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+min_value = -100.0
+step = 0.1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer"]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Y"
+
+[node name="SpinBox2" type="SpinBox" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+min_value = -100.0
+step = 0.1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Z"
+
+[node name="SpinBox3" type="SpinBox" parent="Control/HBoxContainer/Model setup/Center of mass/Moment of inertia/HBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+min_value = -100.0
+step = 0.1
+
+[node name="Moment of inertia2" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
+layout_mode = 2
+
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2"]
 layout_mode = 2
 text = "Moment of inertia:"
 
-[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia"]
+[node name="Moment of inertia" type="HBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia2"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer"]
 layout_mode = 2
 text = " "
 
-[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer"]
 layout_mode = 2
 
-[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = " X"
 
-[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = " Y"
 
-[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer"]
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = " Z"
 
-[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer2"]
 layout_mode = 2
 text = "Recommendation"
 
-[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
-[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
-[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer2"]
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
-[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer3"]
 layout_mode = 2
 text = "User"
 
-[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer3"]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="LineEdit" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "0"
@@ -951,7 +1010,7 @@ alignment = 2
 max_length = 8
 expand_to_text_length = true
 
-[node name="LineEdit2" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="LineEdit2" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "0"
@@ -960,7 +1019,7 @@ alignment = 2
 max_length = 8
 expand_to_text_length = true
 
-[node name="LineEdit3" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer3"]
+[node name="LineEdit3" type="LineEdit" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "0"
@@ -969,30 +1028,30 @@ alignment = 2
 max_length = 8
 expand_to_text_length = true
 
-[node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia"]
+[node name="VBoxContainer4" type="VBoxContainer" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia"]
 layout_mode = 2
 
-[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+[node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 layout_mode = 2
 text = "Unit"
 
-[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 layout_mode = 2
 
-[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+[node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "kg⋅m²"
 
-[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "kg⋅m²"
 
-[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia/Moment of inertia/VBoxContainer4"]
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "kg⋅m²"
@@ -1320,6 +1379,9 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
+- Use SpinBoxes as inputs
+- Synchronize boat changes over central controller
+- Check if connecting with signals makes sense
 
 Runtime testing:
 - Add save and load state
@@ -1344,6 +1406,7 @@ Check physics:
 - Displaced volume should stay consistent at different depths when fully submerged
 - Buoyancy force should stay consistent at different depths when fully submerged
 - Buoyancy force should X Z should be 0"
+paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
