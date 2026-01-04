@@ -14,6 +14,8 @@
 [ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="11_8vvjr"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
+ambient_light_source = 2
+ambient_light_color = Color(0.5370113, 0.5370114, 0.5370111, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f1310"]
 transparency = 1
