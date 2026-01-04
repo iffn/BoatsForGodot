@@ -190,12 +190,12 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Find water height"
 
-[node name="Find water height2" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
+[node name="Caluclate next step" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Calculate next step"
 
-[node name="Find water height3" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
+[node name="Run or pause" type="Button" parent="Control/HBoxContainer/Model view/Update buttons"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Run/Pause"
@@ -230,9 +230,9 @@ boat_syncronizer = NodePath("../../../../../../BoatEditSyncronizer")
 center_of_mass_indicator = NodePath("../../../../../../BoatView/Center of mass indicator")
 center_of_buoyancy_indicator = NodePath("../../../../../../BoatView/Center of buoyancy indicator")
 
-[node name="Visualize underwater mesh" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_view", "visualization")]
+[node name="Visualize underwater mesh" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Calculator" node_paths=PackedStringArray("boat_syncronizer", "visualization")]
 script = ExtResource("1_aak0k")
-boat_view = NodePath("../../../../../../BoatView")
+boat_syncronizer = NodePath("../../../../../../BoatEditSyncronizer")
 visualization = NodePath("../../../../../../BoatView/Underwater hull visualization")
 
 [node name="Input" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states"]
@@ -1386,16 +1386,15 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
-- Use SpinBoxes as inputs
-- Synchronize boat changes over central controller
-- Check if connecting with signals makes sense
+- Use SpinBoxes as inputs everywhere
 
 Runtime testing:
 - Add save and load state
 - Add wave injection
+- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update 
 
 Plots:
-- Level once -> Rotate around CoG -> Measure pitch torque
+- Level once -> Rotate around CoM -> Measure pitch torque
 - Set Yaw AoA -> Plot yaw torque
 
 Save file:
@@ -1416,8 +1415,8 @@ Check physics:
 paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
-[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
-[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height3" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="play_pause"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Caluclate next step" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
+[connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Run or pause" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="play_pause"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Apply" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="update_state"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Get" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="get_state_from_rigidbody"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer/Reset" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="reset_state"]
