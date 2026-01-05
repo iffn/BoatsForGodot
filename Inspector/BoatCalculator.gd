@@ -188,91 +188,95 @@ func _evaluate_geometry():
 	
 	var data : BoatHull.BoatCalculationData = calculation_boat.hull.calculate_all()
 	
-	names[i].text = "Triangles below water"
+	#names[i].text = "Triangles below water"
 	output_z[i].text = str(data.triangles_below_water.size())
 	i+=1
 	
-	names[i].text = "Waterline points"
+	#names[i].text = "Waterline points"
 	output_z[i].text = str(data.waterline_points.size())
 	i+=1
 	
-	names[i].text = "Water plane size"
+	#names[i].text = "Water plane size"
 	output_x[i].text = str(data.water_plane_size_XZ.x).pad_decimals(2)
 	output_y[i].text = ""
 	output_z[i].text = str(data.water_plane_size_XZ.y).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Center of buoyancy"
+	#names[i].text = "Center of buoyancy"
 	output_x[i].text = str(data.center_of_buoyancy_world.x).pad_decimals(2)
 	output_y[i].text = str(data.center_of_buoyancy_world.y).pad_decimals(2)
 	output_z[i].text = str(data.center_of_buoyancy_world.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Displaced volume"
+	#names[i].text = "Displaced volume"
 	output_z[i].text = str(data.displaced_volume).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Buoyancy force"
+	#names[i].text = "Buoyancy force"
 	output_x[i].text = str(data.buoyancy_force.x).pad_decimals(2)
 	output_y[i].text = str(data.buoyancy_force.y).pad_decimals(2)
 	output_z[i].text = str(data.buoyancy_force.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Friction drag force"
+	#names[i].text = "Friction drag force"
 	output_x[i].text = str(data.friction_drag_force.x).pad_decimals(2)
 	output_y[i].text = str(data.friction_drag_force.y).pad_decimals(2)
 	output_z[i].text = str(data.friction_drag_force.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Pressure drag force"
+	#names[i].text = "Pressure drag force"
 	output_x[i].text = str(data.pressure_drag_force.x).pad_decimals(2)
 	output_y[i].text = str(data.pressure_drag_force.y).pad_decimals(2)
 	output_z[i].text = str(data.pressure_drag_force.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Total drag force"
+	#names[i].text = "Total drag force"
 	output_x[i].text = str(data.all_forces.x).pad_decimals(2)
 	output_y[i].text = str(data.all_forces.y).pad_decimals(2)
 	output_z[i].text = str(data.all_forces.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Buoyancy torque"
+	#names[i].text = "Buoyancy torque"
 	output_x[i].text = str(data.buoyancy_torque.x).pad_decimals(2)
 	output_y[i].text = str(data.buoyancy_torque.y).pad_decimals(2)
 	output_z[i].text = str(data.buoyancy_torque.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Friction drag torque"
+	#names[i].text = "Friction drag torque"
 	output_x[i].text = str(data.friction_drag_torque.x).pad_decimals(2)
 	output_y[i].text = str(data.friction_drag_torque.y).pad_decimals(2)
 	output_z[i].text = str(data.friction_drag_torque.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Pressure drag torque"
+	#names[i].text = "Pressure drag torque"
 	output_x[i].text = str(data.pressure_drag_torque.x).pad_decimals(2)
 	output_y[i].text = str(data.pressure_drag_torque.y).pad_decimals(2)
 	output_z[i].text = str(data.pressure_drag_torque.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Total drag torque"
+	#names[i].text = "Total drag torque"
 	output_x[i].text = str(data.all_torques.x).pad_decimals(2)
 	output_y[i].text = str(data.all_torques.y).pad_decimals(2)
 	output_z[i].text = str(data.all_torques.z).pad_decimals(2)
 	i+=1
 	
-	names[i].text = "Linear energy"
+	#names[i].text = "Linear energy"
 	output_z[i].text = str(data.linear_kinetic_energy).pad_decimals(0)
 	i+=1
 	
-	names[i].text = "Angular energy"
+	#names[i].text = "Angular energy"
 	output_z[i].text = str(data.angular_kinetic_energy).pad_decimals(0)
 	i+=1
 	
-	names[i].text = "Potential energy"
-	output_z[i].text = str(data.potential_energy).pad_decimals(0)
+	#names[i].text = "Height potential energy"
+	output_z[i].text = str(data.height_potential_energy).pad_decimals(0)
 	i+=1
 	
-	names[i].text = "Total energy"
+	#names[i].text = "Buoyant potential energy"
+	output_z[i].text = str(data.buoyant_potential_energy).pad_decimals(0)
+	i+=1
+	
+	#names[i].text = "Total energy"
 	output_z[i].text = str(data.all_energies).pad_decimals(0)
 	i+=1
 

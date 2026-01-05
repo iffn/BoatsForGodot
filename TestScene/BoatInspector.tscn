@@ -579,7 +579,13 @@ horizontal_alignment = 2
 [node name="Subtitle17" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "Potential energy"
+text = "Height potential energy"
+horizontal_alignment = 2
+
+[node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Buoyant potential energy"
 horizontal_alignment = 2
 
 [node name="Subtitle18" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
@@ -690,6 +696,11 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 horizontal_alignment = 2
 
+[node name="Subtitle20" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
 [node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
@@ -788,6 +799,11 @@ layout_mode = 2
 horizontal_alignment = 2
 
 [node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle20" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 horizontal_alignment = 2
@@ -896,6 +912,12 @@ text = "123"
 horizontal_alignment = 2
 
 [node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle20" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
@@ -1535,11 +1557,19 @@ Check physics:
 - Buoyancy force should stay consistent at different depths when fully submerged
 - Buoyancy force should X Z should be 0
 
+Model views:
+- Rotate isometric view
+- Transparent water
+- Adjust view size relative to boat
+
+
 Try to make a stable speed boat:
-- Output total energy and see if it goes down.
+- Plot energy need to pitch boat
 - Implement slamming forces for added dampening.
 - Figure out how to design good hull shapes.
-- Test existing hull shapes."
+- Test existing hull shapes.
+- Calculate and visualize center of pressure
+- Visualize pressure forces on mesh"
 paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]

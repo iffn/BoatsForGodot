@@ -208,7 +208,7 @@ func calculate_all() -> BoatCalculationData:
 		rigidbody.inertia.z * (local_omega.z * local_omega.z)
 	)
 	
-	output.potential_energy = rigidbody.mass * BelowWaterTriangle.GRAVITATIONAL_ACCELERATION * rigidbody.global_position.y
+	output.height_potential_energy = rigidbody.mass * BelowWaterTriangle.GRAVITATIONAL_ACCELERATION * rigidbody.global_position.y
 	
 	if(triangles_below_water.size() > 0):
 		output.water_plane_size_XZ = Vector2(water_x_max - water_x_min, water_z_max - water_z_min)
@@ -223,7 +223,7 @@ func calculate_all() -> BoatCalculationData:
 		output.buoyancy_torque = buoyancy_torque
 		output.friction_drag_torque = friction_drag_force
 		output.pressure_drag_torque = pressure_drag_torque
-		
+		output.buoyant_potential_energy = -1000 * displaced_volume_additive * BelowWaterTriangle.GRAVITATIONAL_ACCELERATION * center_of_buoyancy_world_additive.y
 	
 	return output
 
@@ -593,7 +593,8 @@ class BoatCalculationData:
 	
 	var linear_kinetic_energy : float
 	var angular_kinetic_energy : float
-	var potential_energy : float
+	var height_potential_energy : float
+	var buoyant_potential_energy : float
 	
 	var all_forces : Vector3:
 		get:
@@ -605,7 +606,7 @@ class BoatCalculationData:
 	
 	var all_energies : float:
 		get:
-			return linear_kinetic_energy + angular_kinetic_energy + potential_energy
+			return linear_kinetic_energy + angular_kinetic_energy + height_potential_energy + buoyant_potential_energy
 
 class MeshTriangle:
 	var i0 : int
