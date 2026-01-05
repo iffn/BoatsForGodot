@@ -355,7 +355,8 @@ layout_mode = 2
 [node name="height" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer5"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-min_value = -100.0
+min_value = -1000.0
+max_value = 1000.0
 step = 0.01
 alignment = 2
 
@@ -1417,6 +1418,7 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
+- BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accurarcy issues.
 
 Runtime testing:
 - Add wave injection
@@ -1435,11 +1437,10 @@ Save file:
 - Separate mass into center of gravity object
 
 Bugs:
-- Check if apply works correctly
-- Check why apply doesn't work sometimes
+- Check why physics update sometimes breaks apply.
 
 Check physics:
-- Center of Buoyancy should be inside the hull at depth
+- Center of Buoyancy should be inside the hull at depth (-500)
 - Displaced volume should stay consistent at different depths when fully submerged
 - Buoyancy force should stay consistent at different depths when fully submerged
 - Buoyancy force should X Z should be 0"

@@ -128,6 +128,7 @@ func reset_state():
 	_set_input_state(initial_state)
 	if active_toggle.button_pressed:
 		update_state()
+		calculation_boat.global_position = Vector3(0, calculation_boat.global_position.y, 0)
 
 func update_state():
 	_set_boat_state_from_inputs()
@@ -168,7 +169,7 @@ func _set_input_state(new_state : BoatController.BoatState):
 
 func get_boat_state_from_inputs() -> BoatController.BoatState:
 	return BoatController.BoatState.new(
-			Vector3(0, height_position_input.value, 0),
+			Vector3(calculation_boat.global_position.x, height_position_input.value, calculation_boat.global_position.z),
 			Vector3(deg_to_rad(pitch_input.value), deg_to_rad(yaw_input.value), deg_to_rad(roll_input.value)),
 			Vector3(linear_velocity_x_input.value, linear_velocity_y_input.value, linear_velocity_z_input.value),
 			Vector3(deg_to_rad(angular_velocity_x_input.value), deg_to_rad(angular_velocity_y_input.value), deg_to_rad(angular_velocity_z_input.value))
