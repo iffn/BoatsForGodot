@@ -62,6 +62,8 @@ var current_update_state : update_states:
 				pass
 		_current_update_state = value
 
+var last_report : Array[String] = []
+
 func _ready() -> void:
 	_boat_sate = boat_state
 	setup()
@@ -80,6 +82,11 @@ func replace_boat_model(new_boat_model : Node3D):
 func setup():
 	_thrusters = []
 	
+	var valid_thrusters_found := 0
+	var hulls_found := 0
+	var center_of_masses_found := 0
+	var masses_found := 0
+	
 	var all_descendants := boat_model.find_children("*", "", true)
 	for child in all_descendants:
 		if child.has_meta("extras"):
@@ -87,31 +94,34 @@ func setup():
 			if extras.has("ElementType"):
 				if extras.get("ElementType") == "CenterOfMass":
 					if child is Node3D:
+						center_of_masses_found += 1
 						center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
 						center_of_mass = (child as Node3D).position
-						mass = (float)(extras.get("Mass"))
+						if extras.has("ElementType"):
+							mass = (float)(extras.get("Mass"))
+							masses_found += 1
 				if extras.get("ElementType") == "DisplacementMesh":
 					_hull = BoatHull.new()
-					add_child(_hull)
 					var hull_mesh := child as MeshInstance3D
-					if hull_mesh == null:
-						print("Hull mesh not found")
-					else:
-						print("Hull mesh found")
-					
+					if hull_mesh != null:
+						hulls_found += 1
+					if hulls_found > 1:
+						continue # Currently only 1 hull supported
+					add_child(_hull)
 					_hull.drag_multiplier = drag_multiplier
 					_hull.buoyancy_multiplier = buoyancy_multiplier
 					_hull.setup(hull_mesh, self, _water_level)
-					print("Hull set up")
 				if extras.get("ElementType") == "Thruster":
-					var MaxHorizontalRotationDeg := (float)(extras.get("MaxHorizontalRotationDeg"))
-					var MaxVerticalRotationDeg := (float)(extras.get("MaxVerticalRotationDeg"))
-					var Thrust := (float)(extras.get("Thrust"))
 					child.set_script(BoatThruster)
 					var thruster := child as BoatThruster
-					thruster.engine_thrust = Thrust
-					thruster.engine_pitch_deg = MaxVerticalRotationDeg
-					thruster.engine_rotation_deg = MaxHorizontalRotationDeg
+					if extras.has("MaxHorizontalRotationDeg"):
+						thruster.engine_rotation_deg = (float)(extras.get("MaxHorizontalRotationDeg"))
+					if extras.has("MaxVerticalRotationDeg"):
+						thruster.engine_pitch_deg = (float)(extras.get("MaxVerticalRotationDeg"))
+					if extras.has("Thrust"):
+						thruster.engine_thrust = (float)(extras.get("Thrust"))
+						valid_thrusters_found += 1
+						print("Found thruster ")
 					thruster.input_forward = input_forward
 					thruster.input_backward = input_backward
 					thruster.input_right = input_right
@@ -122,6 +132,12 @@ func setup():
 	intertia_calculator.calculate_and_set_inertia()
 	
 	current_update_state = _current_update_state
+	
+	last_report = []
+	last_report.append("Hulls found: " + str(hulls_found) + " (Note: Currently only 1 supported)")
+	last_report.append("Center of masses found: " + str(center_of_masses_found))
+	last_report.append("Masses found: " + str(masses_found))
+	last_report.append("Valid thrusters found: " + str(valid_thrusters_found))
 
 enum update_states {
 	INGAME_UPDATE,

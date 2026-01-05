@@ -31,9 +31,10 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat_syncronizer")]
+[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat_syncronizer", "import_report")]
 script = ExtResource("4_vknsj")
 boat_syncronizer = NodePath("../BoatEditSyncronizer")
+import_report = NodePath("../Control/HBoxContainer/Model selection/Import report")
 
 [node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
 script = ExtResource("5_80gaq")
@@ -60,9 +61,22 @@ layout_mode = 2
 layout_mode = 2
 text = "Model selection"
 
-[node name="Title2" type="Label" parent="Control/HBoxContainer/Model selection"]
+[node name="Instruction" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
 text = "Drag and drop a correctly setup boat model into the view"
+
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+
+[node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "Import report:"
+
+[node name="Import report" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "A
+B
+C"
 
 [node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model selection"]
 visible = false
