@@ -31,8 +31,9 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="SaveAndLoad" type="Node" parent="."]
+[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat_syncronizer")]
 script = ExtResource("4_vknsj")
+boat_syncronizer = NodePath("../BoatEditSyncronizer")
 
 [node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
 script = ExtResource("5_80gaq")
