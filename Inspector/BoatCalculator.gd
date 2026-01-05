@@ -259,6 +259,22 @@ func _evaluate_geometry():
 	output_y[i].text = str(data.all_torques.y).pad_decimals(2)
 	output_z[i].text = str(data.all_torques.z).pad_decimals(2)
 	i+=1
+	
+	names[i].text = "Linear energy"
+	output_z[i].text = str(data.linear_kinetic_energy).pad_decimals(0)
+	i+=1
+	
+	names[i].text = "Angular energy"
+	output_z[i].text = str(data.angular_kinetic_energy).pad_decimals(0)
+	i+=1
+	
+	names[i].text = "Potential energy"
+	output_z[i].text = str(data.potential_energy).pad_decimals(0)
+	i+=1
+	
+	names[i].text = "Total energy"
+	output_z[i].text = str(data.all_energies).pad_decimals(0)
+	i+=1
 
 func _notification(what: int) -> void:
 	match what:

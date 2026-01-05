@@ -345,8 +345,8 @@ alignment = 2
 [node name="ang x" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/Moment of inertia/Moment of inertia/VBoxContainer3"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-min_value = -200.0
-max_value = 200.0
+min_value = -1000.0
+max_value = 1000.0
 step = 0.1
 alignment = 2
 
@@ -564,6 +564,30 @@ layout_mode = 2
 text = "Total toque"
 horizontal_alignment = 2
 
+[node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Linear energy"
+horizontal_alignment = 2
+
+[node name="Subtitle16" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Angular energy"
+horizontal_alignment = 2
+
+[node name="Subtitle17" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Potential energy"
+horizontal_alignment = 2
+
+[node name="Subtitle18" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Total energy"
+horizontal_alignment = 2
+
 [node name="VSeparator2" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
@@ -644,6 +668,26 @@ horizontal_alignment = 2
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle16" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle17" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle18" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
 horizontal_alignment = 2
 
 [node name="VSeparator3" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
@@ -728,6 +772,26 @@ layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
+[node name="Subtitle16" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle17" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle18" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+horizontal_alignment = 2
+
 [node name="VSeparator4" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia"]
 layout_mode = 2
 
@@ -808,6 +872,30 @@ text = "123"
 horizontal_alignment = 2
 
 [node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle16" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle17" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle18" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle19" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
