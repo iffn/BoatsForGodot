@@ -1417,12 +1417,11 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Architecture:
-- Use SpinBoxes as inputs everywhere
 
 Runtime testing:
-- Add save and load state
 - Add wave injection
-- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update 
+- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
+- Output total energy
 
 Plots:
 - Level once -> Rotate around CoM -> Measure pitch torque
@@ -1436,7 +1435,8 @@ Save file:
 - Separate mass into center of gravity object
 
 Bugs:
-- Implement angular velocity into the physics calculation
+- Check if apply works correctly
+- Check why apply doesn't work sometimes
 
 Check physics:
 - Center of Buoyancy should be inside the hull at depth
