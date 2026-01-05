@@ -1534,6 +1534,8 @@ text = "Releasable version:
 - Set inertia directly in setup based on mesh size
 - Save as glb
 - Import notifications
+- Swap between editor and driving
+- Designate visualization hull and swap between
 
 Architecture:
 - BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accuracy issues.
@@ -1563,13 +1565,13 @@ Model views:
 - Adjust view size relative to boat
 
 Try to make a stable speed boat:
+- Try moving CoM and thruster up and down
 - Plot energy need to pitch boat
 - Implement slamming forces for added dampening.
 - Figure out how to design good hull shapes.
 - Test existing hull shapes.
 - Calculate and visualize center of pressure
-- Visualize pressure forces on mesh
-"
+- Visualize pressure forces on mesh"
 paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
