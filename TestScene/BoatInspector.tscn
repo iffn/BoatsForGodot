@@ -1528,13 +1528,17 @@ text = "Idea list:"
 [node name="Title2" type="Label" parent="Control/HBoxContainer/Idea liist"]
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
-text = "Architecture:
-- BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accurarcy issues.
-
-Runtime testing:
-- Output total energy
+text = "Releasable version:
 - Implement steering slider
 - Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
+- Set inertia directly in setup based on mesh size
+- Save as glb
+- Import notifications
+
+Architecture:
+- BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accuracy issues.
+
+Runtime testing:
 - Add wave injection
 
 Plots:
@@ -1542,11 +1546,7 @@ Plots:
 - Set Yaw AoA -> Plot yaw torque
 
 Save file:
-- Set inertia directly in setup
-- Save as glb
-- Import notifications
 - Import tree and setup
-- Separate mass into center of gravity object
 
 Bugs:
 - Check why physics update sometimes breaks apply.
@@ -1562,14 +1562,14 @@ Model views:
 - Transparent water
 - Adjust view size relative to boat
 
-
 Try to make a stable speed boat:
 - Plot energy need to pitch boat
 - Implement slamming forces for added dampening.
 - Figure out how to design good hull shapes.
 - Test existing hull shapes.
 - Calculate and visualize center of pressure
-- Visualize pressure forces on mesh"
+- Visualize pressure forces on mesh
+"
 paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
