@@ -1422,9 +1422,10 @@ text = "Architecture:
 - BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accurarcy issues.
 
 Runtime testing:
-- Add wave injection
-- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
 - Output total energy
+- Implement steering slider
+- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
+- Add wave injection
 
 Plots:
 - Level once -> Rotate around CoM -> Measure pitch torque
@@ -1444,7 +1445,13 @@ Check physics:
 - Center of Buoyancy should be inside the hull at depth (-500)
 - Displaced volume should stay consistent at different depths when fully submerged
 - Buoyancy force should stay consistent at different depths when fully submerged
-- Buoyancy force should X Z should be 0"
+- Buoyancy force should X Z should be 0
+
+Try to make a stable speed boat:
+- Output total energy and see if it goes down.
+- Implement slamming forces for added dampening.
+- Figure out how to design good hull shapes.
+- Test existing hull shapes."
 paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
