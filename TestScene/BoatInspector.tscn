@@ -31,11 +31,6 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat_syncronizer", "import_report")]
-script = ExtResource("4_vknsj")
-boat_syncronizer = NodePath("../BoatEditSyncronizer")
-import_report = NodePath("../Control/HBoxContainer/Model selection/Import report")
-
 [node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
 script = ExtResource("5_80gaq")
 boat_view = NodePath("../BoatView")
@@ -56,6 +51,12 @@ offset_bottom = 40.0
 
 [node name="Model selection" type="VBoxContainer" parent="Control/HBoxContainer"]
 layout_mode = 2
+
+[node name="SaveAndLoad" type="Node" parent="Control/HBoxContainer/Model selection" node_paths=PackedStringArray("boat_syncronizer", "import_report", "save_or_download_button")]
+script = ExtResource("4_vknsj")
+boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+import_report = NodePath("../Import report")
+save_or_download_button = NodePath("../HBoxContainer/Export")
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -117,15 +118,15 @@ layout_mode = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
+[node name="Drive around" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Drive around [ToDo]"
 
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
+[node name="Export" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Export as .glb [ToDo]"
+text = "Save as .glb"
 
 [node name="HSeparator3" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -1727,6 +1728,7 @@ Try to make a stable speed boat:
 - Visualize pressure forces on mesh"
 paragraph_separator = "\\"
 
+[connection signal="button_down" from="Control/HBoxContainer/Model selection/HBoxContainer/Export" to="Control/HBoxContainer/Model selection/SaveAndLoad" method="save_or_download_boat"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Caluclate next step" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Run or pause" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="play_pause"]

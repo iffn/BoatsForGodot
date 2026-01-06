@@ -79,8 +79,28 @@ func replace_boat_model(new_boat_model : Node3D):
 	
 	setup()
 
+func prepare_boat_model_for_export():
+	var extras : Dictionary
+	
+	extras = center_of_mass_object.get_meta("extras")
+	extras["Mass"] = mass
+	center_of_mass_object.set_meta("extras", extras)
+	
+	for thruster in _thrusters:
+		extras = thruster.get_meta("extras")
+		extras["Thrust"] = thruster.engine_thrust
+		extras["MaxHorizontalRotationDeg"] = thruster.engine_rotation_deg
+		extras["MaxVerticalRotationDeg"] = thruster.engine_pitch_deg
+		thruster.set_meta("extras", extras)
+
+var center_of_mass_object : Node3D
+
 func setup():
 	_thrusters = []
+	
+	if hull != null:
+		print("Destroying hull")
+		hull.queue_free()
 	
 	var valid_thrusters_found := 0
 	var hulls_found := 0
@@ -94,6 +114,7 @@ func setup():
 			if extras.has("ElementType"):
 				if extras.get("ElementType") == "CenterOfMass":
 					if child is Node3D:
+						center_of_mass_object = child
 						center_of_masses_found += 1
 						center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
 						center_of_mass = (child as Node3D).position
@@ -121,7 +142,6 @@ func setup():
 					if extras.has("Thrust"):
 						thruster.engine_thrust = (float)(extras.get("Thrust"))
 						valid_thrusters_found += 1
-						print("Found thruster ")
 					thruster.input_forward = input_forward
 					thruster.input_backward = input_backward
 					thruster.input_right = input_right
