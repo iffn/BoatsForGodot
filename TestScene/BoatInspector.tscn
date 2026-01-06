@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
-[ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/ThrottleController.gd" id="10_7h35j"]
+[ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/EditorBoatControls.gd" id="10_7h35j"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
 [ext_resource type="Script" uid="uid://bpmhoudtbohe" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/PitchTorqueAtPitchAngle.gd" id="12_7o47y"]
 [ext_resource type="Script" uid="uid://0b14erwylor4" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterOfMassEditor.gd" id="12_gtuxg"]
@@ -454,29 +454,113 @@ custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "°/s"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
+[node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
 
-[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2" node_paths=PackedStringArray("boat_view")]
+[node name="HBoxContainer4" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
+layout_mode = 2
+
+[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4" node_paths=PackedStringArray("steering_slider", "steering_number", "throttle_slider", "throttle_number", "trim_slider", "trim_number", "boat_view")]
 script = ExtResource("10_7h35j")
+steering_slider = NodePath("../VBoxContainer/Steering/HSlider")
+steering_number = NodePath("../VBoxContainer/Steering/SpinBox")
+throttle_slider = NodePath("../VBoxContainer/Throttle/HSlider")
+throttle_number = NodePath("../VBoxContainer/Throttle/SpinBox")
+trim_slider = NodePath("../HBoxContainer/VSlider")
+trim_number = NodePath("../HBoxContainer/VBoxContainer/SpinBox")
 boat_view = NodePath("../../../../../../../BoatView")
 
-[node name="Label" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Throttle controls"
+
+[node name="CheckBox" type="CheckBox" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Enabled"
+
+[node name="Steering" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Steering"]
+layout_mode = 2
+text = "Steering"
+
+[node name="HSlider" type="HSlider" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Steering"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.0
+tick_count = 3
+ticks_on_borders = true
+
+[node name="SpinBox" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Steering"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+alignment = 2
+
+[node name="Throttle" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Throttle"]
 layout_mode = 2
 text = "Throttle"
 
-[node name="HSlider" type="HSlider" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2"]
+[node name="HSlider" type="HSlider" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Throttle"]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 max_value = 1.0
 step = 0.0
+tick_count = 5
+ticks_on_borders = true
 
-[node name="CheckBox" type="CheckBox" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2"]
+[node name="SpinBox" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Throttle"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4"]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2"]
+[node name="VSlider" type="VSlider" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer"]
 layout_mode = 2
-text = "Enabled"
+min_value = -1.0
+max_value = 1.0
+step = 0.0
+tick_count = 3
+ticks_on_borders = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Trim"
+
+[node name="SpinBox" type="SpinBox" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = -1.0
+max_value = 1.0
+step = 0.01
+alignment = 2
 
 [node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer/Model view/Setting states"]
 layout_mode = 2
@@ -1543,11 +1627,9 @@ text = "Idea list:"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Releasable version:
-- Implement steering slider
 - Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
 - Set inertia directly in setup based on mesh size
 - Save as glb
-- Import notifications
 - Swap between editor and driving
 - Designate visualization hull and swap between
 
@@ -1598,8 +1680,13 @@ paragraph_separator = "\\"
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Load 1" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="load_from_1"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Save 2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="save_to_2"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer3/Load 2" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="load_from_2"]
-[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/HSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="set_throttle"]
-[connection signal="toggled" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/CheckBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer2/ThrottleController" method="enabled"]
+[connection signal="toggled" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/HBoxContainer2/CheckBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="enabled"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Steering/HSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_steering"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Steering/SpinBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_steering"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Throttle/HSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_throttle"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/VBoxContainer/Throttle/SpinBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_throttle"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VSlider" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_trim"]
+[connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VBoxContainer/SpinBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_trim"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="evaluate_waterline"]
 [connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
