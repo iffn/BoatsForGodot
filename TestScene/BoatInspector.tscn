@@ -38,6 +38,21 @@ boat_view = NodePath("../BoatView")
 [node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
 _camera_followers = [NodePath("Water"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
 
+[node name="Label" type="Label" parent="."]
+custom_minimum_size = Vector2(500, 0)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -126.0
+offset_right = 500.0
+offset_bottom = 1.0
+grow_vertical = 0
+text = "Note:
+Anything used here is an approximation optimized for performance and likely contains bugs. Do not use it for anything related to the safety of you or anyone else.
+"
+vertical_alignment = 2
+autowrap_mode = 2
+
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -64,7 +79,8 @@ text = "Model selection"
 
 [node name="Instruction" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
-text = "Drag and drop a correctly setup boat model into the view"
+text = "Drag and drop a correctly setup boat model into the view
+"
 
 [node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -1091,7 +1107,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
-text = "Model setup"
+text = "Model setup
+"
 
 [node name="MassWaterline" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
@@ -1370,7 +1387,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
-text = "Analysis"
+text = "Analysis
+"
 
 [node name="Button" type="Button" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
@@ -1609,7 +1627,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Plots"]
 layout_mode = 2
-text = "Plots"
+text = "Plots
+"
 
 [node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("chart", "boat_syncronizer", "update_button")]
 custom_minimum_size = Vector2(800, 0)
@@ -1679,7 +1698,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Idea liist"]
 layout_mode = 2
-text = "Idea list:"
+text = "Idea list:
+"
 
 [node name="Title2" type="Label" parent="Control/HBoxContainer/Idea liist"]
 custom_minimum_size = Vector2(350, 0)
@@ -1687,7 +1707,6 @@ layout_mode = 2
 text = "Releasable version:
 - Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
 - Set inertia directly in setup based on mesh size
-- Save as glb
 - Swap between editor and driving
 - Designate visualization hull and swap between
 
