@@ -111,6 +111,47 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 text = "Import"
 
+[node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+
+[node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "Boat setup guide in Blender:
+"
+
+[node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+text = "CenterOfMass:
+- Only one supported
+- Local position = Center of mass position
+- Custom properties:
+  \"ElementType\" = \"CenterOfMass\"
+  \"Mass\" = float for mass in kilograms
+
+DisplacementMesh:
+- Multiple possible but only one supported in the analysis for now. -> Merge meshes
+- Mesh:
+  - Is the basis of the calculation.
+  - Needs to be closed, otherwise phantom forces are created.
+  - Limit size. 250 or less.
+  - Keep triangle size roughly the same. Otherwise low resolution might cause problems.
+- Custom properties:
+  \"ElementType\" = \"DisplacementMesh\"
+
+Thrusters:
+- Multiple supported
+- Custom properties:
+  \"ElementType\" = \"Thruster\"
+  \"MaxHorizontalRotationDeg\" = float for ± steering angle in degrees
+  \"MaxVerticalRotationDeg\" = float for ± steering angle in degrees
+  \"Thrust\" = float for thrust in Newtons
+
+Export as glb:
+- Set Format to \"glTF Binary (.glb)\"
+- Set Include > Custom Properties to true (false by default...)
+- Probably set Meshes > Apply Modifiers to true (false by default...)
+"
+
 [node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
