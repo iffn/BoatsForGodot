@@ -114,6 +114,22 @@ text = "Import"
 [node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Drive around [ToDo]"
+
+[node name="Button2" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Export as .glb [ToDo]"
+
+[node name="HSeparator3" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
+layout_mode = 2
+
 [node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
 text = "Boat setup guide in Blender:
