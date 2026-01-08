@@ -52,6 +52,7 @@ Anything used here is an approximation optimized for performance and likely cont
 "
 vertical_alignment = 2
 autowrap_mode = 2
+paragraph_separator = "\\"
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -81,6 +82,7 @@ text = "Model selection"
 layout_mode = 2
 text = "Drag and drop a correctly setup boat model into the view
 "
+paragraph_separator = "\\"
 
 [node name="HSeparator" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -184,6 +186,7 @@ Export as glb:
 - Set Include > Custom Properties to true (false by default...)
 - Probably set Meshes > Apply Modifiers to true (false by default...)
 "
+paragraph_separator = "\\"
 
 [node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer"]
 custom_minimum_size = Vector2(20, 0)
