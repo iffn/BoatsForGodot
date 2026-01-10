@@ -1,5 +1,6 @@
-[gd_scene load_steps=33 format=4 uid="uid://5dm7gun61a5o"]
+[gd_scene load_steps=35 format=4 uid="uid://5dm7gun61a5o"]
 
+[ext_resource type="Script" uid="uid://50nywlrgda27" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/BoatDrivingSceneManager.gd" id="1_30h0f"]
 [ext_resource type="PackedScene" uid="uid://b4fso0ql27llx" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTree.tscn" id="4_35urj"]
 [ext_resource type="Script" uid="uid://ccp6qq033aevu" path="res://iffnsStuff/BoatsForGodot/Water/WaterFollower.gd" id="4_omhcd"]
 [ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/SineWaveWaterLevelProvider.gd" id="5_omhcd"]
@@ -13,6 +14,7 @@
 [ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="11_7srql"]
 [ext_resource type="Script" uid="uid://jlxtks6h7bha" path="res://iffnsStuff/BoatsForGodot/Scripts/InertiaCalculator.gd" id="12_ga5ut"]
 [ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/EditorBoatControls.gd" id="13_r0iif"]
+[ext_resource type="Script" uid="uid://8jgmissauqr" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/SceneManager.gd" id="14_a08aq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8hqqe"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -335,7 +337,8 @@ _surfaces = [{
 [sub_resource type="BoxShape3D" id="BoxShape3D_ufnvq"]
 size = Vector3(2.5231934, 1, 7.1388397)
 
-[node name="Node3D" type="Node3D"]
+[node name="DrivingScene" type="Node3D"]
+script = ExtResource("1_30h0f")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_co0j2")
@@ -509,8 +512,14 @@ layout_mode = 2
 layout_mode = 2
 text = "Trim"
 
+[node name="Edit" type="Button" parent="."]
+custom_minimum_size = Vector2(200, 0)
+text = "Edit boat"
+script = ExtResource("14_a08aq")
+
 [connection signal="value_changed" from="HBoxContainer4/VBoxContainer/Steering/HSlider" to="HBoxContainer4/ThrottleController" method="set_steering"]
 [connection signal="value_changed" from="HBoxContainer4/VBoxContainer/Throttle/HSlider" to="HBoxContainer4/ThrottleController" method="set_throttle"]
 [connection signal="value_changed" from="HBoxContainer4/HBoxContainer/VSlider" to="HBoxContainer4/ThrottleController" method="set_trim"]
+[connection signal="pressed" from="Edit" to="." method="switch_to_inspector_scene"]
 
 [editable path="SmallSpeedBoat2/SmallSpeedBoat"]

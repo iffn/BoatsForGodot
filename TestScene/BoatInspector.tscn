@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=21 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
+[ext_resource type="Script" uid="uid://btluhuf1oqv35" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/InspectorSceneManager.gd" id="1_v00ot"]
 [ext_resource type="Script" uid="uid://bems4e3psnncq" path="res://iffnsStuff/BoatsForGodot/Inspector/InspectorCamera.gd" id="1_vakq3"]
 [ext_resource type="PackedScene" uid="uid://1k50il72p5qf" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.tscn" id="2_gli4e"]
 [ext_resource type="Script" uid="uid://dlwej14u6j545" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/CenterEvaluator.gd" id="4_7s5vx"]
@@ -20,7 +21,8 @@
 [ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
-[node name="Node2D" type="Node2D"]
+[node name="BoatInspector" type="Node2D"]
+script = ExtResource("1_v00ot")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 visible = false
@@ -96,6 +98,8 @@ layout_mode = 2
 text = "A
 B
 C"
+paragraph_separator = "\\"
+clip_text = true
 
 [node name="Subtitle" type="Label" parent="Control/HBoxContainer/Model selection"]
 visible = false
@@ -139,7 +143,7 @@ layout_mode = 2
 [node name="Drive around" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Drive around [ToDo]"
+text = "Drive around"
 
 [node name="Export" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
@@ -1764,6 +1768,7 @@ Try to make a stable speed boat:
 - Visualize pressure forces on mesh"
 paragraph_separator = "\\"
 
+[connection signal="pressed" from="Control/HBoxContainer/Model selection/HBoxContainer/Drive around" to="." method="switch_to_driving_scene"]
 [connection signal="button_down" from="Control/HBoxContainer/Model selection/HBoxContainer/Export" to="Control/HBoxContainer/Model selection/SaveAndLoad" method="save_or_download_boat"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Caluclate next step" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
