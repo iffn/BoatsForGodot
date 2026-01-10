@@ -18,20 +18,14 @@ class_name BoatThruster
 
 var throttle_initialized = 0
 
-var external_control := false
-var external_throttle := 0.0
-var external_steering := 0.0
-var external_trimming := 0.0
+var throttle := 0.0
+var steering := 0.0
+var trimming := 0.0
 
-func _physics_process(delta: float) -> void:
-	var throttle := 0.0
-	var steering := 0.0
-	var trimming := 0.0
-	
-	throttle = external_throttle
-	steering = external_steering
-	trimming = external_trimming
-		
+var steering_inputs_held := 0
+var throttle_inputs_held := 0
+
+func _process(delta: float) -> void:
 	if joystick_inputs:
 		trimming = Input.get_joy_axis(0, JOY_AXIS_LEFT_Y)
 		steering = Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
@@ -43,16 +37,25 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_pressed(input_forward.input_name):
 		throttle = 1.0
-	
 	if Input.is_action_pressed(input_backward.input_name):
 		throttle = -1.0
 	
 	if Input.is_action_pressed(input_right.input_name):
 		steering = 1.0
-	
 	if Input.is_action_pressed(input_left.input_name):
 		steering = -1.0
 	
+	if Input.is_action_just_released(input_forward.input_name) && !Input.is_action_pressed(input_backward.input_name):
+		throttle = 0
+	if Input.is_action_just_released(input_backward.input_name) && !Input.is_action_pressed(input_forward.input_name):
+		throttle = 0
+	
+	if Input.is_action_just_released(input_right.input_name) && !Input.is_action_pressed(input_left.input_name):
+		steering = 0
+	if Input.is_action_just_released(input_left.input_name) && !Input.is_action_pressed(input_right.input_name):
+		steering = 0
+
+func _physics_process(delta: float) -> void:
 	var thrust = engine_thrust * throttle
 	
 	rotation = Vector3(deg_to_rad(trimming * engine_pitch_deg),  deg_to_rad(steering * engine_rotation_deg), 0)

@@ -147,6 +147,7 @@ func setup():
 					thruster.input_right = input_right
 					thruster.input_left = input_left
 					thruster.linked_rigidbody = self
+					thruster.set_process(true)
 					_thrusters.append(thruster)
 	
 	intertia_calculator.calculate_and_set_inertia()
