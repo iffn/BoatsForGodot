@@ -28,12 +28,11 @@ func _physics_process(delta: float) -> void:
 	var steering := 0.0
 	var trimming := 0.0
 	
-	if external_control:
-		throttle = external_throttle
-		steering = external_steering
-		trimming = external_trimming
+	throttle = external_throttle
+	steering = external_steering
+	trimming = external_trimming
 		
-	elif joystick_inputs:
+	if joystick_inputs:
 		trimming = Input.get_joy_axis(0, JOY_AXIS_LEFT_Y)
 		steering = Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
 		
@@ -41,19 +40,18 @@ func _physics_process(delta: float) -> void:
 			throttle = -Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y) * 0.5 + 0.5
 		else:
 			throttle_initialized = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y) != 0.0
-		
-	elif keyboard_inputs:
-		if Input.is_action_pressed(input_forward.input_name):
-			throttle = 1.0
-		
-		if Input.is_action_pressed(input_backward.input_name):
-			throttle = -1.0
-		
-		if Input.is_action_pressed(input_right.input_name):
-			steering = 1.0
-		
-		if Input.is_action_pressed(input_left.input_name):
-			steering = -1.0
+	
+	if Input.is_action_pressed(input_forward.input_name):
+		throttle = 1.0
+	
+	if Input.is_action_pressed(input_backward.input_name):
+		throttle = -1.0
+	
+	if Input.is_action_pressed(input_right.input_name):
+		steering = 1.0
+	
+	if Input.is_action_pressed(input_left.input_name):
+		steering = -1.0
 	
 	var thrust = engine_thrust * throttle
 	
