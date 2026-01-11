@@ -9,20 +9,21 @@
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="4_fm4hc"]
 [ext_resource type="Script" uid="uid://pjsgcrlqrek5" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MassWaterLineEvaluator.gd" id="4_otdjp"]
 [ext_resource type="Script" uid="uid://cbkttc3885icy" path="res://iffnsStuff/BoatsForGodot/Scripts/SaveAndLoad.gd" id="4_vknsj"]
-[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatEditSyncronizer.gd" id="5_80gaq"]
+[ext_resource type="Script" uid="uid://bnm3ffgvhcvi" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatEditSyncronizer.gd" id="5_80gaq"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
-[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
+[ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
 [ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/EditorBoatControls.gd" id="10_7h35j"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
 [ext_resource type="Script" uid="uid://bpmhoudtbohe" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/PitchTorqueAtPitchAngle.gd" id="12_7o47y"]
-[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterOfMassEditor.gd" id="12_gtuxg"]
+[ext_resource type="Script" uid="uid://0b14erwylor4" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterOfMassEditor.gd" id="12_gtuxg"]
 [ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
-[node name="BoatInspector" type="Node2D"]
+[node name="BoatInspector" type="Node2D" node_paths=PackedStringArray("save_and_load")]
 script = ExtResource("1_v00ot")
+save_and_load = NodePath("Control/HBoxContainer/Model selection/SaveAndLoad")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 visible = false
@@ -33,9 +34,9 @@ script = ExtResource("1_vakq3")
 script = ExtResource("4_fm4hc")
 input_collection = ExtResource("5_w5bwg")
 
-[node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("boat_view")]
+[node name="BoatEditSyncronizer" type="Node" parent="." node_paths=PackedStringArray("calculation_boat")]
 script = ExtResource("5_80gaq")
-boat_view = NodePath("../BoatView")
+calculation_boat = NodePath("../BoatView/CalculationBoat")
 
 [node name="BoatView" parent="." node_paths=PackedStringArray("_camera_followers") instance=ExtResource("2_gli4e")]
 _camera_followers = [NodePath("Water"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Front/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Front and Side view/Side/SubViewport/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/ISO/SubViewport/Node3D2/Camera3D"), NodePath("../Control/HBoxContainer/Model view/Iso and Top view/Top/SubViewport/Camera3D")]
@@ -70,9 +71,10 @@ offset_bottom = 40.0
 [node name="Model selection" type="VBoxContainer" parent="Control/HBoxContainer"]
 layout_mode = 2
 
-[node name="SaveAndLoad" type="Node" parent="Control/HBoxContainer/Model selection" node_paths=PackedStringArray("boat_syncronizer", "import_report", "save_or_download_button")]
+[node name="SaveAndLoad" type="Node" parent="Control/HBoxContainer/Model selection" node_paths=PackedStringArray("boat_syncronizer", "boat", "import_report", "save_or_download_button")]
 script = ExtResource("4_vknsj")
 boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+boat = NodePath("../../../../BoatView/CalculationBoat")
 import_report = NodePath("../Import report")
 save_or_download_button = NodePath("../HBoxContainer/Export")
 
@@ -542,7 +544,7 @@ layout_mode = 2
 [node name="HBoxContainer4" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
 
-[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4" node_paths=PackedStringArray("steering_slider", "steering_number", "throttle_slider", "throttle_number", "trim_slider", "trim_number", "linked_boat")]
+[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4" node_paths=PackedStringArray("steering_slider", "steering_number", "throttle_slider", "throttle_number", "trim_slider", "trim_number")]
 script = ExtResource("10_7h35j")
 steering_slider = NodePath("../VBoxContainer/Steering/HSlider")
 steering_number = NodePath("../VBoxContainer/Steering/SpinBox")
@@ -550,7 +552,6 @@ throttle_slider = NodePath("../VBoxContainer/Throttle/HSlider")
 throttle_number = NodePath("../VBoxContainer/Throttle/SpinBox")
 trim_slider = NodePath("../HBoxContainer/VSlider")
 trim_number = NodePath("../HBoxContainer/VBoxContainer/SpinBox")
-linked_boat = NodePath("../../../../../../../BoatView/SmallSpeedBoat")
 _enabled = false
 _update_from_inputs = false
 
@@ -1795,4 +1796,4 @@ paragraph_separator = "\\"
 [editable path="BoatView"]
 [editable path="BoatView/Center of mass indicator"]
 [editable path="BoatView/Center of buoyancy indicator"]
-[editable path="BoatView/SmallSpeedBoat/SmallSpeedBoat"]
+[editable path="BoatView/CalculationBoat/SmallSpeedBoat"]

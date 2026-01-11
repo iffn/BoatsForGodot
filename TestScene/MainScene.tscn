@@ -11,9 +11,3 @@ driving_scene_source = ExtResource("3_xh2q4")
 current_scene = NodePath("BoatInspector")
 
 [node name="BoatInspector" parent="." instance=ExtResource("2_xh2q4")]
-
-[editable path="BoatInspector"]
-[editable path="BoatInspector/BoatView"]
-[editable path="BoatInspector/BoatView/Center of mass indicator"]
-[editable path="BoatInspector/BoatView/Center of buoyancy indicator"]
-[editable path="BoatInspector/BoatView/SmallSpeedBoat/SmallSpeedBoat"]

@@ -14,7 +14,7 @@ func _ready():
 		var inspector_scene = current_scene as InspectorSceneManager
 		inspector_scene.setup(self)
 
-func switch_to_inspector_scene():
+func switch_to_inspector_scene(glb_buffer: PackedByteArray):
 	current_scene.queue_free()
 	
 	current_scene = inspector_scene_source.instantiate()
@@ -22,10 +22,10 @@ func switch_to_inspector_scene():
 	
 	if current_scene is InspectorSceneManager:
 		var driving_scene = current_scene as InspectorSceneManager
-		driving_scene.setup(self)
+		driving_scene.setup_with_model(self, glb_buffer)
 
 
-func switch_to_driving_scene():
+func switch_to_driving_scene(glb_buffer: PackedByteArray):
 	current_scene.queue_free()
 	
 	current_scene = driving_scene_source.instantiate()
@@ -33,4 +33,4 @@ func switch_to_driving_scene():
 	
 	if current_scene is BoatDrivingSceneManager:
 		var driving_scene = current_scene as BoatDrivingSceneManager
-		driving_scene.setup(self)
+		driving_scene.setup_with_model(self, glb_buffer)

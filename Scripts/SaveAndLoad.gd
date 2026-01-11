@@ -1,14 +1,15 @@
 extends Node
 
-@export var boat_syncronizer : BoatEditSyncronizer
-var boat : BoatController:
-	get:
-		return boat_syncronizer.calculation_boat
+class_name SaveAndLoad
 
+@export var boat_syncronizer : BoatEditSyncronizer
+@export var boat: BoatController
 @export var import_report : Label
 @export var save_or_download_button : Button
 
 func output_last_load_report():
+	if import_report == null || boat_syncronizer == null:
+		return
 	var report := boat_syncronizer.calculation_boat.last_report
 	var output := ""
 	var separator := import_report.paragraph_separator.c_unescape()
@@ -18,10 +19,44 @@ func output_last_load_report():
 func _ready():
 	get_tree().get_root().files_dropped.connect(_on_files_dropped)
 	call_deferred("output_last_load_report")
-	if OS.has_feature("web"):
-		save_or_download_button.text = "Download .glb"
-	else:
-		save_or_download_button.text = "Save as .glb"
+	if save_or_download_button:
+		if OS.has_feature("web"):
+			save_or_download_button.text = "Download .glb"
+		else:
+			save_or_download_button.text = "Save as .glb"
+
+func convert_node_to_glb_buffer(node: Node) -> PackedByteArray:
+	var gltf_doc = GLTFDocument.new()
+	var gltf_state = GLTFState.new()
+	gltf_doc.append_from_scene(node, gltf_state)
+	return gltf_doc.generate_buffer(gltf_state)
+
+func convert_glb_buffer_to_node(buffer: PackedByteArray) -> Node:
+	if buffer.is_empty():
+		return null
+	var gltf_doc = GLTFDocument.new()
+	var gltf_state = GLTFState.new()
+	var error = gltf_doc.append_from_buffer(buffer, "", gltf_state)
+	if error == OK:
+		return gltf_doc.generate_scene(gltf_state)
+	return null
+
+func get_boat_as_glb_buffer() -> PackedByteArray:
+	boat.prepare_boat_model_for_export()
+	return convert_node_to_glb_buffer(boat.boat_model)
+
+func load_boat_from_buffer(buffer: PackedByteArray):
+	var boat_model := convert_glb_buffer_to_node(buffer) as Node3D
+	_setup_boat(boat_model)
+
+func _setup_boat(boat_model: Node3D):
+	if boat_model == null:
+		return
+	boat.add_child(boat_model)
+	boat.replace_boat_model(boat_model)
+	if boat_syncronizer:
+		boat_syncronizer.boat_modified.emit()
+	output_last_load_report()
 
 func _on_files_dropped(files: PackedStringArray):
 	if files[0].ends_with(".glb"):
@@ -34,22 +69,14 @@ func load_glb_at_runtime(path: String):
 	var error = gltf_doc.append_from_file(path, gltf_state)
 	if error == OK:
 		var boat_model := gltf_doc.generate_scene(gltf_state) as Node3D
-		boat.add_child(boat_model)
-		boat.replace_boat_model(boat_model)
-		boat_syncronizer.boat_modified.emit()
-		output_last_load_report()
+		_setup_boat(boat_model)
 
 func save_or_download_boat():
 	boat.prepare_boat_model_for_export()
 	_save_or_download_glb(boat.boat_model)
 
 func _save_or_download_glb(node : Node):
-	var gltf_doc = GLTFDocument.new()
-	var gltf_state = GLTFState.new()
-	
-	gltf_doc.append_from_scene(node, gltf_state)
-	var buffer = gltf_doc.generate_buffer(gltf_state)
-	
+	var buffer: = convert_node_to_glb_buffer(node)
 	if OS.has_feature("web"):
 		JavaScriptBridge.download_buffer(buffer, node.name + ".glb", "model/gltf-binary")
 	else:
