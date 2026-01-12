@@ -1,0 +1,38 @@
+[gd_scene load_steps=11 format=3 uid="uid://cffb6b4ojmkfs"]
+
+[ext_resource type="Script" uid="uid://3a3uhfevxm18" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatController.gd" id="1_22bs1"]
+[ext_resource type="Resource" uid="uid://daj3r004we3ve" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_forward.tres" id="2_o2sx7"]
+[ext_resource type="Resource" uid="uid://b44gn6lwh86bv" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_backward.tres" id="3_fh10v"]
+[ext_resource type="Resource" uid="uid://bxcyp7nsrxiwf" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_right.tres" id="4_b01yv"]
+[ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="5_lk2o7"]
+[ext_resource type="Resource" uid="uid://dir5owhdwbvad" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/trim_up.tres" id="6_fh10v"]
+[ext_resource type="Script" uid="uid://jlxtks6h7bha" path="res://iffnsStuff/BoatsForGodot/Scripts/InertiaCalculator.gd" id="6_y8npv"]
+[ext_resource type="PackedScene" uid="uid://cx8bv6kdbg1jk" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.blend" id="7_1b7io"]
+[ext_resource type="Resource" uid="uid://8ntdrqku6nk6" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/trim_down.tres" id="7_b01yv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
+size = Vector3(2.5231934, 1, 7.1388397)
+
+[node name="CalculationBoat" type="RigidBody3D" node_paths=PackedStringArray("intertia_calculator", "boat_model")]
+script = ExtResource("1_22bs1")
+intertia_calculator = NodePath("CollisionShape3D/InertiaCalculation")
+input_forward = ExtResource("2_o2sx7")
+input_backward = ExtResource("3_fh10v")
+input_right = ExtResource("4_b01yv")
+input_left = ExtResource("5_lk2o7")
+trim_up = ExtResource("6_fh10v")
+trim_down = ExtResource("7_b01yv")
+boat_model = NodePath("SmallSpeedBoat")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2437253)
+shape = SubResource("BoxShape3D_xeeb7")
+
+[node name="InertiaCalculation" type="Node" parent="CollisionShape3D" node_paths=PackedStringArray("linked_rigidbody", "box_collision_shape")]
+script = ExtResource("6_y8npv")
+linked_rigidbody = NodePath("../..")
+box_collision_shape = NodePath("..")
+
+[node name="SmallSpeedBoat" parent="." instance=ExtResource("7_1b7io")]
+
+[editable path="SmallSpeedBoat"]

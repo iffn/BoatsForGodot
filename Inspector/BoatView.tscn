@@ -1,17 +1,11 @@
-[gd_scene load_steps=26 format=4 uid="uid://1k50il72p5qf"]
+[gd_scene load_steps=19 format=4 uid="uid://1k50il72p5qf"]
 
 [ext_resource type="Script" uid="uid://682d8p34i48m" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.gd" id="1_eesk3"]
-[ext_resource type="PackedScene" uid="uid://cx8bv6kdbg1jk" path="res://iffnsStuff/BoatsForGodot/Boats/SmallSpeedBoat.blend" id="2_forn3"]
 [ext_resource type="PackedScene" uid="uid://br8m36qu8rl8k" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterSphereSide.blend" id="2_htfkw"]
 [ext_resource type="Script" uid="uid://67gg5gmyh4fi" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="3_6ad51"]
-[ext_resource type="Script" uid="uid://3a3uhfevxm18" path="res://iffnsStuff/BoatsForGodot/Scripts/BoatController.gd" id="3_forn3"]
-[ext_resource type="Script" uid="uid://jlxtks6h7bha" path="res://iffnsStuff/BoatsForGodot/Scripts/InertiaCalculator.gd" id="4_forn3"]
 [ext_resource type="Material" uid="uid://de0c640fkbred" path="res://iffnsStuff/BoatsForGodot/Inspector/WireframeMaterial.tres" id="5_vvj4a"]
+[ext_resource type="PackedScene" uid="uid://cffb6b4ojmkfs" path="res://iffnsStuff/BoatsForGodot/Prefabs/calculation_boat.tscn" id="6_4kpyc"]
 [ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="6_sfudi"]
-[ext_resource type="Resource" uid="uid://daj3r004we3ve" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_forward.tres" id="8_pllas"]
-[ext_resource type="Resource" uid="uid://b44gn6lwh86bv" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_backward.tres" id="9_ise16"]
-[ext_resource type="Resource" uid="uid://bxcyp7nsrxiwf" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_right.tres" id="10_jpwgn"]
-[ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="11_8vvjr"]
 
 [sub_resource type="Environment" id="Environment_f1310"]
 ambient_light_source = 2
@@ -111,9 +105,6 @@ shadow_mesh = SubResource("ArrayMesh_kwyvo")
 no_depth_test = true
 albedo_color = Color(0, 0.37254903, 1, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xeeb7"]
-size = Vector3(2.5231934, 1, 7.1388397)
-
 [node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat")]
 script = ExtResource("1_eesk3")
 _linked_boat = NodePath("CalculationBoat")
@@ -209,27 +200,8 @@ script = ExtResource("3_6ad51")
 material_override = ExtResource("5_vvj4a")
 skeleton = NodePath("")
 
-[node name="CalculationBoat" type="RigidBody3D" parent="." node_paths=PackedStringArray("_water_level", "intertia_calculator", "boat_model")]
-script = ExtResource("3_forn3")
+[node name="CalculationBoat" parent="." node_paths=PackedStringArray("_water_level") instance=ExtResource("6_4kpyc")]
 _water_level = NodePath("../EditorWaterLevel")
-intertia_calculator = NodePath("CollisionShape3D/InertiaCalculation")
-input_forward = ExtResource("8_pllas")
-input_backward = ExtResource("9_ise16")
-input_right = ExtResource("10_jpwgn")
-input_left = ExtResource("11_8vvjr")
-boat_model = NodePath("SmallSpeedBoat")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CalculationBoat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2437253)
-shape = SubResource("BoxShape3D_xeeb7")
-
-[node name="InertiaCalculation" type="Node" parent="CalculationBoat/CollisionShape3D" node_paths=PackedStringArray("linked_rigidbody", "box_collision_shape")]
-script = ExtResource("4_forn3")
-linked_rigidbody = NodePath("../..")
-box_collision_shape = NodePath("..")
-
-[node name="SmallSpeedBoat" parent="CalculationBoat" instance=ExtResource("2_forn3")]
 
 [editable path="Center of mass indicator"]
 [editable path="Center of buoyancy indicator"]
-[editable path="CalculationBoat/SmallSpeedBoat"]

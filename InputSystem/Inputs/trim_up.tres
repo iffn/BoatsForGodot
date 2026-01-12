@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="InputResource" load_steps=2 format=3 uid="uid://dir5owhdwbvad"]
+
+[ext_resource type="Script" uid="uid://fjjjq54nt2ir" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/InputResource.gd" id="1_xphdj"]
+
+[resource]
+script = ExtResource("1_xphdj")
+input_name = "engine_pitch_up"
+input = 4194325

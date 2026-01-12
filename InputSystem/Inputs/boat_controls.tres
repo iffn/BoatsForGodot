@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="InputCollection" load_steps=7 format=3 uid="uid://dhc5nrjr5at4j"]
+[gd_resource type="Resource" script_class="InputCollection" load_steps=9 format=3 uid="uid://dhc5nrjr5at4j"]
 
 [ext_resource type="Script" uid="uid://fjjjq54nt2ir" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/InputResource.gd" id="1_8upcm"]
 [ext_resource type="Resource" uid="uid://daj3r004we3ve" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_forward.tres" id="2_3dyw8"]
 [ext_resource type="Resource" uid="uid://b44gn6lwh86bv" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_backward.tres" id="3_c8ie1"]
 [ext_resource type="Resource" uid="uid://d3ufts0le6kdu" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_left.tres" id="4_noule"]
 [ext_resource type="Resource" uid="uid://bxcyp7nsrxiwf" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/move_right.tres" id="5_gn2k8"]
+[ext_resource type="Resource" uid="uid://dir5owhdwbvad" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/trim_up.tres" id="6_3dnop"]
 [ext_resource type="Script" uid="uid://btp2mu70cenul" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/InputCollection.gd" id="6_d048w"]
+[ext_resource type="Resource" uid="uid://8ntdrqku6nk6" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/trim_down.tres" id="7_860c1"]
 
 [resource]
 script = ExtResource("6_d048w")
-inputs = Array[ExtResource("1_8upcm")]([ExtResource("2_3dyw8"), ExtResource("3_c8ie1"), ExtResource("4_noule"), ExtResource("5_gn2k8")])
+inputs = Array[ExtResource("1_8upcm")]([ExtResource("2_3dyw8"), ExtResource("3_c8ie1"), ExtResource("4_noule"), ExtResource("5_gn2k8"), ExtResource("6_3dnop"), ExtResource("7_860c1")])

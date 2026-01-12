@@ -11,6 +11,8 @@ class_name BoatController
 @export var input_backward : InputResource
 @export var input_right : InputResource
 @export var input_left : InputResource
+@export var trim_up : InputResource
+@export var trim_down : InputResource
 @export var boat_model : Node3D
 
 var hull : BoatHull:
@@ -90,7 +92,7 @@ func prepare_boat_model_for_export():
 		extras = thruster.get_meta("extras")
 		extras["Thrust"] = thruster.engine_thrust
 		extras["MaxHorizontalRotationDeg"] = thruster.engine_rotation_deg
-		extras["MaxVerticalRotationDeg"] = thruster.engine_pitch_deg
+		extras["MaxVerticalRotationDeg"] = thruster.trim_deg
 		thruster.set_meta("extras", extras)
 
 var center_of_mass_object : Node3D
@@ -138,7 +140,7 @@ func setup():
 					if extras.has("MaxHorizontalRotationDeg"):
 						thruster.engine_rotation_deg = (float)(extras.get("MaxHorizontalRotationDeg"))
 					if extras.has("MaxVerticalRotationDeg"):
-						thruster.engine_pitch_deg = (float)(extras.get("MaxVerticalRotationDeg"))
+						thruster.trim_deg = (float)(extras.get("MaxVerticalRotationDeg"))
 					if extras.has("Thrust"):
 						thruster.engine_thrust = (float)(extras.get("Thrust"))
 						valid_thrusters_found += 1
@@ -146,6 +148,8 @@ func setup():
 					thruster.input_backward = input_backward
 					thruster.input_right = input_right
 					thruster.input_left = input_left
+					thruster.trim_up = trim_up
+					thruster.trim_down = trim_down
 					thruster.linked_rigidbody = self
 					thruster.set_process(true)
 					_thrusters.append(thruster)

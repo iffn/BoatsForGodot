@@ -159,6 +159,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Boat setup guide in Blender:
 "
+paragraph_separator = "\\"
 
 [node name="Subtitle5" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -544,7 +545,7 @@ layout_mode = 2
 [node name="HBoxContainer4" type="HBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input"]
 layout_mode = 2
 
-[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4" node_paths=PackedStringArray("steering_slider", "steering_number", "throttle_slider", "throttle_number", "trim_slider", "trim_number")]
+[node name="ThrottleController" type="Node" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4" node_paths=PackedStringArray("steering_slider", "steering_number", "throttle_slider", "throttle_number", "trim_slider", "trim_number", "linked_boat")]
 script = ExtResource("10_7h35j")
 steering_slider = NodePath("../VBoxContainer/Steering/HSlider")
 steering_number = NodePath("../VBoxContainer/Steering/SpinBox")
@@ -552,6 +553,7 @@ throttle_slider = NodePath("../VBoxContainer/Throttle/HSlider")
 throttle_number = NodePath("../VBoxContainer/Throttle/SpinBox")
 trim_slider = NodePath("../HBoxContainer/VSlider")
 trim_number = NodePath("../HBoxContainer/VBoxContainer/SpinBox")
+linked_boat = NodePath("../../../../../../../BoatView/CalculationBoat")
 _enabled = false
 _update_from_inputs = false
 
@@ -1795,4 +1797,3 @@ paragraph_separator = "\\"
 [editable path="BoatView"]
 [editable path="BoatView/Center of mass indicator"]
 [editable path="BoatView/Center of buoyancy indicator"]
-[editable path="BoatView/CalculationBoat/SmallSpeedBoat"]

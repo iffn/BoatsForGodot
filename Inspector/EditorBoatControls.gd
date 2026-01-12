@@ -37,9 +37,7 @@ func _process(delta: float) -> void:
 
 func enable(value: bool):
 	_enabled = value
-	
-	for thruster in linked_boat.thrusters:
-		thruster.control = value
+	_update_from_inputs = value
 	
 	if value:
 		if steering_slider:
