@@ -10,27 +10,13 @@ So far, the basic concept seems to work.
 - Add this repository to your Godot project folder
 
 ### Test scene
-- In Godot, open BoatsForGodot > TestScene > BuoyancyTest.tscn
+- In Godot, open BoatsForGodot > TestScene > MainScene.tscn
 - Press F6 to test it
-  - Control with WASD
-  - Inputs are automatically assigned when running the game, but not saved to the project
-
-### Inspector (Early WIP)
-- In Godot, open BoatsForGodot > Inspector > BoatInspector.tscn
-- Press F6 to test it
-  - Scroll in and out or use the middle mouse button to look around
-  - Use the UI
-- Currently, multiple script reference the sample boat directly, so replacing it is not easy. -> WIP
+  - You can move the mouse to scroll wheel to move around.
+  - You can drive the boat by using the 'Drive around' button
 
 ### Create a boat
-- Model a closed buoyancy mesh (Limit the number of triangles for performance reasons)
-- Setup a boat similar to the test boats:
-    - Rigidbody base
-    - Buoyancy mesh (closed, otherwise you'll get phantom forces)
-    - HullCalculator script linked to the Rigidbody and Buoyancy mesh
-    - InertiaCalculation if not set properly
-    - Thruster if required
-    - Input setter if needed
+- The up to date description should be found in the inspector
 
 ## Current implementation
 ### Buoyancy and drag
