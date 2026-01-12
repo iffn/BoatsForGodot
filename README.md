@@ -4,6 +4,7 @@ So far, the basic concept seems to work.
 
 ## Requirements
 - Easy Charts: https://godotengine.org/asset-library/asset/643
+- Debug Draw 3D https://godotengine.org/asset-library/asset/1766
 
 ## Use
 ### Setup
