@@ -555,7 +555,6 @@ trim_slider = NodePath("../HBoxContainer/VSlider")
 trim_number = NodePath("../HBoxContainer/VBoxContainer/SpinBox")
 linked_boat = NodePath("../../../../../../../BoatView/CalculationBoat")
 _enabled = false
-_update_from_inputs = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4"]
 layout_mode = 2
@@ -719,6 +718,12 @@ layout_mode = 2
 text = "Pressure drag force"
 horizontal_alignment = 2
 
+[node name="Subtitle21" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Slamming force"
+horizontal_alignment = 2
+
 [node name="Subtitle10" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -741,6 +746,12 @@ horizontal_alignment = 2
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Pressure drag torque"
+horizontal_alignment = 2
+
+[node name="Subtitle20" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "Slamming torque"
 horizontal_alignment = 2
 
 [node name="Subtitle14" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Names"]
@@ -837,6 +848,12 @@ layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
+[node name="Subtitle22" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
 [node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -856,6 +873,12 @@ text = "123"
 horizontal_alignment = 2
 
 [node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle21" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/X"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
@@ -944,6 +967,12 @@ layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
+[node name="Subtitle22" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
 [node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -963,6 +992,12 @@ text = "123"
 horizontal_alignment = 2
 
 [node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle21" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Y"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
@@ -1054,6 +1089,12 @@ layout_mode = 2
 text = "123"
 horizontal_alignment = 2
 
+[node name="Subtitle22" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
 [node name="Subtitle12" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
@@ -1073,6 +1114,12 @@ text = "123"
 horizontal_alignment = 2
 
 [node name="Subtitle15" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+text = "123"
+horizontal_alignment = 2
+
+[node name="Subtitle21" type="Label" parent="Control/HBoxContainer/Model view/Setting states/Input2/Moment of inertia/Moment of inertia/Z"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "123"
@@ -1754,6 +1801,7 @@ Check physics:
 - Displaced volume should stay consistent at different depths when fully submerged
 - Buoyancy force should stay consistent at different depths when fully submerged
 - Buoyancy force should X Z should be 0
+- Calculate slamming force for 0 surface points
 
 Model views:
 - Rotate isometric view

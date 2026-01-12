@@ -28,8 +28,6 @@ func update_centers():
 	center_of_mass_indicator.global_position = center_of_mass_world
 	#center_of_buoyancy_indicator.global_position = data.center_of_buoyancy_world
 	
-	
-	
 	var total_force := data.all_forces
 	var total_torque := data.all_torques
 	

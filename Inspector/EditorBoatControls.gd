@@ -14,11 +14,8 @@ extends Node
 
 func _process(delta: float) -> void:
 	
-	if _update_from_inputs && linked_boat.thrusters.size() > 0:
-		
+	if _enabled && linked_boat.thrusters.size() > 0:
 		var reference_thruster := linked_boat.thrusters[0]
-		#print(reference_thruster.can_process())
-		#reference_thruster._process(delta)
 		
 		if steering_slider:
 			steering_slider.set_value_no_signal(reference_thruster.steering)
@@ -33,11 +30,10 @@ func _process(delta: float) -> void:
 		if trim_slider:
 			trim_slider.set_value_no_signal(reference_thruster.trimming)
 		if throttle_number:
-			throttle_number.set_value_no_signal(reference_thruster.trimming)
+			trim_number.set_value_no_signal(reference_thruster.trimming)
 
 func enable(value: bool):
 	_enabled = value
-	_update_from_inputs = value
 	
 	if value:
 		if steering_slider:
