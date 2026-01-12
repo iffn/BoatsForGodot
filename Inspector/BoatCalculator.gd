@@ -230,6 +230,12 @@ func _evaluate_geometry():
 	output_z[i].text = str(data.pressure_drag_force.z).pad_decimals(2)
 	i+=1
 	
+	#names[i].text = "Slamming force"
+	output_x[i].text = str(data.slamming_force.x).pad_decimals(2)
+	output_y[i].text = str(data.slamming_force.y).pad_decimals(2)
+	output_z[i].text = str(data.slamming_force.z).pad_decimals(2)
+	i+=1
+	
 	#names[i].text = "Total drag force"
 	output_x[i].text = str(data.all_forces.x).pad_decimals(2)
 	output_y[i].text = str(data.all_forces.y).pad_decimals(2)
@@ -252,6 +258,12 @@ func _evaluate_geometry():
 	output_x[i].text = str(data.pressure_drag_torque.x).pad_decimals(2)
 	output_y[i].text = str(data.pressure_drag_torque.y).pad_decimals(2)
 	output_z[i].text = str(data.pressure_drag_torque.z).pad_decimals(2)
+	i+=1
+	
+	#names[i].text = "Slamming torque"
+	output_x[i].text = str(data.slamming_torque.x).pad_decimals(2)
+	output_y[i].text = str(data.slamming_torque.y).pad_decimals(2)
+	output_z[i].text = str(data.slamming_torque.z).pad_decimals(2)
 	i+=1
 	
 	#names[i].text = "Total drag torque"
