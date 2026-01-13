@@ -15,10 +15,10 @@ var line_of_action_end : Vector3
 
 func _ready() -> void:
 	boat_syncronizer.boat_modified.connect(update_centers)
-	DebugDraw3D.new_scoped_config().set_thickness(1).set_no_depth_test(true)
 
 func _process(delta: float) -> void:
-	DebugDraw3D.draw_line(line_of_action_start, line_of_action_end, Color.WHITE)
+	var line_config := DebugDraw3D.new_scoped_config().set_no_depth_test(true).set_thickness(0.05)
+	DebugDraw3D.draw_line(line_of_action_start, line_of_action_end, Color.DODGER_BLUE)
 
 func update_centers():
 	var data := calculation_boat.hull.calculate_all()
@@ -40,8 +40,11 @@ func update_centers():
 		center_of_buoyancy_indicator.global_position = center_of_pressure_world
 		
 		var direction = total_force.normalized()
-		line_of_action_start = center_of_pressure_world - direction * 5.0
-		line_of_action_end = center_of_pressure_world + direction * 5.0
+		var neutral_buoyancy_force = calculation_boat.mass * 9.81
+		
+		var force_factor = total_force.length() / neutral_buoyancy_force
+		line_of_action_start = center_of_pressure_world
+		line_of_action_end = center_of_pressure_world + direction * force_factor * 1.0
 	else:
 		center_of_buoyancy_indicator.visible = false
 		line_of_action_start = Vector3.ZERO
