@@ -1769,9 +1769,10 @@ paragraph_separator = "\\"
 custom_minimum_size = Vector2(350, 0)
 layout_mode = 2
 text = "Releasable version:
-- Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
-- Set inertia directly in setup based on mesh size
-- Designate visualization hull and swap between
+- General: Set inertia directly in setup based on mesh size
+- Inspector: calculate_all once instead of multiple times
+- Inspector: Fix underwater mesh when pausing. -> Cannot simply be added at the end of the play/pause update
+- Inspector: Designate visualization hull and swap between
 - Boat driving: Camera controls
 - Boat driving: Wave settings
 
