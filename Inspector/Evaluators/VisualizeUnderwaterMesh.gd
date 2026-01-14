@@ -10,8 +10,7 @@ var calculation_boat : BoatController:
 @export var visualization : MeshInstance3D
 
 func _ready() -> void:
-	boat_syncronizer.boat_modified.connect(update_underwater_mesh)
+	boat_syncronizer.connect_boat_modified_calculated(update_underwater_mesh)
 
-func update_underwater_mesh() -> void:
-	var result := calculation_boat.hull.calculate_all()
-	calculation_boat.hull.assign_underwater_mesh(visualization, result.triangles_below_water)
+func update_underwater_mesh(data: BoatHull.BoatCalculationData) -> void:
+	calculation_boat.hull.assign_underwater_mesh(visualization, data.triangles_below_water)

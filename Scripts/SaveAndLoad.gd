@@ -55,7 +55,7 @@ func _setup_boat(boat_model: Node3D):
 	boat.add_child(boat_model)
 	boat.replace_boat_model(boat_model)
 	if boat_syncronizer:
-		boat_syncronizer.boat_modified.emit()
+		boat_syncronizer.emit_signals()
 	output_last_load_report()
 
 func _on_files_dropped(files: PackedStringArray):

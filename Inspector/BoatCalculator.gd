@@ -81,15 +81,17 @@ func _physics_process(delta: float) -> void:
 		if _update_counter >= 1:
 			current_update_state = update_states.FROZEN
 		else:
+			var data := calculation_boat.hull.calculate_all()
 			_update_counter += 1
-			center_evaluator.update_centers()
-			visualize_underwater_mesh.update_underwater_mesh()
-			_evaluate_geometry()
+			center_evaluator.update_centers(data)
+			visualize_underwater_mesh.update_underwater_mesh(data)
+			_evaluate_geometry(data)
 			
 	elif current_update_state == update_states.SIMULATING:
-		center_evaluator.update_centers()
-		visualize_underwater_mesh.update_underwater_mesh()
-		_evaluate_geometry()
+		var data := calculation_boat.hull.calculate_all()
+		center_evaluator.update_centers(data)
+		visualize_underwater_mesh.update_underwater_mesh(data)
+		_evaluate_geometry(data)
 		if active_toggle.button_pressed:
 			_set_input_state(calculation_boat.boat_state)
 
@@ -117,24 +119,25 @@ func save_to_2():
 func load_from_1():
 	_set_input_state(save_state_1)
 	if active_toggle.button_pressed:
-		update_state()
+		update_state_heavy()
 
 func load_from_2():
 	_set_input_state(save_state_2)
 	if active_toggle.button_pressed:
-		update_state()
+		update_state_heavy()
 
 func reset_state():
 	_set_input_state(initial_state)
 	if active_toggle.button_pressed:
-		update_state()
+		update_state_heavy()
 		calculation_boat.global_position = Vector3(0, calculation_boat.global_position.y, 0)
 
-func update_state():
+func update_state_heavy():
+	var data := calculation_boat.hull.calculate_all()
 	_set_boat_state_from_inputs()
-	_evaluate_geometry()
-	center_evaluator.update_centers()
-	visualize_underwater_mesh.update_underwater_mesh()
+	_evaluate_geometry(data)
+	center_evaluator.update_centers(data)
+	visualize_underwater_mesh.update_underwater_mesh(data)
 
 func find_water_height():
 	var height := calculation_boat.hull.find_waterline(9.81 * calculation_boat.mass)
@@ -142,15 +145,16 @@ func find_water_height():
 	state.position.y = height
 	calculation_boat.boat_state = state
 	_set_input_state(state)
-	_evaluate_geometry()
-	center_evaluator.update_centers()
-	visualize_underwater_mesh.update_underwater_mesh()
+	var data := calculation_boat.hull.calculate_all() # data should not be gotten from find_waterline, since it doesn't have to calculate_all
+	_evaluate_geometry(data)
+	center_evaluator.update_centers(data)
+	visualize_underwater_mesh.update_underwater_mesh(data)
 
 func update_from_inputs(value : float):
 	if !active_toggle.button_pressed:
 		return
 	
-	update_state()
+	update_state_heavy()
 
 func _set_input_state(new_state : BoatController.BoatState):
 	height_position_input.set_value_no_signal(new_state.position.y)
@@ -178,15 +182,13 @@ func get_boat_state_from_inputs() -> BoatController.BoatState:
 func _set_boat_state_from_inputs():
 	calculation_boat.boat_state = get_boat_state_from_inputs()
 
-func _evaluate_geometry():
-	var names := _output_holder_name.find_children("*", "Label")
+func _evaluate_geometry(data: BoatHull.BoatCalculationData):
+	#var names := _output_holder_name.find_children("*", "Label")
 	var output_x := _output_holder_x.find_children("*", "Label")
 	var output_y := _output_holder_y.find_children("*", "Label")
 	var output_z := _output_holder_z.find_children("*", "Label")
 	
 	var i = 0
-	
-	var data : BoatHull.BoatCalculationData = calculation_boat.hull.calculate_all()
 	
 	#names[i].text = "Triangles below water"
 	output_z[i].text = str(data.triangles_below_water.size())

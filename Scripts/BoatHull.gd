@@ -119,6 +119,7 @@ func apply_to_rigidbody():
 		rigidbody.apply_force(drag_multiplier * triangle.f_slamming, triangle.slamming_pos_world - rigidbody.global_position)
 
 func calculate_all() -> BoatCalculationData:
+	print("Calculate all")
 	var output := BoatCalculationData.new()
 	var triangles_below_water : Array[BelowWaterTriangle] = []
 	var waterline_points : Array[Vector3] = []

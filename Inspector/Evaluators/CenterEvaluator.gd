@@ -14,15 +14,13 @@ var line_of_action_start : Vector3
 var line_of_action_end : Vector3
 
 func _ready() -> void:
-	boat_syncronizer.boat_modified.connect(update_centers)
+	boat_syncronizer.connect_boat_modified_calculated(update_centers)
 
 func _process(delta: float) -> void:
 	var line_config := DebugDraw3D.new_scoped_config().set_no_depth_test(true).set_thickness(0.05)
 	DebugDraw3D.draw_line(line_of_action_start, line_of_action_end, Color.DODGER_BLUE)
 
-func update_centers():
-	var data := calculation_boat.hull.calculate_all()
-	
+func update_centers(data: BoatHull.BoatCalculationData):
 	var center_of_mass_world := calculation_boat.global_transform * calculation_boat.center_of_mass
 	
 	center_of_mass_indicator.global_position = center_of_mass_world

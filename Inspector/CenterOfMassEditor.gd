@@ -13,7 +13,7 @@ func _ready() -> void:
 	input_x.connect("value_changed", set_com_x)
 	input_y.connect("value_changed", set_com_y)
 	input_z.connect("value_changed", set_com_z)
-	boat_syncronizer.boat_modified.connect(get_center_of_mass)
+	boat_syncronizer.connect_boat_modified(get_center_of_mass)
 
 func get_center_of_mass():
 	input_x.set_value_no_signal(calculation_boat.center_of_mass.x)
@@ -22,12 +22,12 @@ func get_center_of_mass():
 
 func set_com_x(x : float):
 	calculation_boat.center_of_mass.x = x
-	boat_syncronizer.boat_modified.emit()
+	boat_syncronizer.emit_signals()
 
 func set_com_y(y : float):
 	calculation_boat.center_of_mass.y = y
-	boat_syncronizer.boat_modified.emit()
+	boat_syncronizer.emit_signals()
 
 func set_com_z(z : float):
 	calculation_boat.center_of_mass.z = z
-	boat_syncronizer.boat_modified.emit()
+	boat_syncronizer.emit_signals()

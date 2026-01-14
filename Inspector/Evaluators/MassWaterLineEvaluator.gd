@@ -15,7 +15,7 @@ const waterline_from_mass := 0
 const mass_from_waterline := 1
 
 func _ready() -> void:
-	boat_syncronizer.boat_modified.connect(boat_modified)
+	boat_syncronizer.connect_boat_modified(boat_modified)
 	_mass_input.connect("value_changed", set_mass)
 	_waterline_input.connect("value_changed", set_waterline)
 
@@ -55,9 +55,9 @@ func evaluate_waterline():
 func set_mass(value : float):
 	calculation_boat.mass = value
 	_mass_input.set_value_no_signal(value)
-	boat_syncronizer.boat_modified.emit()
+	boat_syncronizer.emit_signals()
 
 func set_waterline(value : float):
 	_waterline_input.set_value_no_signal(value)
 	calculation_boat.position.y = value
-	boat_syncronizer.boat_modified.emit()
+	boat_syncronizer.emit_signals()

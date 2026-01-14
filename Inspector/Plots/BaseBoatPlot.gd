@@ -13,7 +13,7 @@ func boat_modified():
 	update_button.text = "Out of date. Click to update"
 
 func _ready() -> void:
-	boat_syncronizer.boat_modified.connect(boat_modified)
+	boat_syncronizer.connect_boat_modified(boat_modified)
 	if not update_button.pressed.is_connected(plot_graph):
 		update_button.pressed.connect(plot_graph)
 
