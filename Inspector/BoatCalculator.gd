@@ -77,23 +77,32 @@ func _ready() -> void:
 		angular_velocity_z_input.value_changed.connect(update_from_inputs)
 
 func _physics_process(delta: float) -> void:
+	if delayed_update:
+		_calculate_physics_step()
+		delayed_update = false
+	
 	if current_update_state == update_states.LIMITED_STEPS:
 		if _update_counter >= 1:
 			current_update_state = update_states.FROZEN
+			_calculate_physics_step()
+			#delayed_update = true
 		else:
 			var data := calculation_boat.hull.calculate_all()
 			_update_counter += 1
-			center_evaluator.update_centers(data)
-			visualize_underwater_mesh.update_underwater_mesh(data)
-			_evaluate_geometry(data)
+			_calculate_physics_step()
 			
 	elif current_update_state == update_states.SIMULATING:
-		var data := calculation_boat.hull.calculate_all()
-		center_evaluator.update_centers(data)
-		visualize_underwater_mesh.update_underwater_mesh(data)
-		_evaluate_geometry(data)
-		if active_toggle.button_pressed:
-			_set_input_state(calculation_boat.boat_state)
+		_calculate_physics_step()
+
+func _calculate_physics_step():
+	var data := calculation_boat.hull.calculate_all()
+	center_evaluator.update_centers(data)
+	visualize_underwater_mesh.update_underwater_mesh(data)
+	_evaluate_geometry(data)
+	if active_toggle.button_pressed:
+		_set_input_state(calculation_boat.boat_state)
+
+var delayed_update := false
 
 func play_pause():
 	match _current_update_state:
@@ -103,6 +112,7 @@ func play_pause():
 			current_update_state = update_states.SIMULATING
 		update_states.SIMULATING:
 			current_update_state = update_states.FROZEN
+			delayed_update = true
 
 func calculate_next_step():
 	current_update_state = update_states.LIMITED_STEPS
