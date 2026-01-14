@@ -32,6 +32,7 @@ var initial_state : BoatController.BoatState
 var save_state_1 : BoatController.BoatState
 var save_state_2 : BoatController.BoatState
 
+var _delayed_update := false
 var _update_counter := 0
 var _current_update_state := update_states.FROZEN
 
@@ -77,9 +78,9 @@ func _ready() -> void:
 		angular_velocity_z_input.value_changed.connect(update_from_inputs)
 
 func _physics_process(delta: float) -> void:
-	if delayed_update:
+	if _delayed_update:
 		_calculate_physics_step()
-		delayed_update = false
+		_delayed_update = false
 	
 	if current_update_state == update_states.LIMITED_STEPS:
 		if _update_counter >= 1:
@@ -87,7 +88,6 @@ func _physics_process(delta: float) -> void:
 			_calculate_physics_step()
 			#delayed_update = true
 		else:
-			var data := calculation_boat.hull.calculate_all()
 			_update_counter += 1
 			_calculate_physics_step()
 			
@@ -102,8 +102,6 @@ func _calculate_physics_step():
 	if active_toggle.button_pressed:
 		_set_input_state(calculation_boat.boat_state)
 
-var delayed_update := false
-
 func play_pause():
 	match _current_update_state:
 		update_states.FROZEN:
@@ -112,7 +110,7 @@ func play_pause():
 			current_update_state = update_states.SIMULATING
 		update_states.SIMULATING:
 			current_update_state = update_states.FROZEN
-			delayed_update = true
+			_delayed_update = true
 
 func calculate_next_step():
 	current_update_state = update_states.LIMITED_STEPS
