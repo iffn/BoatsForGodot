@@ -300,6 +300,10 @@ custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Run/Pause"
 
+[node name="Title" type="Label" parent="Control/HBoxContainer/Model view/Update buttons"]
+layout_mode = 2
+text = "(Use WASD to control the boat)"
+
 [node name="Setting states" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
 
