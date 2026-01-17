@@ -7,6 +7,8 @@ class_name SaveAndLoad
 @export var import_report : Label
 @export var save_or_download_button : Button
 
+var original_boat : PackedByteArray
+
 func output_last_load_report():
 	if import_report == null || boat_syncronizer == null:
 		return
@@ -19,11 +21,15 @@ func output_last_load_report():
 func _ready():
 	get_tree().get_root().files_dropped.connect(_on_files_dropped)
 	call_deferred("output_last_load_report")
+	original_boat = convert_node_to_glb_buffer(boat.boat_model)
 	if save_or_download_button:
 		if OS.has_feature("web"):
 			save_or_download_button.text = "Download .glb"
 		else:
 			save_or_download_button.text = "Save as .glb"
+
+func restore_original_boat():
+	load_boat_from_buffer(original_boat)
 
 func convert_node_to_glb_buffer(node: Node) -> PackedByteArray:
 	var gltf_doc = GLTFDocument.new()

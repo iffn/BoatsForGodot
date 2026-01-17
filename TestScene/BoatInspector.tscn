@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://cbkttc3885icy" path="res://iffnsStuff/BoatsForGodot/Scripts/SaveAndLoad.gd" id="4_vknsj"]
 [ext_resource type="Script" uid="uid://bnm3ffgvhcvi" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatEditSyncronizer.gd" id="5_80gaq"]
 [ext_resource type="Script" uid="uid://ddwsgudjwmnd" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/MeshEvaluator.gd" id="5_uk4ya"]
-[ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
+[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
 [ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/EditorBoatControls.gd" id="10_7h35j"]
@@ -151,6 +151,11 @@ text = "Drive around"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Save as .glb"
+
+[node name="Export2" type="Button" parent="Control/HBoxContainer/Model selection/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Reset boat"
 
 [node name="HSeparator3" type="HSeparator" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -1823,6 +1828,7 @@ paragraph_separator = "\\"
 
 [connection signal="pressed" from="Control/HBoxContainer/Model selection/HBoxContainer/Drive around" to="." method="switch_to_driving_scene"]
 [connection signal="button_down" from="Control/HBoxContainer/Model selection/HBoxContainer/Export" to="Control/HBoxContainer/Model selection/SaveAndLoad" method="save_or_download_boat"]
+[connection signal="button_down" from="Control/HBoxContainer/Model selection/HBoxContainer/Export2" to="Control/HBoxContainer/Model selection/SaveAndLoad" method="restore_original_boat"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Find water height" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="find_water_height"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Caluclate next step" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="calculate_next_step"]
 [connection signal="pressed" from="Control/HBoxContainer/Model view/Update buttons/Run or pause" to="Control/HBoxContainer/Model view/Setting states/Calculator" method="play_pause"]
