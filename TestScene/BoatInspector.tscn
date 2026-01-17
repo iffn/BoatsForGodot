@@ -80,7 +80,7 @@ save_or_download_button = NodePath("../HBoxContainer/Export")
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
-text = "Model selection"
+text = "New model selection"
 
 [node name="Instruction" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -1428,17 +1428,17 @@ layout_mode = 2
 [node name="Subtitle2" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "kg⋅m²"
+text = "kg m²"
 
 [node name="Subtitle3" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "kg⋅m²"
+text = "kg m²"
 
 [node name="Subtitle4" type="Label" parent="Control/HBoxContainer/Model setup/Moment of inertia2/Moment of inertia/VBoxContainer4"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-text = "kg⋅m²"
+text = "kg m²"
 
 [node name="HSeparator2" type="HSeparator" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
