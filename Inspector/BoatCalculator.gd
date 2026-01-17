@@ -79,7 +79,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _delayed_update:
-		_calculate_physics_step()
+		var data := calculation_boat.hull.calculate_all()
+		visualize_underwater_mesh.update_underwater_mesh(data)
+		center_evaluator.update_centers(data)
 		_delayed_update = false
 	
 	if current_update_state == update_states.LIMITED_STEPS:
