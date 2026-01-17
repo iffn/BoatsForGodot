@@ -19,11 +19,6 @@ func _ready() -> void:
 
 func get_distance_to_water(world_position : Vector3) -> float:
 	var time : int
-	time = 25443 # broken cube
-	time = 96409 # broken cube
-	time = 7284 # broken speed boat
-	time = 6884 # broken speed boat
-	time = 5353 # broken plane
 	time = Time.get_ticks_msec()
 	
 	var float_time = 0.001 * time
@@ -32,4 +27,3 @@ func get_distance_to_water(world_position : Vector3) -> float:
 	var water_pos_y := wave_height * sin(world_position.z / wave_length + float_time * wave_frequency)
 	
 	return world_position.y - water_pos_y
-	
