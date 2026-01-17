@@ -10,12 +10,13 @@ var calculation_boat : BoatController:
 @export var _basic_geometry_output_holder: Control 
 
 func _ready() -> void:
-	boat_syncronizer.connect_boat_modified_calculated(boat_modified)
+	boat_syncronizer.connect_boat_modified_calculated(update_geometry_info)
 
-func boat_modified():
-	_update_button.text = "Out of date. Click to update"
+func evaluate_geometry():
+	var data := calculation_boat.hull.calculate_all()
+	update_geometry_info(data)
 
-func evaluate_geometry(data: BoatHull.BoatCalculationData):
+func update_geometry_info(data: BoatHull.BoatCalculationData):
 	var names := _basic_geometry_name_holder.find_children("*", "Label")
 	var output := _basic_geometry_output_holder.find_children("*", "Label")
 	

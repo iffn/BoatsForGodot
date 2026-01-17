@@ -5,8 +5,16 @@ var calculation_boat : BoatController:
 	get:
 		return boat_view.linked_boat
 
+@export var boat_syncronizer : BoatEditSyncronizer
 @export var _basic_geometry_name_holder: Control 
 @export var _basic_geometry_output_holder: Control 
+@export var _update_button: Button
+
+func _ready() -> void:
+	boat_syncronizer.connect_boat_modified(boat_modified)
+
+func boat_modified():
+	_update_button.text = "Out of date. Click to update"
 
 func evaluate_mesh():
 	var names := _basic_geometry_name_holder.find_children("*", "Label")
@@ -56,3 +64,5 @@ func evaluate_mesh():
 	names[i].text = "Calculation time"
 	output[i].text = str(elapsed_msec).pad_decimals(3)
 	i+=1
+	
+	_update_button.text = "Up to date"
