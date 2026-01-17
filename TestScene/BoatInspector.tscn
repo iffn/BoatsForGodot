@@ -1819,6 +1819,7 @@ Performance:
 
 Bugs:
 - Check why physics update sometimes breaks apply.
+- Waves add a yaw spin to the boat
 
 Check physics:
 - Center of Buoyancy should be inside the hull at depth (-500)

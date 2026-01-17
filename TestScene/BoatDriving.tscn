@@ -403,9 +403,9 @@ depth = 12
 [node name="SineWaveWaterLevel" type="Node" parent="." node_paths=PackedStringArray("height_slider", "freq_slider", "length_slider")]
 script = ExtResource("5_omhcd")
 water_material = SubResource("ShaderMaterial_56d3r")
-height_slider = NodePath("../VBoxContainer/Steering/Sliders connected to the script/Wave height")
-freq_slider = NodePath("../VBoxContainer/Steering/Sliders connected to the script/Wave frequency")
-length_slider = NodePath("../VBoxContainer/Steering/Sliders connected to the script/Wave length")
+height_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave height")
+freq_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave frequency")
+length_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave length")
 
 [node name="CalculationBoat" parent="." node_paths=PackedStringArray("_water_level") instance=ExtResource("7_5he7e")]
 _water_level = NodePath("../SineWaveWaterLevel")
@@ -500,7 +500,7 @@ script = ExtResource("14_a08aq")
 script = ExtResource("16_55bv8")
 boat = NodePath("../CalculationBoat")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Wave settings" type="VBoxContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -508,31 +508,35 @@ offset_left = -369.0
 offset_bottom = 104.0
 grow_horizontal = 0
 
-[node name="Steering" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="Wave settings"]
+layout_mode = 2
+text = "Waves (experimental)"
+
+[node name="HBox" type="HBoxContainer" parent="Wave settings"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Steering"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Wave settings/HBox"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Steering/VBoxContainer"]
+[node name="Label" type="Label" parent="Wave settings/HBox/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave height"
 
-[node name="Label2" type="Label" parent="VBoxContainer/Steering/VBoxContainer"]
+[node name="Label2" type="Label" parent="Wave settings/HBox/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave frequency"
 
-[node name="Label3" type="Label" parent="VBoxContainer/Steering/VBoxContainer"]
+[node name="Label3" type="Label" parent="Wave settings/HBox/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave length"
 
-[node name="Sliders connected to the script" type="VBoxContainer" parent="VBoxContainer/Steering"]
+[node name="Sliders connected to the script" type="VBoxContainer" parent="Wave settings/HBox"]
 layout_mode = 2
 
-[node name="Wave height" type="HSlider" parent="VBoxContainer/Steering/Sliders connected to the script"]
+[node name="Wave height" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 max_value = 5.0
@@ -540,7 +544,7 @@ step = 0.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Wave frequency" type="HSlider" parent="VBoxContainer/Steering/Sliders connected to the script"]
+[node name="Wave frequency" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 min_value = 0.1
@@ -550,7 +554,7 @@ value = 0.10000000000002274
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Wave length" type="HSlider" parent="VBoxContainer/Steering/Sliders connected to the script"]
+[node name="Wave length" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 min_value = 2.0
@@ -560,10 +564,10 @@ value = 2.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Spin boxes connected to the sliders" type="VBoxContainer" parent="VBoxContainer/Steering"]
+[node name="Spin boxes connected to the sliders" type="VBoxContainer" parent="Wave settings/HBox"]
 layout_mode = 2
 
-[node name="Setting Min Value to -INF crashes Godot 4_5_1" type="SpinBox" parent="VBoxContainer/Steering/Spin boxes connected to the sliders"]
+[node name="Setting Min Value to -INF crashes Godot 4_5_1" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -571,7 +575,7 @@ max_value = 360.0
 step = 0.1
 alignment = 2
 
-[node name="roll2" type="SpinBox" parent="VBoxContainer/Steering/Spin boxes connected to the sliders"]
+[node name="roll2" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -580,7 +584,7 @@ step = 0.1
 value = 0.10000000000002274
 alignment = 2
 
-[node name="roll3" type="SpinBox" parent="VBoxContainer/Steering/Spin boxes connected to the sliders"]
+[node name="roll3" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -593,9 +597,9 @@ alignment = 2
 [connection signal="value_changed" from="HBoxContainer4/VBoxContainer/Throttle/HSlider" to="HBoxContainer4/ThrottleController" method="set_throttle"]
 [connection signal="value_changed" from="HBoxContainer4/HBoxContainer/VSlider" to="HBoxContainer4/ThrottleController" method="set_trim"]
 [connection signal="pressed" from="Edit" to="." method="switch_to_inspector_scene"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Sliders connected to the script/Wave height" to="VBoxContainer/Steering/Spin boxes connected to the sliders/Setting Min Value to -INF crashes Godot 4_5_1" method="set_value"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Sliders connected to the script/Wave frequency" to="VBoxContainer/Steering/Spin boxes connected to the sliders/roll2" method="set_value"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Sliders connected to the script/Wave length" to="VBoxContainer/Steering/Spin boxes connected to the sliders/roll3" method="set_value"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Spin boxes connected to the sliders/Setting Min Value to -INF crashes Godot 4_5_1" to="VBoxContainer/Steering/Sliders connected to the script/Wave height" method="set_value"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Spin boxes connected to the sliders/roll2" to="VBoxContainer/Steering/Sliders connected to the script/Wave frequency" method="set_value"]
-[connection signal="value_changed" from="VBoxContainer/Steering/Spin boxes connected to the sliders/roll3" to="VBoxContainer/Steering/Sliders connected to the script/Wave length" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Sliders connected to the script/Wave height" to="Wave settings/HBox/Spin boxes connected to the sliders/Setting Min Value to -INF crashes Godot 4_5_1" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Sliders connected to the script/Wave frequency" to="Wave settings/HBox/Spin boxes connected to the sliders/roll2" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Sliders connected to the script/Wave length" to="Wave settings/HBox/Spin boxes connected to the sliders/roll3" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Spin boxes connected to the sliders/Setting Min Value to -INF crashes Godot 4_5_1" to="Wave settings/HBox/Sliders connected to the script/Wave height" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Spin boxes connected to the sliders/roll2" to="Wave settings/HBox/Sliders connected to the script/Wave frequency" method="set_value"]
+[connection signal="value_changed" from="Wave settings/HBox/Spin boxes connected to the sliders/roll3" to="Wave settings/HBox/Sliders connected to the script/Wave length" method="set_value"]
