@@ -1803,6 +1803,7 @@ Architecture:
 - BoatCalculator: Instead of applying directly from inputs, have boat state in between to avoid accuracy issues.
 - Use a single throttle controller and apply them to all
 - Fix SaveAndLoad script design mess
+- Fix BoatCalculator script naming mess
 
 Runtime testing:
 - Add wave injection
@@ -1818,7 +1819,6 @@ Performance:
 - Toggle calculate_all when running in the inspector
 
 Bugs:
-- Check why physics update sometimes breaks apply.
 - Waves add a yaw spin to the boat
 
 Check physics:
