@@ -66,16 +66,16 @@ func _ready() -> void:
 	_set_input_state(initial_state)
 	
 	if !Engine.is_editor_hint():
-		height_position_input.value_changed.connect(update_from_inputs)
-		pitch_input.value_changed.connect(update_from_inputs)
-		yaw_input.value_changed.connect(update_from_inputs)
-		roll_input.value_changed.connect(update_from_inputs)
-		linear_velocity_x_input.value_changed.connect(update_from_inputs)
-		linear_velocity_y_input.value_changed.connect(update_from_inputs)
-		linear_velocity_z_input.value_changed.connect(update_from_inputs)
-		angular_velocity_x_input.value_changed.connect(update_from_inputs)
-		angular_velocity_y_input.value_changed.connect(update_from_inputs)
-		angular_velocity_z_input.value_changed.connect(update_from_inputs)
+		height_position_input.value_changed.connect(update_from_inputs_spinbox)
+		pitch_input.value_changed.connect(update_from_inputs_spinbox)
+		yaw_input.value_changed.connect(update_from_inputs_spinbox)
+		roll_input.value_changed.connect(update_from_inputs_spinbox)
+		linear_velocity_x_input.value_changed.connect(update_from_inputs_spinbox)
+		linear_velocity_y_input.value_changed.connect(update_from_inputs_spinbox)
+		linear_velocity_z_input.value_changed.connect(update_from_inputs_spinbox)
+		angular_velocity_x_input.value_changed.connect(update_from_inputs_spinbox)
+		angular_velocity_y_input.value_changed.connect(update_from_inputs_spinbox)
+		angular_velocity_z_input.value_changed.connect(update_from_inputs_spinbox)
 
 func _physics_process(delta: float) -> void:
 	if _delayed_update:
@@ -88,7 +88,6 @@ func _physics_process(delta: float) -> void:
 		if _update_counter >= 1:
 			current_update_state = update_states.FROZEN
 			_calculate_physics_step()
-			#delayed_update = true
 		else:
 			_update_counter += 1
 			_calculate_physics_step()
@@ -137,14 +136,15 @@ func load_from_2():
 		update_state_heavy()
 
 func reset_state():
+	calculation_boat.boat_state = initial_state
 	_set_input_state(initial_state)
-	if active_toggle.button_pressed:
-		update_state_heavy()
-		calculation_boat.global_position = Vector3(0, calculation_boat.global_position.y, 0)
+	var data := calculation_boat.hull.calculate_all()
+	_evaluate_geometry(data)
+	_delayed_update = true
 
 func update_state_heavy():
-	var data := calculation_boat.hull.calculate_all()
 	_set_boat_state_from_inputs()
+	var data := calculation_boat.hull.calculate_all()
 	_evaluate_geometry(data)
 	center_evaluator.update_centers(data)
 	visualize_underwater_mesh.update_underwater_mesh(data)
@@ -160,7 +160,10 @@ func find_water_height():
 	center_evaluator.update_centers(data)
 	visualize_underwater_mesh.update_underwater_mesh(data)
 
-func update_from_inputs(value : float):
+func update_from_inputs_button():
+	update_state_heavy()
+
+func update_from_inputs_spinbox(value : float):
 	if !active_toggle.button_pressed:
 		return
 	

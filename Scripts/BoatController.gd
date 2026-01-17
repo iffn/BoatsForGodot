@@ -61,7 +61,6 @@ var current_update_state : update_states:
 					hull.set_physics_process(false)
 				for thruster in _thrusters:
 					thruster.set_physics_process(false)
-				pass
 		_current_update_state = value
 
 var last_report : Array[String] = []
