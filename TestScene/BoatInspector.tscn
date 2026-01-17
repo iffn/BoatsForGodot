@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=22 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://btluhuf1oqv35" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/InspectorSceneManager.gd" id="1_v00ot"]
@@ -20,6 +20,9 @@
 [ext_resource type="Script" uid="uid://0b14erwylor4" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterOfMassEditor.gd" id="12_gtuxg"]
 [ext_resource type="Script" uid="uid://0biuqls0h5lb" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/DragForcePlot.gd" id="12_jf4no"]
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_v00ot"]
+font_size = 32
 
 [node name="BoatInspector" type="Node2D" node_paths=PackedStringArray("save_and_load")]
 script = ExtResource("1_v00ot")
@@ -81,6 +84,7 @@ save_or_download_button = NodePath("../HBoxContainer/Export")
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
 text = "New model selection"
+label_settings = SubResource("LabelSettings_v00ot")
 
 [node name="Instruction" type="Label" parent="Control/HBoxContainer/Model selection"]
 layout_mode = 2
@@ -209,8 +213,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model view"]
 layout_mode = 2
-text = "Model view
-"
+text = "Model view"
+label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
 [node name="Front and Side view" type="HBoxContainer" parent="Control/HBoxContainer/Model view"]
@@ -1178,8 +1182,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Model setup"]
 layout_mode = 2
-text = "Model setup
-"
+text = "Model setup"
+label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
 [node name="MassWaterline" type="VBoxContainer" parent="Control/HBoxContainer/Model setup"]
@@ -1459,8 +1463,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
-text = "Analysis
-"
+text = "Analysis"
+label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
 [node name="Button" type="Button" parent="Control/HBoxContainer/Analysis"]
@@ -1710,8 +1714,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Plots"]
 layout_mode = 2
-text = "Plots
-"
+text = "Plots"
+label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
 [node name="Roll correction" type="VBoxContainer" parent="Control/HBoxContainer/Plots" node_paths=PackedStringArray("chart", "boat_syncronizer", "update_button")]
@@ -1782,8 +1786,8 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Control/HBoxContainer/Idea liist"]
 layout_mode = 2
-text = "Idea list:
-"
+text = "Idea list:"
+label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
 [node name="Title2" type="Label" parent="Control/HBoxContainer/Idea liist"]
