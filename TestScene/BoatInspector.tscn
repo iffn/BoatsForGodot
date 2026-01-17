@@ -1467,7 +1467,7 @@ text = "Analysis"
 label_settings = SubResource("LabelSettings_v00ot")
 paragraph_separator = "\\"
 
-[node name="Button" type="Button" parent="Control/HBoxContainer/Analysis"]
+[node name="Evaluate all" type="Button" parent="Control/HBoxContainer/Analysis"]
 layout_mode = 2
 text = "Evaluate all"
 
@@ -1478,9 +1478,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Mesh info:"
 
-[node name="Button2" type="Button" parent="Control/HBoxContainer/Analysis/Mesh info"]
+[node name="Update mesh info" type="Button" parent="Control/HBoxContainer/Analysis/Mesh info"]
 layout_mode = 2
-text = "Update"
+text = "Out of date. Click to update"
 
 [node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Mesh info" node_paths=PackedStringArray("boat_view", "boat_syncronizer", "_basic_geometry_name_holder", "_basic_geometry_output_holder", "_update_button")]
 script = ExtResource("5_uk4ya")
@@ -1488,7 +1488,7 @@ boat_view = NodePath("../../../../../BoatView")
 boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
 _basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
 _basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
-_update_button = NodePath("../Button2")
+_update_button = NodePath("../Update mesh info")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/HBoxContainer/Analysis/Mesh info"]
 layout_mode = 2
@@ -1588,14 +1588,14 @@ layout_mode = 2
 layout_mode = 2
 text = "Basic geometry:"
 
-[node name="Button3" type="Button" parent="Control/HBoxContainer/Analysis/Basic geometry"]
+[node name="Update geometry info" type="Button" parent="Control/HBoxContainer/Analysis/Basic geometry"]
 layout_mode = 2
-text = "Update"
+text = "Out of date. Click to update"
 
 [node name="Evaluation" type="Node" parent="Control/HBoxContainer/Analysis/Basic geometry" node_paths=PackedStringArray("boat_syncronizer", "_update_button", "_basic_geometry_name_holder", "_basic_geometry_output_holder")]
 script = ExtResource("4_aak0k")
 boat_syncronizer = NodePath("../../../../../BoatEditSyncronizer")
-_update_button = NodePath("../../Button")
+_update_button = NodePath("../Update geometry info")
 _basic_geometry_name_holder = NodePath("../HBoxContainer/Names")
 _basic_geometry_output_holder = NodePath("../HBoxContainer/Data")
 
@@ -1865,10 +1865,10 @@ paragraph_separator = "\\"
 [connection signal="value_changed" from="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/HBoxContainer/VBoxContainer/SpinBox" to="Control/HBoxContainer/Model view/Setting states/Input/HBoxContainer4/ThrottleController" method="set_trim"]
 [connection signal="item_selected" from="Control/HBoxContainer/Model setup/MassWaterline/OptionButton" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="mass_or_waterline_selected"]
 [connection signal="button_down" from="Control/HBoxContainer/Model setup/MassWaterline/Button" to="Control/HBoxContainer/Model setup/MassWaterline/MassAndWaterlineEvaluation" method="evaluate_waterline"]
-[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
-[connection signal="button_down" from="Control/HBoxContainer/Analysis/Button" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
-[connection signal="button_down" from="Control/HBoxContainer/Analysis/Mesh info/Button2" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
-[connection signal="button_down" from="Control/HBoxContainer/Analysis/Basic geometry/Button3" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Evaluate all" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Evaluate all" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Mesh info/Update mesh info" to="Control/HBoxContainer/Analysis/Mesh info/Evaluation" method="evaluate_mesh"]
+[connection signal="button_down" from="Control/HBoxContainer/Analysis/Basic geometry/Update geometry info" to="Control/HBoxContainer/Analysis/Basic geometry/Evaluation" method="evaluate_geometry"]
 
 [editable path="BoatView"]
 [editable path="BoatView/Center of mass indicator"]
