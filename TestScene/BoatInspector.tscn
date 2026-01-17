@@ -22,7 +22,7 @@
 [ext_resource type="Script" uid="uid://cia4gbs5nti0j" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/RollCorrectionPlot.gd" id="13_7o47y"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_v00ot"]
-font_size = 32
+font_size = 28
 
 [node name="BoatInspector" type="Node2D" node_paths=PackedStringArray("save_and_load")]
 script = ExtResource("1_v00ot")
