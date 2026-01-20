@@ -1,0 +1,159 @@
+[gd_scene load_steps=24 format=3 uid="uid://dg6p6bgtg2oj2"]
+
+[ext_resource type="Shader" uid="uid://bft2cxdusw037" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/DepthLense.gdshader" id="2_mw4r7"]
+[ext_resource type="Shader" uid="uid://d0ghwtm5uceaa" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/Buffer.gdshader" id="3_u6lpq"]
+[ext_resource type="Shader" uid="uid://dnsl8fo7bk3qg" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/WaterDisplayTest.gdshader" id="7_ij1vs"]
+[ext_resource type="PackedScene" uid="uid://cffb6b4ojmkfs" path="res://iffnsStuff/BoatsForGodot/Prefabs/calculation_boat.tscn" id="8_5im6p"]
+[ext_resource type="Shader" uid="uid://j2v6p1314qrr" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/WaterSimulation.gdshader" id="8_dm854"]
+[ext_resource type="Script" uid="uid://67gg5gmyh4fi" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="8_u6lpq"]
+[ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="9_vta3p"]
+[ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="10_fuov3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sceo6"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_gt0sd"]
+sky_material = SubResource("ProceduralSkyMaterial_sceo6")
+
+[sub_resource type="Environment" id="Environment_ai1qr"]
+background_mode = 2
+sky = SubResource("Sky_gt0sd")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_rdm35"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1oyda"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_mw4r7")
+shader_parameter/cam_near = 0.001
+shader_parameter/cam_far = 3.0
+shader_parameter/reversed_z = true
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vtyt1"]
+viewport_path = NodePath("DepthRenderer")
+
+[sub_resource type="QuadMesh" id="QuadMesh_08lmn"]
+size = Vector2(100, 100)
+subdivide_width = 100
+subdivide_depth = 100
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0b1lw"]
+viewport_path = NodePath("WaterExample/WaterSim")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4asyk"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("7_ij1vs")
+shader_parameter/water_color = Color(0, 0, 1, 1)
+shader_parameter/wave_color = Color(0.66999996, 0.66999996, 1, 1)
+shader_parameter/depth_tex = SubResource("ViewportTexture_0b1lw")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_4asyk"]
+viewport_path = NodePath("WaterExample/WaterSim")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3ur6q"]
+resource_local_to_scene = true
+shader = ExtResource("3_u6lpq")
+shader_parameter/simulation = SubResource("ViewportTexture_4asyk")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_obvp1"]
+viewport_path = NodePath("DepthRenderer")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_3ur6q"]
+viewport_path = NodePath("WaterExample/WaterBuffer")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_elf7b"]
+resource_local_to_scene = true
+shader = ExtResource("8_dm854")
+shader_parameter/waveSpeed = 0.2
+shader_parameter/dampening = 0.999
+shader_parameter/water_buffer = SubResource("ViewportTexture_3ur6q")
+shader_parameter/depth_tex = SubResource("ViewportTexture_obvp1")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_haqpc"]
+viewport_path = NodePath("WaterExample/WaterBuffer")
+
+[node name="ObjectImpactTest" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ai1qr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.25595093, 0.51554674, -0.81774116, 0.15399797, 0.8568614, 0.49200922, 0.95434475, -2.7014084e-07, -0.29870763, 0, 4.29137, 0)
+light_color = Color(0.89, 0.89, 1, 1)
+
+[node name="DepthRenderer" type="SubViewport" parent="."]
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="DepthRenderer"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -3, 0)
+cull_mask = 1
+projection = 1
+size = 100.0
+near = 0.001
+far = 3.0
+
+[node name="DepthLense" type="MeshInstance3D" parent="DepthRenderer/Camera3D"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, -0.01)
+mesh = SubResource("QuadMesh_rdm35")
+surface_material_override/0 = SubResource("ShaderMaterial_1oyda")
+
+[node name="Output on sprite" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0730524, 7.6533575, -2.3119884)
+texture = SubResource("ViewportTexture_vtyt1")
+
+[node name="WaterExample" type="Node3D" parent="."]
+
+[node name="Water test" type="MeshInstance3D" parent="WaterExample"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.19139457, -0.076165676, -0.06105852)
+mesh = SubResource("QuadMesh_08lmn")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ShaderMaterial_4asyk")
+
+[node name="WaterBuffer" type="SubViewport" parent="WaterExample"]
+disable_3d = true
+use_hdr_2d = true
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="WaterExample/WaterBuffer"]
+material = SubResource("ShaderMaterial_3ur6q")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WaterSim" type="SubViewport" parent="WaterExample"]
+disable_3d = true
+use_hdr_2d = true
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="WaterExample/WaterSim"]
+material = SubResource("ShaderMaterial_elf7b")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Water buffer output" type="Sprite3D" parent="WaterExample"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.29883, 7.6533575, -2.3119884)
+texture = SubResource("ViewportTexture_haqpc")
+
+[node name="CalculationBoat" parent="." node_paths=PackedStringArray("_water_level") instance=ExtResource("8_5im6p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2363663, 0, 8.183215)
+_water_level = NodePath("../EditorWaterLevel")
+
+[node name="Camera3D" type="Camera3D" parent="CalculationBoat"]
+transform = Transform3D(1, 0, 0, 0, 0.9346024, 0.35569423, 0, -0.35569423, 0.9346024, 0, 3.161384, 7.367585)
+
+[node name="SetupInputs" type="Node" parent="."]
+script = ExtResource("9_vta3p")
+input_collection = ExtResource("10_fuov3")
+
+[node name="EditorWaterLevel" type="Node" parent="."]
+script = ExtResource("8_u6lpq")
