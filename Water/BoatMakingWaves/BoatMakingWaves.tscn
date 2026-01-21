@@ -28,9 +28,8 @@ glow_enabled = true
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_mw4r7")
-shader_parameter/cam_near = 0.001
-shader_parameter/cam_far = 3.0
-shader_parameter/reversed_z = true
+shader_parameter/cam_near = 1.0
+shader_parameter/cam_far = 4.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_vtyt1"]
 viewport_path = NodePath("DepthRenderer")
@@ -90,15 +89,15 @@ size_2d_override_stretch = true
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="DepthRenderer"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -3, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -4, 0)
 cull_mask = 1
 projection = 1
 size = 100.0
-near = 0.001
-far = 3.0
+near = 1.0
+far = 4.0
 
 [node name="DepthLense" type="MeshInstance3D" parent="DepthRenderer/Camera3D"]
-transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, -0.01)
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, -1.01)
 mesh = SubResource("QuadMesh_rdm35")
 surface_material_override/0 = SubResource("ShaderMaterial_1oyda")
 
