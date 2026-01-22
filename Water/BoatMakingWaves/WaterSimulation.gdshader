@@ -25,7 +25,7 @@ void fragment() {
 	// Shared values
 	vec2 res = vec2(float(textureSize(depth_tex, 0).x), float(textureSize(depth_tex, 0).y));
 	
-	vec4 duv = vec4(1.0 / res.x, 1.0  / res.y, 0 ,0);
+	vec4 duv = vec4(1.0 / res.x, 1.0  / res.y, 0.0 ,0.0);
 	float du = 1.0 / res.x;
 	float dv = 1.0 / res.y;
 	
@@ -45,27 +45,19 @@ void fragment() {
 	float laplacianWeightedSum = up.r + down.r + left.r + right.r - 4.0 * center.r;
 	float nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
 	
-	// Edge absorbtion
-	/*
-	if (fragCoord.x <= ABSORBTION_LAYER_THICKNESS || fragCoord.x >= res.x - ABSORBTION_LAYER_THICKNESS || 
-        fragCoord.y <= ABSORBTION_LAYER_THICKNESS || fragCoord.y >= res.y - ABSORBTION_LAYER_THICKNESS) 
-    {
-        float coeff = (waveSpeed - 1.0) / (waveSpeed + 1.0);
-        
-        float currentInner;
-        if      (fragCoord.x <= ABSORBTION_LAYER_THICKNESS)         currentInner = right.r;
-        else if (fragCoord.x >= res.x - ABSORBTION_LAYER_THICKNESS) currentInner = left.r;
-        else if (fragCoord.y <= ABSORBTION_LAYER_THICKNESS)         currentInner = up.r;
-        else                                                        currentInner = down.r;
-
-        nextAmplitude = currentInner + (nextAmplitude - center.r) * coeff;
-    }
-	*/
+	float leftEdgeSignal = step(UV.x, du);
+    float topEdgeSignal = step(UV.y, dv);
+    float rightEdgeSignal = step(1.0 - du, UV.x);
+    float bottomEdgeSignal = step(1.0 - dv, UV.y);
+	float isBoundaryPixelSignal = clamp(leftEdgeSignal + topEdgeSignal + rightEdgeSignal + bottomEdgeSignal, 0.0, 1.0);
+	float isNotBoundaryPixelSignal = 1.0 - isBoundaryPixelSignal;
 	
 	// Depth
 	float prevDepthValue = center.b;
 	float newDepthValue = texture(depth_tex, UV).r;
-	nextAmplitude += newDepthValue - prevDepthValue;
+	float addition = newDepthValue - prevDepthValue;
+	addition = mix(addition, 0.0, isBoundaryPixelSignal);
+	nextAmplitude += addition;
 	nextAmplitude = clamp(nextAmplitude, 0.0, 1.0);
 	
 	// Combine return value
