@@ -39,6 +39,8 @@ void fragment() {
 	vec3 left = texture(water_buffer, UV - duv.xw + lookupOffset).rgb;
 	vec3 right = texture(water_buffer, UV + duv.xw + lookupOffset).rgb;
 	
+	float newDepthValue = texture(depth_tex, UV).r;
+	
 	if (up.b > 0.1) up.r = center.r;
 	if (down.b > 0.1) down.r = center.r;
 	if (left.b > 0.1) left.r = center.r;
@@ -48,7 +50,7 @@ void fragment() {
 	float waveSpeedSquared = waveSpeed * waveSpeed;
 	
 	float nextAmplitude = 0.0;
-	if (center.b < 0.1) // Hard set values on blocked values
+	if (center.b < 0.1 && newDepthValue < 0.1) // Hard set values on blocked values
 	{
 		float laplacianWeightedSum = up.r + down.r + left.r + right.r - 4.0 * center.r;
 		nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
@@ -63,7 +65,6 @@ void fragment() {
 	
 	// Depth
 	float prevDepthValue = center.b;
-	float newDepthValue = texture(depth_tex, UV).r;
 	float addition = newDepthValue - prevDepthValue;
 	addition = mix(addition, 0.0, isBoundaryPixelSignal);
 	nextAmplitude += addition;
