@@ -6,6 +6,7 @@ uniform float dampening : hint_range(0.0, 1.0, 0.001) = 0.999;
 uniform sampler2D water_buffer : filter_nearest, source_color;
 uniform sampler2D depth_tex : filter_nearest, source_color;
 
+const float ABSORBTION_LAYER_THICKNESS = 1.0;
 
 void fragment() {
 	// Based on: https://github.com/iffn/iffnsWaterShaderForUnity/blob/main/WaterComputeLikeShader.shader
@@ -17,18 +18,17 @@ void fragment() {
 		a: Not useable since it influences the others. Use 1.0
     */
 	
-	vec2 uv = UV;
-	float pixelWidthU = 1.0 / float(textureSize(depth_tex, 0).x);
-	float pixelWidthV = 1.0 / float(textureSize(depth_tex, 0).y);
-	
-	vec4 duv = vec4(pixelWidthU, pixelWidthV, 0 ,0);
-	
 	// Shared values
-	vec3 center = texture(water_buffer, uv).rgb;
-    vec3 up = texture(water_buffer, uv + duv.wy).rgb;
-    vec3 down = texture(water_buffer, uv - duv.wy).rgb;
-    vec3 left = texture(water_buffer, uv - duv.xw).rgb;
-    vec3 right = texture(water_buffer, uv + duv.xw).rgb;
+	vec2 res = vec2(float(textureSize(depth_tex, 0).x), float(textureSize(depth_tex, 0).y));
+	
+	vec4 duv = vec4(1.0 / res.x, 1.0  / res.y, 0 ,0);
+	vec2 fragCoord = vec2(UV.x * res.x, UV.y * res.x);
+	
+	vec3 center = texture(water_buffer, UV).rgb;
+    vec3 up = texture(water_buffer, UV + duv.wy).rgb;
+    vec3 down = texture(water_buffer, UV - duv.wy).rgb;
+    vec3 left = texture(water_buffer, UV - duv.xw).rgb;
+    vec3 right = texture(water_buffer, UV + duv.xw).rgb;
 	
 	// Waves
 	float waveSpeedSquared = waveSpeed * waveSpeed;
@@ -36,9 +36,24 @@ void fragment() {
 	float laplacianWeightedSum = up.r + down.r + left.r + right.r - 4.0 * center.r;
 	float nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
 	
+	// Edge absorbtion
+	if (fragCoord.x <= ABSORBTION_LAYER_THICKNESS || fragCoord.x >= res.x - ABSORBTION_LAYER_THICKNESS || 
+        fragCoord.y <= ABSORBTION_LAYER_THICKNESS || fragCoord.y >= res.y - ABSORBTION_LAYER_THICKNESS) 
+    {
+        float coeff = (waveSpeed - 1.0) / (waveSpeed + 1.0);
+        
+        float currentInner;
+        if      (fragCoord.x <= ABSORBTION_LAYER_THICKNESS)         currentInner = right.r;
+        else if (fragCoord.x >= res.x - ABSORBTION_LAYER_THICKNESS) currentInner = left.r;
+        else if (fragCoord.y <= ABSORBTION_LAYER_THICKNESS)         currentInner = up.r;
+        else                                                        currentInner = down.r;
+
+        nextAmplitude = currentInner + (nextAmplitude - center.r) * coeff;
+    }
+	
 	// Depth
 	float prevDepthValue = center.b;
-	float newDepthValue = texture(depth_tex, uv).r;
+	float newDepthValue = texture(depth_tex, UV).r;
 	nextAmplitude += newDepthValue;
 	nextAmplitude = clamp(nextAmplitude, 0.0, 1.0);
 	
