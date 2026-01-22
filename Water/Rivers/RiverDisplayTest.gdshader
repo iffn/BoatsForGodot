@@ -3,7 +3,7 @@
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
-uniform float height = 10.0;
+uniform float max_height = 10.0;
 uniform sampler2D heightmap : filter_linear;
 
 uniform vec3 albedo : source_color;
@@ -42,7 +42,7 @@ void vertex() {
 	uv_tangent = UV + vec2(pixel_size.x, 0.0);
 	uv_binormal = UV + vec2(0.0, pixel_size.y);
 	
-	VERTEX.z = texture(heightmap, UV).r * height;
+	VERTEX.z = texture(heightmap, UV).r * max_height;
 }
 
 void fragment() {

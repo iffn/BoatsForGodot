@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cffb6b4ojmkfs" path="res://iffnsStuff/BoatsForGodot/Prefabs/calculation_boat.tscn" id="6_urw7s"]
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="7_dn71r"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="8_78frg"]
-[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="9_ntthn"]
+[ext_resource type="Script" uid="uid://ct04fe6ty6nm6" path="res://iffnsStuff/BoatsForGodot/Water/Rivers/RiverLevelProvider.gd" id="10_7oy5i"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sceo6"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -70,7 +70,7 @@ viewport_path = NodePath("WaterWithWavesSimulation/WaterSim")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("5_sihjt")
-shader_parameter/height = 20.0
+shader_parameter/max_height = 10.0
 shader_parameter/heightmap = ExtResource("6_7oy5i")
 shader_parameter/albedo = Color(0, 0.7490196, 0.9411765, 1)
 shader_parameter/metalic = 0.8
@@ -190,7 +190,10 @@ script = ExtResource("7_dn71r")
 input_collection = ExtResource("8_78frg")
 
 [node name="EditorWaterLevel" type="Node" parent="."]
-script = ExtResource("9_ntthn")
+script = ExtResource("10_7oy5i")
+heightmap = ExtResource("6_7oy5i")
+grid_size = 500.0
+max_height = 10.0
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.96959, 3.9081764, -42.529503)
