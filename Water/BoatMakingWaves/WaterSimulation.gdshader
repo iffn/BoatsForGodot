@@ -34,10 +34,10 @@ void fragment() {
 	vec2 lookupOffset = vec2(du * offsetX, dv * offsetY);
 	
 	vec3 center = texture(water_buffer, UV + lookupOffset).rgb;
-    vec3 up = texture(water_buffer, UV + duv.wy + lookupOffset).rgb;
-    vec3 down = texture(water_buffer, UV - duv.wy + lookupOffset).rgb;
-    vec3 left = texture(water_buffer, UV - duv.xw + lookupOffset).rgb;
-    vec3 right = texture(water_buffer, UV + duv.xw + lookupOffset).rgb;
+	vec3 up = texture(water_buffer, UV + duv.wy + lookupOffset).rgb;
+	vec3 down = texture(water_buffer, UV - duv.wy + lookupOffset).rgb;
+	vec3 left = texture(water_buffer, UV - duv.xw + lookupOffset).rgb;
+	vec3 right = texture(water_buffer, UV + duv.xw + lookupOffset).rgb;
 	
 	// Waves
 	float waveSpeedSquared = waveSpeed * waveSpeed;
@@ -46,9 +46,9 @@ void fragment() {
 	float nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
 	
 	float leftEdgeSignal = step(UV.x, du);
-    float topEdgeSignal = step(UV.y, dv);
-    float rightEdgeSignal = step(1.0 - du, UV.x);
-    float bottomEdgeSignal = step(1.0 - dv, UV.y);
+	float topEdgeSignal = step(UV.y, dv);
+	float rightEdgeSignal = step(1.0 - du, UV.x);
+	float bottomEdgeSignal = step(1.0 - dv, UV.y);
 	float isBoundaryPixelSignal = clamp(leftEdgeSignal + topEdgeSignal + rightEdgeSignal + bottomEdgeSignal, 0.0, 1.0);
 	float isNotBoundaryPixelSignal = 1.0 - isBoundaryPixelSignal;
 	
