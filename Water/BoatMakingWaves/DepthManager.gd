@@ -25,7 +25,6 @@ func _process(_delta: float) -> void:
 	var offset_z : int = int(round(displacement.z * pixels_per_unit))
 	
 	if offset_x != 0 or offset_z != 0:
-		
 		var snapped_world_move = Vector3(
 			offset_x / pixels_per_unit,
 			0.0,
