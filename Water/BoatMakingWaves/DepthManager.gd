@@ -1,34 +1,45 @@
-@tool
-extends Node
+extends Node3D
 
-@export var cam_far: float = 3:
-	set(value):
-		cam_far = value
-		depth_display.set_shader_parameter("cam_far", cam_far)
-		camera.far = cam_far
+@export var simulation_shader : ShaderMaterial
+@export var depth_camera : Camera3D
+@export var reference_boat : Node3D
+@export var water_quad : Node3D
+@export var resolution := 512
+@export var size := 100.0
 
-@export var width: float = 3:
-	set(value):
-		width = value
-		camera.size = width
-		depth_quad.scale = width * Vector3.ONE
-
-@export_tool_button("Apply just in case", "") var button_function = apply_parameters
-
-@export var camera: Camera3D
-@export var subviewport: SubViewport
-@export var depth_quad: Node3D
-@export var depth_display: ShaderMaterial
+var pixels_per_unit : float
 
 func apply_parameters():
-	depth_display.set_shader_parameter("cam_far", cam_far)
 	
-	camera.far = cam_far
-	camera.size = width
+	depth_camera.size = size
 	
-	depth_quad.scale = width * Vector3.ONE
-	
-	print("Parameters applied")
+	pixels_per_unit = float(resolution) / float(size)
 
 func _ready() -> void:
 	apply_parameters()
+
+func _process(_delta: float) -> void:
+	var displacement := reference_boat.global_position - global_position
+	
+	var offset_x : int = int(round(displacement.x * pixels_per_unit))
+	var offset_z : int = int(round(displacement.z * pixels_per_unit))
+	
+	if offset_x != 0 or offset_z != 0:
+		
+		var snapped_world_move = Vector3(
+			offset_x / pixels_per_unit,
+			0.0,
+			offset_z / pixels_per_unit
+		)
+		
+		global_position += snapped_world_move
+		
+		depth_camera.global_position.x = global_position.x
+		depth_camera.global_position.z = global_position.z
+		
+		simulation_shader.set_shader_parameter("offsetX", offset_x)
+		simulation_shader.set_shader_parameter("offsetY", offset_z)
+		
+	else:
+		simulation_shader.set_shader_parameter("offsetX", 0)
+		simulation_shader.set_shader_parameter("offsetY", 0)

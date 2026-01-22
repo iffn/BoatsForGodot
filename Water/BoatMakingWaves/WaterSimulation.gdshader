@@ -3,6 +3,9 @@ shader_type canvas_item;
 uniform float waveSpeed : hint_range(0.0, 1.0, 0.01) = 0.2;
 uniform float dampening : hint_range(0.0, 1.0, 0.001) = 0.999;
 
+uniform float offsetX = 0.0;
+uniform float offsetY = 0.0;
+
 uniform sampler2D water_buffer : filter_nearest, source_color;
 uniform sampler2D depth_tex : filter_nearest, source_color;
 
@@ -22,13 +25,18 @@ void fragment() {
 	vec2 res = vec2(float(textureSize(depth_tex, 0).x), float(textureSize(depth_tex, 0).y));
 	
 	vec4 duv = vec4(1.0 / res.x, 1.0  / res.y, 0 ,0);
+	float du = 1.0 / res.x;
+	float dv = 1.0 / res.y;
+	
 	vec2 fragCoord = vec2(UV.x * res.x, UV.y * res.x);
 	
-	vec3 center = texture(water_buffer, UV).rgb;
-    vec3 up = texture(water_buffer, UV + duv.wy).rgb;
-    vec3 down = texture(water_buffer, UV - duv.wy).rgb;
-    vec3 left = texture(water_buffer, UV - duv.xw).rgb;
-    vec3 right = texture(water_buffer, UV + duv.xw).rgb;
+	vec2 lookupOffset = vec2(du * offsetX, dv * offsetY);
+	
+	vec3 center = texture(water_buffer, UV + lookupOffset).rgb;
+    vec3 up = texture(water_buffer, UV + duv.wy + lookupOffset).rgb;
+    vec3 down = texture(water_buffer, UV - duv.wy + lookupOffset).rgb;
+    vec3 left = texture(water_buffer, UV - duv.xw + lookupOffset).rgb;
+    vec3 right = texture(water_buffer, UV + duv.xw + lookupOffset).rgb;
 	
 	// Waves
 	float waveSpeedSquared = waveSpeed * waveSpeed;
@@ -37,6 +45,7 @@ void fragment() {
 	float nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
 	
 	// Edge absorbtion
+	/*
 	if (fragCoord.x <= ABSORBTION_LAYER_THICKNESS || fragCoord.x >= res.x - ABSORBTION_LAYER_THICKNESS || 
         fragCoord.y <= ABSORBTION_LAYER_THICKNESS || fragCoord.y >= res.y - ABSORBTION_LAYER_THICKNESS) 
     {
@@ -50,6 +59,7 @@ void fragment() {
 
         nextAmplitude = currentInner + (nextAmplitude - center.r) * coeff;
     }
+	*/
 	
 	// Depth
 	float prevDepthValue = center.b;
