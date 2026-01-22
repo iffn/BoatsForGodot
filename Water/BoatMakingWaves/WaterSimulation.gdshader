@@ -5,6 +5,7 @@ uniform float dampening : hint_range(0.0, 1.0, 0.001) = 0.999;
 
 uniform float offsetX = 0.0;
 uniform float offsetY = 0.0;
+uniform float initializationFactor = 0.0;
 
 uniform sampler2D water_buffer : filter_nearest, source_color;
 uniform sampler2D depth_tex : filter_nearest, source_color;
@@ -69,6 +70,9 @@ void fragment() {
 	
 	// Combine return value
 	vec3 returnValue = vec3(nextAmplitude, center.r, newDepthValue);
+	vec3 initalizationValue = vec3(center.r, center.g, newDepthValue);
+	
+	returnValue = mix(returnValue, initalizationValue, initializationFactor);
 	
 	// Auto refresh in editor
 	float time = TIME;

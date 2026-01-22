@@ -16,7 +16,12 @@ func apply_parameters():
 	pixels_per_unit = float(resolution) / float(size)
 
 func _ready() -> void:
+	simulation_shader.set_shader_parameter("initializationFactor", 1)
 	apply_parameters()
+	
+	for i in range(5):
+		await get_tree().process_frame
+	simulation_shader.set_shader_parameter("initializationFactor", 0)
 
 func _process(_delta: float) -> void:
 	var displacement := reference_boat.global_position - global_position

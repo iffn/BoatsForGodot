@@ -6,7 +6,7 @@
 [ext_resource type="Shader" uid="uid://dnsl8fo7bk3qg" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/WaterDisplayTest.gdshader" id="7_ij1vs"]
 [ext_resource type="PackedScene" uid="uid://cffb6b4ojmkfs" path="res://iffnsStuff/BoatsForGodot/Prefabs/calculation_boat.tscn" id="8_5im6p"]
 [ext_resource type="Shader" uid="uid://j2v6p1314qrr" path="res://iffnsStuff/BoatsForGodot/Water/BoatMakingWaves/WaterSimulation.gdshader" id="8_dm854"]
-[ext_resource type="Script" uid="uid://67gg5gmyh4fi" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="8_u6lpq"]
+[ext_resource type="Script" path="res://iffnsStuff/BoatsForGodot/Scripts/WaterLevelProvider.gd" id="8_u6lpq"]
 [ext_resource type="Script" uid="uid://ca6bxi2ph21ij" path="res://iffnsStuff/BoatsForGodot/InputSystem/Scripts/SetupInputs.gd" id="9_vta3p"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="10_fuov3"]
 
@@ -36,6 +36,7 @@ shader_parameter/waveSpeed = 0.2
 shader_parameter/dampening = 0.999
 shader_parameter/offsetX = 0.0
 shader_parameter/offsetY = 0.0
+shader_parameter/initializationFactor = 0.0
 shader_parameter/water_buffer = SubResource("ViewportTexture_3ur6q")
 shader_parameter/depth_tex = SubResource("ViewportTexture_obvp1")
 
