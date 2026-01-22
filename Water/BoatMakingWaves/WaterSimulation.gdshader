@@ -39,11 +39,20 @@ void fragment() {
 	vec3 left = texture(water_buffer, UV - duv.xw + lookupOffset).rgb;
 	vec3 right = texture(water_buffer, UV + duv.xw + lookupOffset).rgb;
 	
+	if (up.b > 0.1) up.r = center.r;
+	if (down.b > 0.1) down.r = center.r;
+	if (left.b > 0.1) left.r = center.r;
+	if (right.b > 0.1) right.r = center.r;
+	
 	// Waves
 	float waveSpeedSquared = waveSpeed * waveSpeed;
 	
-	float laplacianWeightedSum = up.r + down.r + left.r + right.r - 4.0 * center.r;
-	float nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
+	float nextAmplitude = 0.0;
+	if (center.b < 0.1) // Hard set values on blocked values
+	{
+		float laplacianWeightedSum = up.r + down.r + left.r + right.r - 4.0 * center.r;
+		nextAmplitude = center.r + (center.r - center.g) * dampening + waveSpeedSquared * laplacianWeightedSum;
+	}
 	
 	float leftEdgeSignal = step(UV.x, du);
 	float topEdgeSignal = step(UV.y, dv);
