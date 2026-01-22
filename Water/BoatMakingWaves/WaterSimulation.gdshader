@@ -64,7 +64,7 @@ void fragment() {
 	// Depth
 	float prevDepthValue = center.b;
 	float newDepthValue = texture(depth_tex, UV).r;
-	nextAmplitude += newDepthValue;
+	nextAmplitude += newDepthValue - prevDepthValue;
 	nextAmplitude = clamp(nextAmplitude, 0.0, 1.0);
 	
 	// Combine return value
