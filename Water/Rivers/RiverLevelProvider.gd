@@ -12,12 +12,16 @@ func _ready() -> void:
 		img.decompress()
 
 func get_distance_to_water(world_position : Vector3) -> float:
-	var pos := Vector2(world_position.x, world_position.z)
 	var half_size := grid_size * 0.5
+	
+	if abs(world_position.x) > half_size || abs(world_position.z) > half_size:
+		return world_position.y
+	
+	var pos := Vector2(world_position.x, world_position.z)
 	
 	var uv_x : float = inverse_lerp(-half_size, half_size, pos.x)
 	var uv_y : float = inverse_lerp(-half_size, half_size, pos.y)
-
+	
 	var UV := Vector2(uv_x, uv_y)
 	
 	var tex_size := img.get_size()
