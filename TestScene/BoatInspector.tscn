@@ -218,6 +218,7 @@ text = "New model selection"
 label_settings = SubResource("LabelSettings_v00ot")
 
 [node name="Tree" type="Tree" parent="Control/HBoxContainer/Model selection2" node_paths=PackedStringArray("boat_syncronizer")]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 script = ExtResource("8_bc43o")
 boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
