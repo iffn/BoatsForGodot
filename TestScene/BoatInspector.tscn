@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bodglwvbjrqjg"]
+[gd_scene load_steps=23 format=3 uid="uid://bodglwvbjrqjg"]
 
 [ext_resource type="Script" uid="uid://lqiksmogpif3" path="res://iffnsStuff/BoatsForGodot/Inspector/Evaluators/VisualizeUnderwaterMesh.gd" id="1_aak0k"]
 [ext_resource type="Script" uid="uid://btluhuf1oqv35" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/InspectorSceneManager.gd" id="1_v00ot"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://dq4hupxnhgo8j" path="res://iffnsStuff/BoatsForGodot/Scripts/Follower.gd" id="5_vknsj"]
 [ext_resource type="Resource" uid="uid://dhc5nrjr5at4j" path="res://iffnsStuff/BoatsForGodot/InputSystem/Inputs/boat_controls.tres" id="5_w5bwg"]
 [ext_resource type="Script" uid="uid://cy7u0kjcj6cs8" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatCalculator.gd" id="6_7o47y"]
+[ext_resource type="Script" uid="uid://bvcelh5e3q81c" path="res://iffnsStuff/BoatsForGodot/Inspector/HierarchyTree.gd" id="8_bc43o"]
 [ext_resource type="Script" uid="uid://dv4jd3gobaqfa" path="res://iffnsStuff/BoatsForGodot/Inspector/EditorBoatControls.gd" id="10_7h35j"]
 [ext_resource type="PackedScene" uid="uid://dlwq4kmdb3bhs" path="res://addons/easy_charts/control_charts/chart.tscn" id="10_iv8r6"]
 [ext_resource type="Script" uid="uid://bpmhoudtbohe" path="res://iffnsStuff/BoatsForGodot/Inspector/Plots/PitchTorqueAtPitchAngle.gd" id="12_7o47y"]
@@ -205,6 +206,23 @@ Export as glb:
 paragraph_separator = "\\"
 
 [node name="VSeparator" type="VSeparator" parent="Control/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Model selection2" type="VBoxContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Hierarchy" type="Label" parent="Control/HBoxContainer/Model selection2"]
+layout_mode = 2
+text = "New model selection"
+label_settings = SubResource("LabelSettings_v00ot")
+
+[node name="Tree" type="Tree" parent="Control/HBoxContainer/Model selection2" node_paths=PackedStringArray("boat_syncronizer")]
+layout_mode = 2
+script = ExtResource("8_bc43o")
+boat_syncronizer = NodePath("../../../../BoatEditSyncronizer")
+
+[node name="VSeparator6" type="VSeparator" parent="Control/HBoxContainer"]
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 2
 
