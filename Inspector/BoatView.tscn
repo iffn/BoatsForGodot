@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://1k50il72p5qf"]
+[gd_scene format=4 uid="uid://1k50il72p5qf"]
 
 [ext_resource type="Script" uid="uid://682d8p34i48m" path="res://iffnsStuff/BoatsForGodot/Inspector/BoatView.gd" id="1_eesk3"]
 [ext_resource type="PackedScene" uid="uid://br8m36qu8rl8k" path="res://iffnsStuff/BoatsForGodot/Inspector/CenterSphereSide.blend" id="2_htfkw"]
@@ -105,56 +105,56 @@ shadow_mesh = SubResource("ArrayMesh_kwyvo")
 no_depth_test = true
 albedo_color = Color(0, 0.37254903, 1, 1)
 
-[node name="BoatView" type="Node3D" node_paths=PackedStringArray("_linked_boat")]
+[node name="BoatView" type="Node3D" unique_id=1151568310 node_paths=PackedStringArray("_linked_boat")]
 script = ExtResource("1_eesk3")
 _linked_boat = NodePath("CalculationBoat")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1711134752]
 environment = SubResource("Environment_f1310")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=1923274747]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.950036, 0, 0)
 
-[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="WorldEnvironment" unique_id=192435288]
 transform = Transform3D(-4.371139e-08, 1, -2.9802322e-08, 0, 2.9802322e-08, 1, 1, 4.371139e-08, -3.5527137e-15, 5.950036, 0, 0)
 light_energy = 0.2
 
-[node name="Water" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+[node name="Water" type="Node3D" parent="." unique_id=850854290 node_paths=PackedStringArray("target")]
 script = ExtResource("6_sfudi")
 target = NodePath("../CalculationBoat")
 follow_horizontal_position = true
 follow_heading = true
 
-[node name="Top" type="CSGBox3D" parent="Water"]
+[node name="Top" type="CSGBox3D" parent="Water" unique_id=1637782187]
 visible = false
 material_override = SubResource("StandardMaterial3D_f1310")
 size = Vector3(20, 0, 20)
 
-[node name="Side +X" type="CSGBox3D" parent="Water"]
+[node name="Side +X" type="CSGBox3D" parent="Water" unique_id=1298783095]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, -25, 0)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
-[node name="Side -X" type="CSGBox3D" parent="Water"]
+[node name="Side -X" type="CSGBox3D" parent="Water" unique_id=1797078421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, -25, 0)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(0, 50, 20)
 
-[node name="Side +Z" type="CSGBox3D" parent="Water"]
+[node name="Side +Z" type="CSGBox3D" parent="Water" unique_id=1427160077]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, 10)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
 
-[node name="Side -Z" type="CSGBox3D" parent="Water"]
+[node name="Side -Z" type="CSGBox3D" parent="Water" unique_id=1455140176]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -25, -10)
 visible = false
 material_override = SubResource("ShaderMaterial_4kpyc")
 size = Vector3(20, 50, 0)
 
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Water"]
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Water" unique_id=82340556]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 material_override = SubResource("ShaderMaterial_4kpyc")
 flip_faces = true
@@ -162,45 +162,45 @@ radius = 20.0
 height = 40.0
 sides = 32
 
-[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Water"]
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Water" unique_id=1749791289]
 material_override = SubResource("ShaderMaterial_4kpyc")
 flip_faces = true
 radius = 20.0
 height = 0.001
 sides = 32
 
-[node name="Center of mass indicator" parent="." instance=ExtResource("2_htfkw")]
+[node name="Center of mass indicator" parent="." unique_id=452351491 instance=ExtResource("2_htfkw")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
 [node name="Sphere" parent="Center of mass indicator" index="0"]
 material_override = SubResource("StandardMaterial3D_6ad51")
 
-[node name="Sphere2" type="MeshInstance3D" parent="Center of mass indicator"]
+[node name="Sphere2" type="MeshInstance3D" parent="Center of mass indicator" unique_id=466560536]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_eesk3")
 mesh = SubResource("ArrayMesh_yvgo2")
 skeleton = NodePath("")
 
-[node name="Center of buoyancy indicator" parent="." instance=ExtResource("2_htfkw")]
+[node name="Center of buoyancy indicator" parent="." unique_id=947353195 instance=ExtResource("2_htfkw")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0.3470461)
 
 [node name="Sphere" parent="Center of buoyancy indicator" index="0"]
 material_override = SubResource("StandardMaterial3D_vvj4a")
 
-[node name="Sphere2" type="MeshInstance3D" parent="Center of buoyancy indicator"]
+[node name="Sphere2" type="MeshInstance3D" parent="Center of buoyancy indicator" unique_id=1099474603]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_eesk3")
 mesh = SubResource("ArrayMesh_yvgo2")
 skeleton = NodePath("")
 
-[node name="EditorWaterLevel" type="Node" parent="."]
+[node name="EditorWaterLevel" type="Node" parent="." unique_id=101015829]
 script = ExtResource("3_6ad51")
 
-[node name="Underwater hull visualization" type="MeshInstance3D" parent="."]
+[node name="Underwater hull visualization" type="MeshInstance3D" parent="." unique_id=696848781]
 material_override = ExtResource("5_vvj4a")
 skeleton = NodePath("")
 
-[node name="CalculationBoat" parent="." node_paths=PackedStringArray("_water_level") instance=ExtResource("6_4kpyc")]
+[node name="CalculationBoat" parent="." unique_id=499185917 node_paths=PackedStringArray("_water_level") instance=ExtResource("6_4kpyc")]
 _water_level = NodePath("../EditorWaterLevel")
 
 [editable path="Center of mass indicator"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=4 uid="uid://5dm7gun61a5o"]
+[gd_scene format=4 uid="uid://5dm7gun61a5o"]
 
 [ext_resource type="Script" uid="uid://50nywlrgda27" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/BoatDrivingSceneManager.gd" id="1_30h0f"]
 [ext_resource type="PackedScene" uid="uid://b4fso0ql27llx" path="res://iffnsStuff/BoatsForGodot/Water/RestrictedQuadTree.tscn" id="4_35urj"]
@@ -400,69 +400,69 @@ albedo_color = Color(0, 0.7490196, 0.9411765, 1)
 metallic = 0.8
 roughness = 0.2
 
-[node name="DrivingScene" type="Node3D" node_paths=PackedStringArray("save_and_load")]
+[node name="DrivingScene" type="Node3D" unique_id=1095754849 node_paths=PackedStringArray("save_and_load")]
 script = ExtResource("1_30h0f")
 save_and_load = NodePath("SaveAndLoad")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1183557238]
 environment = SubResource("Environment_co0j2")
 
-[node name="Water" type="CSGBox3D" parent="."]
+[node name="Water" type="CSGBox3D" parent="." unique_id=1182357699]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51, 0)
 visible = false
 size = Vector3(5000, 1, 5000)
 material = SubResource("ShaderMaterial_kyaw7")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1330936463]
 transform = Transform3D(-0.255951, 0.515547, -0.817741, 0.153998, 0.856862, 0.492009, 0.954345, 6.1678e-10, -0.298708, 0, 4.29137, 0)
 light_color = Color(0.89, 0.89, 1, 1)
 
-[node name="SetupInputs" type="Node" parent="."]
+[node name="SetupInputs" type="Node" parent="." unique_id=1805889807]
 script = ExtResource("9_0pqji")
 input_collection = ExtResource("10_uf2u0")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=762030755]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116.65285, 9.121506, -139.87982)
 size = Vector3(20, 20, 20)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D" unique_id=295297558]
 
-[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D/StaticBody3D"]
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D/StaticBody3D" unique_id=1835485984]
 shape = SubResource("ConcavePolygonShape3D_t7f04")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=287556577]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.494308, 9.121506, -85.510445)
 size = Vector3(20, 20, 20)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D2"]
+[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D2" unique_id=2095330909]
 
-[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D2/StaticBody3D"]
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D2/StaticBody3D" unique_id=1870119523]
 shape = SubResource("ConcavePolygonShape3D_ktcg6")
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=853901320]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59.95305, 9.121506, 64.200096)
 size = Vector3(20, 20, 20)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D3"]
+[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D3" unique_id=1926559123]
 
-[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D3/StaticBody3D"]
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D3/StaticBody3D" unique_id=256434695]
 shape = SubResource("ConcavePolygonShape3D_35urj")
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+[node name="CSGBox3D4" type="CSGBox3D" parent="." unique_id=1744303766]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.54863, 9.121506, 43.8407)
 size = Vector3(20, 20, 20)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D4"]
+[node name="StaticBody3D" type="StaticBody3D" parent="CSGBox3D4" unique_id=1077556407]
 
-[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D4/StaticBody3D"]
+[node name="CSGBakedCollisionShape3D" type="CollisionShape3D" parent="CSGBox3D4/StaticBody3D" unique_id=2133950529]
 shape = SubResource("ConcavePolygonShape3D_omhcd")
 
-[node name="Water2" type="Node3D" parent="." node_paths=PackedStringArray("target")]
+[node name="Water2" type="Node3D" parent="." unique_id=1975651518 node_paths=PackedStringArray("target")]
 visible = false
 script = ExtResource("4_omhcd")
 target = NodePath("../CalculationBoat")
 
-[node name="RestrictedQuadTree" parent="Water2" instance=ExtResource("4_35urj")]
+[node name="RestrictedQuadTree" parent="Water2" unique_id=127884041 instance=ExtResource("4_35urj")]
 material_override = SubResource("ShaderMaterial_56d3r")
 mesh = SubResource("ArrayMesh_omhcd")
 skeleton = NodePath("../..")
@@ -472,18 +472,18 @@ inner_radius = 52.0
 side_quad_count = 40
 depth = 12
 
-[node name="WaterWithWavesSimulation" type="Node3D" parent="." node_paths=PackedStringArray("depth_camera", "reference_boat", "water_quad")]
+[node name="WaterWithWavesSimulation" type="Node3D" parent="." unique_id=1121513048 node_paths=PackedStringArray("depth_camera", "reference_boat", "water_quad")]
 script = ExtResource("6_55bv8")
 simulation_shader = SubResource("ShaderMaterial_jd0cb")
 depth_camera = NodePath("DepthRenderer/DepthCamera")
 reference_boat = NodePath("../CalculationBoat")
 water_quad = NodePath("Water plane with waves")
 
-[node name="DepthRenderer" type="SubViewport" parent="WaterWithWavesSimulation"]
+[node name="DepthRenderer" type="SubViewport" parent="WaterWithWavesSimulation" unique_id=1943070718]
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="DepthCamera" type="Camera3D" parent="WaterWithWavesSimulation/DepthRenderer"]
+[node name="DepthCamera" type="Camera3D" parent="WaterWithWavesSimulation/DepthRenderer" unique_id=1978398049]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -4, 0)
 cull_mask = 1
 projection = 1
@@ -491,17 +491,17 @@ size = 100.0
 near = 1.0
 far = 4.0
 
-[node name="DepthLens" type="MeshInstance3D" parent="WaterWithWavesSimulation/DepthRenderer/DepthCamera"]
+[node name="DepthLens" type="MeshInstance3D" parent="WaterWithWavesSimulation/DepthRenderer/DepthCamera" unique_id=1016904491]
 transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, -2.7755576e-15, -1.3502748)
 mesh = SubResource("QuadMesh_sirhm")
 surface_material_override/0 = SubResource("ShaderMaterial_wxrjy")
 
-[node name="WaterSim" type="SubViewport" parent="WaterWithWavesSimulation"]
+[node name="WaterSim" type="SubViewport" parent="WaterWithWavesSimulation" unique_id=999653526]
 disable_3d = true
 use_hdr_2d = true
 render_target_update_mode = 4
 
-[node name="ColorRect" type="ColorRect" parent="WaterWithWavesSimulation/WaterSim"]
+[node name="ColorRect" type="ColorRect" parent="WaterWithWavesSimulation/WaterSim" unique_id=2123430178]
 material = SubResource("ShaderMaterial_jd0cb")
 anchors_preset = 15
 anchor_right = 1.0
@@ -509,12 +509,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="WaterBuffer" type="SubViewport" parent="WaterWithWavesSimulation"]
+[node name="WaterBuffer" type="SubViewport" parent="WaterWithWavesSimulation" unique_id=2110516449]
 disable_3d = true
 use_hdr_2d = true
 render_target_update_mode = 4
 
-[node name="ColorRect" type="ColorRect" parent="WaterWithWavesSimulation/WaterBuffer"]
+[node name="ColorRect" type="ColorRect" parent="WaterWithWavesSimulation/WaterBuffer" unique_id=195750651]
 material = SubResource("ShaderMaterial_fa3h3")
 anchors_preset = 15
 anchor_right = 1.0
@@ -522,32 +522,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Water plane with waves" type="MeshInstance3D" parent="WaterWithWavesSimulation"]
+[node name="Water plane with waves" type="MeshInstance3D" parent="WaterWithWavesSimulation" unique_id=1845525131]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0.19139457, -0.076165676, -0.06105852)
 mesh = SubResource("QuadMesh_p0jvo")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ShaderMaterial_us72n")
 
-[node name="Water plane distance" type="MeshInstance3D" parent="WaterWithWavesSimulation"]
+[node name="Water plane distance" type="MeshInstance3D" parent="WaterWithWavesSimulation" unique_id=1018956605]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.1, 0)
 mesh = SubResource("QuadMesh_uslkh")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_adt4a")
 
-[node name="SineWaveWaterLevel" type="Node" parent="." node_paths=PackedStringArray("height_slider", "freq_slider", "length_slider")]
+[node name="SineWaveWaterLevel" type="Node" parent="." unique_id=1250028543 node_paths=PackedStringArray("height_slider", "freq_slider", "length_slider")]
 script = ExtResource("5_omhcd")
 water_material = SubResource("ShaderMaterial_56d3r")
 height_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave height")
 freq_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave frequency")
 length_slider = NodePath("../Wave settings/HBox/Sliders connected to the script/Wave length")
 
-[node name="CalculationBoat" parent="." node_paths=PackedStringArray("_water_level") instance=ExtResource("7_5he7e")]
+[node name="CalculationBoat" parent="." unique_id=1031177746 node_paths=PackedStringArray("_water_level") instance=ExtResource("7_5he7e")]
 _water_level = NodePath("../SineWaveWaterLevel")
 
-[node name="Camera3D" type="Camera3D" parent="CalculationBoat"]
+[node name="Camera3D" type="Camera3D" parent="CalculationBoat" unique_id=1279834323]
 transform = Transform3D(1, 0, 0, 0, 0.9346024, 0.35569423, 0, -0.35569423, 0.9346024, 0, 3.161384, 7.367585)
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="."]
+[node name="HBoxContainer4" type="HBoxContainer" parent="." unique_id=1593815282]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -555,31 +555,31 @@ offset_top = -96.0
 offset_right = 448.0
 grow_vertical = 0
 
-[node name="ThrottleController" type="Node" parent="HBoxContainer4" node_paths=PackedStringArray("steering_slider", "throttle_slider", "trim_slider", "linked_boat")]
+[node name="ThrottleController" type="Node" parent="HBoxContainer4" unique_id=631899191 node_paths=PackedStringArray("steering_slider", "throttle_slider", "trim_slider", "linked_boat")]
 script = ExtResource("13_r0iif")
 steering_slider = NodePath("../VBoxContainer/Steering/HSlider")
 throttle_slider = NodePath("../VBoxContainer/Throttle/HSlider")
 trim_slider = NodePath("../HBoxContainer/VSlider")
 linked_boat = NodePath("../../CalculationBoat")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer4"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer4" unique_id=713418247]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer" unique_id=1788043411]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/HBoxContainer2" unique_id=946620292]
 layout_mode = 2
 text = "Controls: WASD, Shift, Control"
 
-[node name="Steering" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer"]
+[node name="Steering" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer" unique_id=154384975]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/Steering"]
+[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/Steering" unique_id=1431141321]
 layout_mode = 2
 text = "Steering"
 
-[node name="HSlider" type="HSlider" parent="HBoxContainer4/VBoxContainer/Steering"]
+[node name="HSlider" type="HSlider" parent="HBoxContainer4/VBoxContainer/Steering" unique_id=2097907136]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 min_value = -1.0
@@ -588,14 +588,14 @@ step = 0.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Throttle" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer"]
+[node name="Throttle" type="HBoxContainer" parent="HBoxContainer4/VBoxContainer" unique_id=128831646]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/Throttle"]
+[node name="Label" type="Label" parent="HBoxContainer4/VBoxContainer/Throttle" unique_id=1263085956]
 layout_mode = 2
 text = "Throttle"
 
-[node name="HSlider" type="HSlider" parent="HBoxContainer4/VBoxContainer/Throttle"]
+[node name="HSlider" type="HSlider" parent="HBoxContainer4/VBoxContainer/Throttle" unique_id=1746443061]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 min_value = -1.0
@@ -604,10 +604,10 @@ step = 0.0
 tick_count = 5
 ticks_on_borders = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer4"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer4" unique_id=1857023976]
 layout_mode = 2
 
-[node name="VSlider" type="VSlider" parent="HBoxContainer4/HBoxContainer"]
+[node name="VSlider" type="VSlider" parent="HBoxContainer4/HBoxContainer" unique_id=1735339036]
 layout_mode = 2
 min_value = -1.0
 max_value = 1.0
@@ -615,21 +615,21 @@ step = 0.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer4/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer4/HBoxContainer" unique_id=99883731]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer4/HBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer4/HBoxContainer/VBoxContainer" unique_id=1988646650]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="HBoxContainer4/HBoxContainer/VBoxContainer"]
+[node name="Label2" type="Label" parent="HBoxContainer4/HBoxContainer/VBoxContainer" unique_id=1611127724]
 layout_mode = 2
 text = "Trim"
 
-[node name="SaveAndLoad" type="Node" parent="." node_paths=PackedStringArray("boat")]
+[node name="SaveAndLoad" type="Node" parent="." unique_id=1599845023 node_paths=PackedStringArray("boat")]
 script = ExtResource("16_55bv8")
 boat = NodePath("../CalculationBoat")
 
-[node name="Wave settings" type="VBoxContainer" parent="."]
+[node name="Wave settings" type="VBoxContainer" parent="." unique_id=453753938]
 visible = false
 anchors_preset = 1
 anchor_left = 1.0
@@ -638,35 +638,35 @@ offset_left = -369.0
 offset_bottom = 104.0
 grow_horizontal = 0
 
-[node name="Label" type="Label" parent="Wave settings"]
+[node name="Label" type="Label" parent="Wave settings" unique_id=1665668530]
 layout_mode = 2
 text = "Waves (experimental)"
 
-[node name="HBox" type="HBoxContainer" parent="Wave settings"]
+[node name="HBox" type="HBoxContainer" parent="Wave settings" unique_id=1459683227]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Wave settings/HBox"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Wave settings/HBox" unique_id=385198753]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Wave settings/HBox/VBoxContainer"]
+[node name="Label" type="Label" parent="Wave settings/HBox/VBoxContainer" unique_id=2040793295]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave height"
 
-[node name="Label2" type="Label" parent="Wave settings/HBox/VBoxContainer"]
+[node name="Label2" type="Label" parent="Wave settings/HBox/VBoxContainer" unique_id=152774016]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave frequency"
 
-[node name="Label3" type="Label" parent="Wave settings/HBox/VBoxContainer"]
+[node name="Label3" type="Label" parent="Wave settings/HBox/VBoxContainer" unique_id=1662945537]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 text = "Wave length"
 
-[node name="Sliders connected to the script" type="VBoxContainer" parent="Wave settings/HBox"]
+[node name="Sliders connected to the script" type="VBoxContainer" parent="Wave settings/HBox" unique_id=1754025598]
 layout_mode = 2
 
-[node name="Wave height" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
+[node name="Wave height" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script" unique_id=822171126]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 max_value = 5.0
@@ -674,7 +674,7 @@ step = 0.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Wave frequency" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
+[node name="Wave frequency" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script" unique_id=1344493969]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 min_value = 0.1
@@ -684,7 +684,7 @@ value = 0.10000000000002274
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Wave length" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script"]
+[node name="Wave length" type="HSlider" parent="Wave settings/HBox/Sliders connected to the script" unique_id=1018799578]
 custom_minimum_size = Vector2(150, 32)
 layout_mode = 2
 min_value = 2.0
@@ -694,10 +694,10 @@ value = 2.0
 tick_count = 3
 ticks_on_borders = true
 
-[node name="Spin boxes connected to the sliders" type="VBoxContainer" parent="Wave settings/HBox"]
+[node name="Spin boxes connected to the sliders" type="VBoxContainer" parent="Wave settings/HBox" unique_id=1346730330]
 layout_mode = 2
 
-[node name="Setting Min Value to -INF crashes Godot 4_5_1" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
+[node name="Setting Min Value to -INF crashes Godot 4_5_1" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders" unique_id=1447325686]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -705,7 +705,7 @@ max_value = 360.0
 step = 0.1
 alignment = 2
 
-[node name="roll2" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
+[node name="roll2" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders" unique_id=24512766]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -714,7 +714,7 @@ step = 0.1
 value = 0.10000000000002274
 alignment = 2
 
-[node name="roll3" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders"]
+[node name="roll3" type="SpinBox" parent="Wave settings/HBox/Spin boxes connected to the sliders" unique_id=620828155]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 min_value = -360.0
@@ -723,18 +723,18 @@ step = 0.1
 value = 2.0
 alignment = 2
 
-[node name="Top right corner" type="VBoxContainer" parent="."]
+[node name="Top right corner" type="VBoxContainer" parent="." unique_id=1602183781]
 offset_top = -1.0
 offset_right = 200.0
 offset_bottom = 65.0
 
-[node name="Edit" type="Button" parent="Top right corner"]
+[node name="Edit" type="Button" parent="Top right corner" unique_id=229037080]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Edit boat"
 script = ExtResource("14_a08aq")
 
-[node name="Respawn" type="Button" parent="Top right corner" node_paths=PackedStringArray("linked_rigidbody")]
+[node name="Respawn" type="Button" parent="Top right corner" unique_id=1869876943 node_paths=PackedStringArray("linked_rigidbody")]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Respawn

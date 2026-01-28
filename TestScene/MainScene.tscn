@@ -1,13 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://jthlnlw5f3ms"]
+[gd_scene format=3 uid="uid://jthlnlw5f3ms"]
 
 [ext_resource type="Script" uid="uid://8jgmissauqr" path="res://iffnsStuff/BoatsForGodot/Scripts/SceneSwitching/SceneManager.gd" id="1_2uy53"]
 [ext_resource type="PackedScene" uid="uid://bodglwvbjrqjg" path="res://iffnsStuff/BoatsForGodot/TestScene/BoatInspector.tscn" id="2_xh2q4"]
 [ext_resource type="PackedScene" uid="uid://5dm7gun61a5o" path="res://iffnsStuff/BoatsForGodot/TestScene/BoatDriving.tscn" id="3_xh2q4"]
 
-[node name="MainScene" type="Node" node_paths=PackedStringArray("current_scene")]
+[node name="MainScene" type="Node" unique_id=1266850095 node_paths=PackedStringArray("current_scene")]
 script = ExtResource("1_2uy53")
 inspector_scene_source = ExtResource("2_xh2q4")
 driving_scene_source = ExtResource("3_xh2q4")
 current_scene = NodePath("BoatInspector")
 
-[node name="BoatInspector" parent="." instance=ExtResource("2_xh2q4")]
+[node name="BoatInspector" parent="." unique_id=1720748151 instance=ExtResource("2_xh2q4")]
