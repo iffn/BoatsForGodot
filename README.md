@@ -22,6 +22,10 @@ Web demo: https://iffn.itch.io/boatsforgodot?secret=jzp0cNoIxExIhayPwXS5mqKk0NY
 - The up to date description should be found in the inspector
 
 ## Current implementation
+### GLB import and export
+- .glb files can be directly dragged into the running application to load them. A save system either saves or 'downloads' them when running inside a browser.
+- Currently uses extras to transfer metadata like thrust to keep it compatible during Blender import end export.
+
 ### Buoyancy and drag
 The core is a hull calculation script, that calculats the proper forces on any closed mesh that interacts with the water. This is done by summing up the pressure on each triangle surface.
 
