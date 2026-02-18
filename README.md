@@ -2,6 +2,8 @@
 The goal is to implement the required resources to implement boats into Godot.
 So far, the basic concept seems to work.
 
+Web demo: https://iffn.itch.io/boatsforgodot?secret=jzp0cNoIxExIhayPwXS5mqKk0NY
+
 ## Requirements
 - Easy Charts: https://godotengine.org/asset-library/asset/643
 - Debug Draw 3D https://godotengine.org/asset-library/asset/1766
